@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 
 
 android {
@@ -32,6 +33,26 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    /**
+     room.incremental: Enables Gradle incremental annotation proccesor.
+     room.expandProjection: Configures Room to rewrite queries such that their top star projection
+     is expanded to only contain the columns defined in the DAO method return type.
+     */
+    defaultConfig {
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        "room.incremental"     : "true",
+                        "room.expandProjection": "true"
+                ]
+            }
+        }
+    }
 }
 
 dependencies {
@@ -47,6 +68,7 @@ dependencies {
     implementation "com.jakewharton.timber:timber:$versions.timber"
 
     implementation "com.google.android.material:material:$versions.material"
+    implementation "com.afollestad.material-dialogs:core:$versions.material_dialog"
 
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.arch}"
     implementation "androidx.lifecycle:lifecycle-extensions:${versions.arch}"
@@ -56,6 +78,14 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
+
+    def room_version = "2.2.5"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
 
 
 //    testImplementation 'junit:junit:4.12'

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 
-inline fun <reified T : ViewModel> Fragment.byViewModel(noinline creator: (() -> T)? = null): Lazy<T> = lazy {
+inline fun <reified T : ViewModel> Fragment.viewModels(noinline creator: (() -> T)? = null): Lazy<T> = lazy {
     if (creator == null) {
         ViewModelProviders.of(this).get(T::class.java)
     } else {

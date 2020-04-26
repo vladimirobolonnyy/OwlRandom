@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Owl randomizer</string>
+    <string name="roll">Roll</string>
+    <string name="submit">submit</string>
+
+    <!--Main Fragment-->
+    <string name="main_empty_text">Tab here to add new items</string>
+    <string name="create_details_title">Create your items</string>
+    <string name="create_details_item_title_hint">Title for your items</string>
+    <string name="create_details_item_hint">Here put any item</string>
 </resources>
