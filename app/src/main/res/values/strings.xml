@@ -8,4 +8,6 @@
     <string name="create_details_title">Create your items</string>
     <string name="create_details_item_title_hint">Title for your items</string>
     <string name="create_details_item_hint">Here put any item</string>
+    <string name="main_title">Your items</string>
+    <string name="main_add_button">Add new item</string>
 </resources>

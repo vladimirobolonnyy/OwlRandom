@@ -2,79 +2,73 @@ package com.obolonnyy.owlrandom.create
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.obolonnyy.owlrandom.base.BaseViewModel
 import com.obolonnyy.owlrandom.database.MainRepository
 import com.obolonnyy.owlrandom.database.MainRepositoryImpl
-import com.obolonnyy.owlrandom.model.Group
 import com.obolonnyy.owlrandom.utils.safeRemoveLast
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
 class CreateDetailsViewModel(
-    val groupId: Long = 1,
-    val repo: MainRepository = MainRepositoryImpl()
+    private val groupId: Long,
+    private val repo: MainRepository = MainRepositoryImpl()
 ) : BaseViewModel() {
 
-    private var state: CreateDetailsViewState = createDefaultList()
+    private var state: CreateDetailsViewState = CreateDetailsViewState()
     private val _viewState = MutableLiveData(state)
     val viewState: LiveData<CreateDetailsViewState> = _viewState
 
-    private fun createDefaultList(): CreateDetailsViewState {
-        return CreateDetailsViewState(Group(groupId, "", listOf("")))
+    init {
+        loadData()
     }
 
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun onPause() {
+        saveData()
+    }
+
+    fun onTitleChanged(newText: String) {
+        state.copy(title = newText).post()
+    }
+
+    fun onItemChanged(newText: String, item: CreateDetailsAdapterItem) {
+        val oldText = state.list[item.position].text
+        state.list[item.position] =
+            state.list[item.position].copy(text = newText, requestFocus = true)
+        if (oldText.isNotBlank() && newText.isBlank()) {
+            state.list.safeRemoveLast()
+        }
+        if (oldText.isBlank() && newText.isNotBlank()) {
+            state.list.add(CreateDetailsAdapterItem(position = state.list.size))
+        }
+        state.post()
+    }
+
+    private fun loadData() {
+        launchIO {
             val group = repo.getGroup(groupId)
-            group?.let {
-                state = CreateDetailsViewState(it)
-                post()
+            if (group != null) {
+                val groupItems = group.items.toMutableList()
+                if (groupItems.lastOrNull().isNullOrBlank().not() || groupItems.isEmpty()) {
+                    groupItems.add("")
+                }
+                val newGroup = group.copy(items = groupItems)
+                CreateDetailsViewState(newGroup).post()
+            } else {
+                CreateDetailsViewState("", mutableListOf(CreateDetailsAdapterItem(0, ""))).post()
             }
         }
     }
 
-    fun onPause() {
-        viewModelScope.launch(Dispatchers.IO) {
-            state = state.copy(group = state.group.copy(items = state.list.map { it.text }))
-            repo.saveGroup(state.group)
-            val allGroup = repo.getAllGroups()
-            print("#### $allGroup")
+    private fun saveData() {
+        GlobalScope.launch(Dispatchers.IO) {
+            repo.saveGroup(state.toGroup(groupId))
         }
     }
 
-    fun onTitleChanged(newText: String) {
-        state = state.copy(group = state.group.copy(title = newText))
-    }
-
-    fun onItemChanged(newText: String, item: CreateDetailsAdapterItem) {
-        //ToDo save in room
-        if (state.list[item.number].text == newText) {
-            return
-        }
-        val list = state.list.toMutableList()
-
-        if (list[item.number].text.isNotBlank() && newText.isBlank()) {
-            list.safeRemoveLast()
-            list[item.number] = list[item.number].copy(text = newText, requestFocus = true)
-            state = state.copy(list = list)
-            post()
-            return
-        }
-
-        if (list[item.number].text.isBlank() && newText.isNotBlank()) {
-            list.add(CreateDetailsAdapterItem(number = list.size))
-            list[item.number] = list[item.number].copy(text = newText, requestFocus = true)
-            state = state.copy(list = list)
-            post()
-            return
-        }
-        list[item.number] = list[item.number].copy(text = newText, requestFocus = false)
-        state = state.copy(list = list)
-    }
-
-    private fun post() {
+    private fun CreateDetailsViewState.post() {
+        state = this
         _viewState.postValue(state)
     }
 }

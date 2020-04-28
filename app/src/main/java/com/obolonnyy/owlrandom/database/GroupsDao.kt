@@ -1,8 +1,6 @@
 package com.obolonnyy.owlrandom.database
 
 import androidx.room.*
-import androidx.room.OnConflictStrategy.REPLACE
-import com.obolonnyy.owlrandom.model.Group
 
 @Dao
 interface GroupsDao {

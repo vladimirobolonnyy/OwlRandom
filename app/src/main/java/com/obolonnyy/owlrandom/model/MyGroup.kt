@@ -2,7 +2,7 @@ package com.obolonnyy.owlrandom.model
 
 import com.obolonnyy.owlrandom.database.GroupEntity
 
-data class Group(
+data class MyGroup(
     val id: Long,
     val title: String,
     val items: List<String>

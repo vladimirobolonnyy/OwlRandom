@@ -1,15 +1,22 @@
 package com.obolonnyy.owlrandom.create
 
-import com.obolonnyy.owlrandom.model.Group
+import com.obolonnyy.owlrandom.model.MyGroup
 
 
 data class CreateDetailsViewState(
-    val group: Group,
-    val list: List<CreateDetailsAdapterItem> = group.items.mapTo()
+    val title : String = "",
+    val list: MutableList<CreateDetailsAdapterItem> = mutableListOf()
 ) {
-    val title: String = group.title
 
+    constructor(group: MyGroup) : this(group.title, group.items.mapTo().toMutableList())
 
+    fun toGroup(groupId: Long) : MyGroup {
+        return MyGroup(
+            id = groupId,
+            title = this.title,
+            items = this.list.filter { it.text.isNotBlank() }.map { it.text }
+        )
+    }
 }
 
 private fun List<String>.mapTo(): List<CreateDetailsAdapterItem> {

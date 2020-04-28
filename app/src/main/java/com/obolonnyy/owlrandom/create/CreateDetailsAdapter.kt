@@ -3,12 +3,12 @@ package com.obolonnyy.owlrandom.create
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.ViewGroup
-import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseViewHolder
+
 
 class CreateDetailsAdapter (
     private val onItemChanged: (String, CreateDetailsAdapterItem) -> Unit
@@ -26,13 +26,12 @@ class CreateDetailsAdapter (
     }
 
     fun setData(list: List<CreateDetailsAdapterItem>){
-        items.clear()
-        items.addAll(list)
-        notifyDataSetChanged()
-    }
+        val callback = CreateDiffUtilCallback(items, list)
+        val diffResult = DiffUtil.calculateDiff(callback)
+        this.items.clear()
+        this.items.addAll(list)
 
-    fun setFocus(focusOnItem: Int) {
-
+        diffResult.dispatchUpdatesTo(this)
     }
 }
 
@@ -68,4 +67,32 @@ class SaveEditTextWrapper (
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
     }
+}
+
+class CreateDiffUtilCallback(
+    private val oldList: List<CreateDetailsAdapterItem>,
+    private val newList: List<CreateDetailsAdapterItem>
+) : DiffUtil.Callback() {
+
+    override fun getOldListSize(): Int = oldList.size
+    override fun getNewListSize(): Int = newList.size
+
+    override fun areItemsTheSame(
+        oldItemPosition: Int,
+        newItemPosition: Int
+    ): Boolean {
+        val old: CreateDetailsAdapterItem = oldList[oldItemPosition]
+        val new: CreateDetailsAdapterItem = newList[newItemPosition]
+        return old.position == new.position
+    }
+
+    override fun areContentsTheSame(
+        oldItemPosition: Int,
+        newItemPosition: Int
+    ): Boolean {
+        val old: CreateDetailsAdapterItem = oldList[oldItemPosition]
+        val new: CreateDetailsAdapterItem = newList[newItemPosition]
+        return old.position == new.position
+    }
+
 }

@@ -12,3 +12,4 @@ fun ViewGroup.inflateView(context: Context, @LayoutRes resource: Int) {
 fun ViewGroup.inflateView(@LayoutRes resource: Int): View {
     return LayoutInflater.from(this.context).inflate(resource, this, false)
 }
+

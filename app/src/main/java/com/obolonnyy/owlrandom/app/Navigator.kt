@@ -8,19 +8,16 @@ import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.create.CreateDetailsFragment
 import com.obolonnyy.owlrandom.details.DetailsFragment
 import com.obolonnyy.owlrandom.main.MainFragment
-import java.util.*
 
-class Navigator (
+class Navigator(
     private val activity: FragmentActivity, //Todo bad
     @IdRes private val container: Int = R.id.main_container
 ) {
 
     private val fm: FragmentManager = activity.supportFragmentManager
 
-    private val stack = Stack<Fragment>()
-
-    fun goToCreateDetails() {
-        CreateDetailsFragment().replace()
+    fun goToCreateDetails(fragmentToHide: Fragment, groupId: Long) {
+        CreateDetailsFragment.new(groupId).replace()
     }
 
     fun goToDetails() {
@@ -38,6 +35,15 @@ class Navigator (
     private fun Fragment.replace() {
         fm.beginTransaction()
             .replace(container, this, this::class.java.toString())
+            .addToBackStack(this::class.java.toString())
+            .commit()
+    }
+
+    private fun Fragment.add(fragmentToHide: Fragment) {
+        fm.beginTransaction()
+            .hide(fragmentToHide)
+            .add(container, this, this::class.java.toString())
+            .addToBackStack(this::class.java.toString())
             .commit()
     }
 
@@ -48,16 +54,21 @@ class Navigator (
     private fun Fragment.show(add: Boolean) {
         fm.beginTransaction()
             .apply { fm.currentVisibleFragment()?.let(this::hide) }
-            .apply { if (add) add(container, this@show, this::class.java.simpleName) else show(this@show) }
+            .apply {
+                if (add) add(
+                    container,
+                    this@show,
+                    this::class.java.simpleName
+                ) else show(this@show)
+            }
             .commit()
     }
 
-}
+    fun FragmentManager.find(fragmentClass: Class<out Fragment>): Fragment? {
+        return fragments.find { fragmentClass.isInstance(it) }
+    }
 
-fun FragmentManager.find(fragmentClass: Class<out Fragment>): Fragment? {
-    return fragments.find { fragmentClass.isInstance(it) }
-}
-
-fun FragmentManager.currentVisibleFragment(): Fragment? {
-    return fragments.find { it.isVisible && it.isAdded }
+    fun FragmentManager.currentVisibleFragment(): Fragment? {
+        return fragments.find { it.isVisible && it.isAdded }
+    }
 }
