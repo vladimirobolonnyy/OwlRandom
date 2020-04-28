@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name='Owl Random'
+rootProject.name='owl-random'
