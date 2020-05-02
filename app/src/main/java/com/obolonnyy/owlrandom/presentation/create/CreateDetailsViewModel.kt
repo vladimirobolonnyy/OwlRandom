@@ -63,7 +63,10 @@ class CreateDetailsViewModel(
 
     private fun saveData() {
         GlobalScope.launch(Dispatchers.IO) {
-            repo.saveGroup(state.toGroup(groupId))
+            val group = state.toGroup(groupId)
+            if (group.items.any { it.isNotBlank() }) {
+                repo.saveGroup(group)
+            }
         }
     }
 

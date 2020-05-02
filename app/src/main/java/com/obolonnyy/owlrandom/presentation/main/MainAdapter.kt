@@ -41,6 +41,6 @@ class MainItemViewHolder(
 
     fun bind(item: MainItem) {
         text.text = "${item.title} (${item.count})"
-        text.setOnClickListener { onItemClicked(item) }
+        itemView.setOnClickListener { onItemClicked(item) }
     }
 }

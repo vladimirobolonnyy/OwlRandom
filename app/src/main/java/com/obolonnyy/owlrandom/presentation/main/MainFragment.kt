@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseFragment
+import com.obolonnyy.owlrandom.base.view.SimpleDividerItemDecoration
 import com.obolonnyy.owlrandom.utils.observe
 import com.obolonnyy.owlrandom.utils.viewModels
 
@@ -22,8 +23,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler = view.findViewById(R.id.main_recycler)
-        recycler.adapter = mainAdapter
-        recycler.layoutManager = LinearLayoutManager(context)
+        recycler.apply {
+            adapter = mainAdapter
+            layoutManager = LinearLayoutManager(context)
+//            addItemDecoration(SimpleDividerItemDecoration(requireContext()))
+        }
         emptyText = view.findViewById(R.id.main_empty_text)
         emptyText.setOnClickListener { addNewItem() }
 

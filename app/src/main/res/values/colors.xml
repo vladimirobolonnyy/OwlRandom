@@ -20,4 +20,5 @@
     <color name="light_blue">#2233b5e5</color>
 
     <color name="transparent">#00000000</color>
+    <color name="gray">#dedede</color>
 </resources>
