@@ -30,7 +30,6 @@ class CreateDetailsAdapter (
         val diffResult = DiffUtil.calculateDiff(callback)
         this.items.clear()
         this.items.addAll(list)
-
         diffResult.dispatchUpdatesTo(this)
     }
 }

@@ -36,7 +36,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     override fun onStart() {
         super.onStart()
-        viewModel.onStart()
         observe(viewModel.viewState, ::render)
     }
 
@@ -49,10 +48,12 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     }
 
     private fun onItemClicked(mainItem: MainItem) {
-        navigator.goToCreateDetails(this, mainItem.groupId)
+//        navigator.goToCreateDetails(this, mainItem.groupId)
+        navigator.goToDetails(this, mainItem.groupId)
     }
 
     private fun addNewItem() {
+        //todo remove in view model
         when (val state = viewModel.viewState.value) {
             MainViewState.Empty -> navigator.goToCreateDetails(this, 1)
             is MainViewState.Loaded -> {

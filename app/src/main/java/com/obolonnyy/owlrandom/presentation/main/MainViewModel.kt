@@ -3,11 +3,11 @@ package com.obolonnyy.owlrandom.presentation.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.obolonnyy.owlrandom.base.BaseViewModel
-import com.obolonnyy.owlrandom.database.MainRepository
 import com.obolonnyy.owlrandom.database.MainRepositoryImpl
+import kotlinx.coroutines.flow.collect
 
 class MainViewModel(
-    private val repo: MainRepository = MainRepositoryImpl()
+    private val repo: MainRepositoryImpl = MainRepositoryImpl()
 ) : BaseViewModel() {
 
     private val _viewState = MutableLiveData<MainViewState>(MainViewState.Empty)
@@ -17,14 +17,13 @@ class MainViewModel(
         loadData()
     }
 
-    fun onStart() {
-        loadData()
-    }
-
     private fun loadData() = launchIO {
-        val groups = repo.getAllGroups()
-        if (groups.isNotEmpty()) {
-            _viewState.postValue(MainViewState.Loaded(groups))
+        repo.getAllGroups().collect { groups ->
+            if (groups.isNotEmpty()) {
+                _viewState.postValue(MainViewState.Loaded(groups))
+            } else {
+                _viewState.postValue(MainViewState.Empty)
+            }
         }
     }
 }

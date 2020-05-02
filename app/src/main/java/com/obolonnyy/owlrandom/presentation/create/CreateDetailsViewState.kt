@@ -22,3 +22,7 @@ data class CreateDetailsViewState(
 private fun List<String>.mapTo(): List<CreateDetailsAdapterItem> {
     return this.mapIndexed { i, s -> CreateDetailsAdapterItem(i, s, false) }
 }
+
+sealed class CreateDetailsViewEvent {
+    object NavigateBack : CreateDetailsViewEvent()
+}

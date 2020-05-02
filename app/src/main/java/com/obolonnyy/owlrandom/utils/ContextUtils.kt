@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -20,3 +21,7 @@ fun Context.getColoredDrawable(@ColorInt color: Int, @DrawableRes drawable: Int)
         ?.let(Drawable::mutate)
         ?.also { DrawableCompat.setTint(it, color) }
         ?: ColorDrawable(Color.TRANSPARENT)
+
+fun Context.getColorCompat(@ColorRes colorRes: Int): Int {
+    return ContextCompat.getColor(this, colorRes)
+}

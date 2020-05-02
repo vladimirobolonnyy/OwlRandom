@@ -20,8 +20,8 @@ class Navigator(
         CreateDetailsFragment.new(groupId).replace()
     }
 
-    fun goToDetails() {
-        DetailsFragment().replace()
+    fun goToDetails(fragmentToHide: Fragment, groupId: Long) {
+        DetailsFragment.new(groupId).replace()
     }
 
     fun goToMain() {

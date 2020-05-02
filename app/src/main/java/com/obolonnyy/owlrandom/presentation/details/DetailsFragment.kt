@@ -2,24 +2,73 @@ package com.obolonnyy.owlrandom.presentation.details
 
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.MaterialToolbar
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseFragment
 import com.obolonnyy.owlrandom.utils.materialDialog
+import com.obolonnyy.owlrandom.utils.observe
 import com.obolonnyy.owlrandom.utils.viewModels
 
 class DetailsFragment : BaseFragment(R.layout.fragment_details) {
 
-    private lateinit var recycler: RecyclerView
-    private lateinit var rollButton: View
+    companion object {
+        private const val GROUP_ID = "GROUP_ID"
 
-    private val viewModel by viewModels { DetailsViewModel() }
+        fun new(groupId: Long): DetailsFragment {
+            return DetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putLong(GROUP_ID, groupId)
+                }
+            }
+        }
+    }
+
+    private val groupId by lazy { arguments!!.getLong(GROUP_ID) }
+    private lateinit var recycler: RecyclerView
+    private val detailsAdapter: DetailsAdapter = DetailsAdapter()
+    private lateinit var toolbar: MaterialToolbar
+
+    private val viewModel by viewModels { DetailsViewModel(groupId) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recycler = view.findViewById(R.id.details_recycler)
-        rollButton = view.findViewById(R.id.details_btn_roll)
-        rollButton.setOnClickListener { showPickDialog() }
+        recycler.apply {
+            adapter = detailsAdapter
+            layoutManager = LinearLayoutManager(context)
+        }
+        view.findViewById<View>(R.id.details_btn_roll).setOnClickListener {
+            //todo move to vm
+            showPickDialog()
+        }
+        view.findViewById<View>(R.id.details_btn_edit).setOnClickListener {
+            //todo move to vm
+            navigator.goToCreateDetails(this, groupId)
+        }
+        toolbar = view.findViewById(R.id.details_toolbar)
+        toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        observe(viewModel.viewState, ::render)
+    }
+
+    private fun render(state: DetailsViewState) {
+        when (state) {
+            DetailsViewState.Loading -> {
+            }
+            DetailsViewState.Error -> {
+            }
+            is DetailsViewState.Loaded -> renderState(state)
+        }
+    }
+
+    private fun renderState(state: DetailsViewState.Loaded) {
+        detailsAdapter.setData(state.adapterItems)
+        toolbar.title = state.group.title
     }
 
     private fun showPickDialog() {
@@ -27,5 +76,4 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
             positiveButton(R.string.submit)
         }
     }
-
 }

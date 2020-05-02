@@ -12,7 +12,7 @@ import com.obolonnyy.owlrandom.base.BaseFragment
 import com.obolonnyy.owlrandom.utils.observe
 import com.obolonnyy.owlrandom.utils.viewModels
 
-class CreateDetailsFragment private constructor() : BaseFragment(R.layout.fragment_create_details) {
+class CreateDetailsFragment : BaseFragment(R.layout.fragment_create_details) {
 
     companion object {
         private const val GROUP_ID = "GROUP_ID"
@@ -40,17 +40,16 @@ class CreateDetailsFragment private constructor() : BaseFragment(R.layout.fragme
         titleEdit = view.findViewById(R.id.create_details_item_title)
         titleEdit.doAfterTextChanged { viewModel.onTitleChanged(it.toString()) }
         val toolbar: MaterialToolbar = view.findViewById(R.id.create_details_toolbar)
-        toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
+        toolbar.setNavigationOnClickListener { navigateBack() }
+        view.findViewById<View>(R.id.create_details_btn_delete).setOnClickListener {
+            viewModel.delete()
+        }
     }
 
     override fun onStart() {
         super.onStart()
         observe(viewModel.viewState, ::render)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.onPause()
+        observe(viewModel.viewEvents, ::process)
     }
 
     private fun render(state: CreateDetailsViewState) {
@@ -58,6 +57,16 @@ class CreateDetailsFragment private constructor() : BaseFragment(R.layout.fragme
         if (titleEdit.text.toString() != state.title) {
             titleEdit.setText(state.title)
         }
+    }
+
+    private fun process(event: CreateDetailsViewEvent) {
+        when (event) {
+            CreateDetailsViewEvent.NavigateBack -> navigateBack()
+        }
+    }
+
+    private fun navigateBack() {
+        activity?.onBackPressed()
     }
 
     private fun onItemChanged(text: String, item: CreateDetailsAdapterItem) {

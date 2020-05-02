@@ -3,29 +3,29 @@ package com.obolonnyy.owlrandom.presentation.create
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.obolonnyy.owlrandom.base.BaseViewModel
-import com.obolonnyy.owlrandom.database.MainRepository
 import com.obolonnyy.owlrandom.database.MainRepositoryImpl
+import com.obolonnyy.owlrandom.utils.SingleLiveEvent
 import com.obolonnyy.owlrandom.utils.safeRemoveLast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 
 class CreateDetailsViewModel(
     private val groupId: Long,
-    private val repo: MainRepository = MainRepositoryImpl()
+    private val repo: MainRepositoryImpl = MainRepositoryImpl()
 ) : BaseViewModel() {
 
     private var state: CreateDetailsViewState = CreateDetailsViewState()
     private val _viewState = MutableLiveData(state)
     val viewState: LiveData<CreateDetailsViewState> = _viewState
 
+    private val _viewEvents = SingleLiveEvent<CreateDetailsViewEvent>()
+    val viewEvents: LiveData<CreateDetailsViewEvent> = _viewEvents
+
     init {
         loadData()
-    }
-
-    fun onPause() {
-        saveData()
     }
 
     fun onTitleChanged(newText: String) {
@@ -45,6 +45,14 @@ class CreateDetailsViewModel(
         state.post()
     }
 
+    fun delete() {
+        launchIO {
+            //ToDo add confirm dialog
+            repo.deleteGroup(state.toGroup(groupId))
+            _viewEvents.postValue(CreateDetailsViewEvent.NavigateBack)
+        }
+    }
+
     private fun loadData() {
         launchIO {
             val group = repo.getGroup(groupId)
@@ -61,13 +69,15 @@ class CreateDetailsViewModel(
         }
     }
 
-    private fun saveData() {
+    override fun onCleared() {
         GlobalScope.launch(Dispatchers.IO) {
             val group = state.toGroup(groupId)
             if (group.items.any { it.isNotBlank() }) {
                 repo.saveGroup(group)
+                Timber.i("CreateDetailsViewModel saved group with id:= ${group.id}")
             }
         }
+        super.onCleared()
     }
 
     private fun CreateDetailsViewState.post() {
