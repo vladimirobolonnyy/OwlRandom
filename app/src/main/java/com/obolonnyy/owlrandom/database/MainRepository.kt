@@ -3,6 +3,7 @@ package com.obolonnyy.owlrandom.database
 import com.obolonnyy.owlrandom.model.MyGroup
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 
 //ToDo make stable interface
 interface MainRepository {
@@ -18,7 +19,7 @@ class MainRepositoryImpl(
 
     private val dao = GROUPS_DATABASE.groupsDao()
 
-    suspend fun getAllGroups(): Flow<List<MyGroup>> {
+    fun getAllGroups(): Flow<List<MyGroup>> {
         return dao.getAllGroups().map { list: List<GroupEntity> ->
             list.map { fromEntity(it) }
         }
@@ -29,7 +30,8 @@ class MainRepositoryImpl(
     }
 
     suspend fun getFlowGroup(id: Long): Flow<MyGroup> {
-        return dao.getFlowGroup(id).map { fromEntity(it) }
+        val flow = dao.getFlowGroup(id)
+        return flow.mapNotNull { fromEntity2(it) }
     }
 
     suspend fun saveGroup(group: MyGroup): MyGroup? {
@@ -46,6 +48,11 @@ class MainRepositoryImpl(
     }
 
     private fun fromEntity(ent: GroupEntity): MyGroup {
+        return MyGroup(ent.id, ent.title, ent.items)
+    }
+
+    private fun fromEntity2(ent: GroupEntity?): MyGroup? {
+        ent ?: return null
         return MyGroup(ent.id, ent.title, ent.items)
     }
 }

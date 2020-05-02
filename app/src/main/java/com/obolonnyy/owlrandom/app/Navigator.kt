@@ -17,6 +17,7 @@ class Navigator(
     private val fm: FragmentManager = activity.supportFragmentManager
 
     fun goToCreateDetails(fragmentToHide: Fragment, groupId: Long) {
+        //ToDo add navigation animations
         CreateDetailsFragment.new(groupId).replace()
     }
 
@@ -25,6 +26,7 @@ class Navigator(
     }
 
     fun goToMain() {
+        fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         MainFragment::class.java.showOrCreate()
     }
 

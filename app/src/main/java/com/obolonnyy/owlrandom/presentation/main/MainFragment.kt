@@ -34,8 +34,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         view.findViewById<View>(R.id.main_add_button).setOnClickListener { addNewItem() }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         observe(viewModel.viewState, ::render)
     }
 

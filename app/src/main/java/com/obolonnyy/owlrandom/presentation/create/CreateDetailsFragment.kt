@@ -2,6 +2,7 @@ package com.obolonnyy.owlrandom.presentation.create
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +11,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseFragment
 import com.obolonnyy.owlrandom.utils.observe
+import com.obolonnyy.owlrandom.utils.sureMaterialDialog
 import com.obolonnyy.owlrandom.utils.viewModels
 
 class CreateDetailsFragment : BaseFragment(R.layout.fragment_create_details) {
@@ -28,6 +30,7 @@ class CreateDetailsFragment : BaseFragment(R.layout.fragment_create_details) {
 
     private lateinit var recycler: RecyclerView
     private lateinit var titleEdit: TextInputEditText
+    private lateinit var deleteBtn: View
     private val createDetailsAdapter = CreateDetailsAdapter(::onItemChanged)
     private val groupId by lazy { arguments!!.getLong(GROUP_ID) }
     private val viewModel by viewModels { CreateDetailsViewModel(groupId) }
@@ -41,27 +44,40 @@ class CreateDetailsFragment : BaseFragment(R.layout.fragment_create_details) {
         titleEdit.doAfterTextChanged { viewModel.onTitleChanged(it.toString()) }
         val toolbar: MaterialToolbar = view.findViewById(R.id.create_details_toolbar)
         toolbar.setNavigationOnClickListener { navigateBack() }
-        view.findViewById<View>(R.id.create_details_btn_delete).setOnClickListener {
-            viewModel.delete()
+        deleteBtn = view.findViewById<View>(R.id.create_details_btn_delete)
+        deleteBtn.setOnClickListener {
+            this.sureMaterialDialog(positive = { viewModel.delete() }, negative = {}).show()
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        observe(viewModel.viewState, ::render)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         observe(viewModel.viewEvents, ::process)
+        observe(viewModel.viewState, ::render)
     }
 
     private fun render(state: CreateDetailsViewState) {
-        createDetailsAdapter.setData(state.list)
-        if (titleEdit.text.toString() != state.title) {
-            titleEdit.setText(state.title)
+        when (state) {
+            CreateDetailsViewState.Empty -> {
+                createDetailsAdapter.setData(emptyList())
+                deleteBtn.isVisible = false
+            }
+            is CreateDetailsViewState.Loaded -> {
+                deleteBtn.isVisible = state.deleteBtnIsVisible
+                createDetailsAdapter.setData(state.list)
+                if (titleEdit.text.toString() != state.title) {
+                    titleEdit.setText(state.title)
+                }
+            }
         }
     }
 
     private fun process(event: CreateDetailsViewEvent) {
         when (event) {
-            CreateDetailsViewEvent.NavigateBack -> navigateBack()
+            CreateDetailsViewEvent.NavigateToMain -> {
+                //ToDo make navigation on MainFragment
+               navigator.goToMain()
+            }
         }
     }
 

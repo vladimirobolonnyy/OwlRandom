@@ -11,5 +11,7 @@
     <string name="main_title">Your items</string>
     <string name="main_add_button">Add new item</string>
     <string name="edit">edit</string>
-    <string name="delete">detele</string>
+    <string name="delete">delete</string>
+    <string name="material_dialog_delete_title">Delete all group?</string>
+    <string name="cancel">cancel</string>
 </resources>

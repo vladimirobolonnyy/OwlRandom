@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.google.android.material.appbar.MaterialToolbar
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseFragment
@@ -51,19 +52,23 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
         toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         observe(viewModel.viewState, ::render)
     }
 
     private fun render(state: DetailsViewState) {
         when (state) {
-            DetailsViewState.Loading -> {
-            }
+            DetailsViewState.Empty -> renderEmptyState()
             DetailsViewState.Error -> {
             }
             is DetailsViewState.Loaded -> renderState(state)
         }
+    }
+
+    private fun renderEmptyState() {
+        detailsAdapter.setData(emptyList())
+        toolbar.title = ""
     }
 
     private fun renderState(state: DetailsViewState.Loaded) {
@@ -72,8 +77,13 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
     }
 
     private fun showPickDialog() {
+        //Todo refactor here
         materialDialog().show {
-            positiveButton(R.string.submit)
+            listItemsSingleChoice(
+                items = RandomTypes.values().map { it.text }
+            ) { _, index, text ->
+                viewModel.onRandomTypePicked(index, text)
+            }
         }
     }
 }

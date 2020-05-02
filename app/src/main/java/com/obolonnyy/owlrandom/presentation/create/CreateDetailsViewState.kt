@@ -2,20 +2,27 @@ package com.obolonnyy.owlrandom.presentation.create
 
 import com.obolonnyy.owlrandom.model.MyGroup
 
+sealed class CreateDetailsViewState {
 
-data class CreateDetailsViewState(
-    val title : String = "",
-    val list: MutableList<CreateDetailsAdapterItem> = mutableListOf()
-) {
+    object Empty : CreateDetailsViewState()
 
-    constructor(group: MyGroup) : this(group.title, group.items.mapTo().toMutableList())
+    data class Loaded(
+        val title: String = "",
+        val list: MutableList<CreateDetailsAdapterItem> = mutableListOf()
+    ) : CreateDetailsViewState() {
 
-    fun toGroup(groupId: Long) : MyGroup {
-        return MyGroup(
-            id = groupId,
-            title = this.title,
-            items = this.list.filter { it.text.isNotBlank() }.map { it.text }
-        )
+        val deleteBtnIsVisible
+        get() = list.isNotEmpty() && list.first().text.isNotBlank()
+
+        constructor(group: MyGroup) : this(group.title, group.items.mapTo().toMutableList())
+
+        fun toGroup(groupId: Long): MyGroup {
+            return MyGroup(
+                id = groupId,
+                title = this.title,
+                items = this.list.filter { it.text.isNotBlank() }.map { it.text }
+            )
+        }
     }
 }
 
@@ -24,5 +31,5 @@ private fun List<String>.mapTo(): List<CreateDetailsAdapterItem> {
 }
 
 sealed class CreateDetailsViewEvent {
-    object NavigateBack : CreateDetailsViewEvent()
+    object NavigateToMain : CreateDetailsViewEvent()
 }

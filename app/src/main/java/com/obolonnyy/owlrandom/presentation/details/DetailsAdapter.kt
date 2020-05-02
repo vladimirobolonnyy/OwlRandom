@@ -11,8 +11,7 @@ import com.obolonnyy.owlrandom.utils.clearAndAdd
 import com.obolonnyy.owlrandom.utils.setBgColor
 
 
-class DetailsAdapter(
-) : RecyclerView.Adapter<DetailsViewHolder>() {
+class DetailsAdapter : RecyclerView.Adapter<DetailsViewHolder>() {
 
     private val items = mutableListOf<DetailsAdapterItem>()
     override fun getItemCount() = items.size
@@ -48,14 +47,10 @@ class DetailsAdapter(
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             return oldList[oldItemPosition] == newList[newItemPosition]
         }
-
     }
 }
 
-class DetailsViewHolder(
-    viewGroup: ViewGroup,
-    private val onItemChanged: (String, CreateDetailsAdapterItem) -> Unit = { _, _ -> }
-) : BaseViewHolder(viewGroup, R.layout.item_details) {
+class DetailsViewHolder(viewGroup: ViewGroup) : BaseViewHolder(viewGroup, R.layout.item_details) {
     private val text: MaterialTextView = itemView.findViewById(R.id.details_item_text)
 
     fun bind(item: DetailsAdapterItem) {

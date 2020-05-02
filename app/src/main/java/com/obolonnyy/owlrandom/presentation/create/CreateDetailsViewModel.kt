@@ -17,7 +17,7 @@ class CreateDetailsViewModel(
     private val repo: MainRepositoryImpl = MainRepositoryImpl()
 ) : BaseViewModel() {
 
-    private var state: CreateDetailsViewState = CreateDetailsViewState()
+    private var state: CreateDetailsViewState = CreateDetailsViewState.Empty
     private val _viewState = MutableLiveData(state)
     val viewState: LiveData<CreateDetailsViewState> = _viewState
 
@@ -29,10 +29,13 @@ class CreateDetailsViewModel(
     }
 
     fun onTitleChanged(newText: String) {
-        state.copy(title = newText).post()
+        (state as? CreateDetailsViewState.Loaded)?.let {
+            it.copy(title = newText).post()
+        }
     }
 
     fun onItemChanged(newText: String, item: CreateDetailsAdapterItem) {
+        val state = (state as? CreateDetailsViewState.Loaded) ?: return
         val oldText = state.list[item.position].text
         state.list[item.position] =
             state.list[item.position].copy(text = newText, requestFocus = true)
@@ -46,10 +49,11 @@ class CreateDetailsViewModel(
     }
 
     fun delete() {
+        val state = (state as? CreateDetailsViewState.Loaded) ?: return
         launchIO {
-            //ToDo add confirm dialog
             repo.deleteGroup(state.toGroup(groupId))
-            _viewEvents.postValue(CreateDetailsViewEvent.NavigateBack)
+            CreateDetailsViewState.Empty.post()
+            _viewEvents.postValue(CreateDetailsViewEvent.NavigateToMain)
         }
     }
 
@@ -62,14 +66,15 @@ class CreateDetailsViewModel(
                     groupItems.add("")
                 }
                 val newGroup = group.copy(items = groupItems)
-                CreateDetailsViewState(newGroup).post()
+                CreateDetailsViewState.Loaded(newGroup).post()
             } else {
-                CreateDetailsViewState("", mutableListOf(CreateDetailsAdapterItem(0, ""))).post()
+                CreateDetailsViewState.Loaded("", mutableListOf(CreateDetailsAdapterItem(0, ""))).post()
             }
         }
     }
 
     override fun onCleared() {
+        val state = (state as? CreateDetailsViewState.Loaded) ?: return
         GlobalScope.launch(Dispatchers.IO) {
             val group = state.toGroup(groupId)
             if (group.items.any { it.isNotBlank() }) {
