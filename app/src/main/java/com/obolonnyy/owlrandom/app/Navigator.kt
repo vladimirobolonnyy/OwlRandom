@@ -5,9 +5,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.obolonnyy.owlrandom.R
-import com.obolonnyy.owlrandom.create.CreateDetailsFragment
-import com.obolonnyy.owlrandom.details.DetailsFragment
-import com.obolonnyy.owlrandom.main.MainFragment
+import com.obolonnyy.owlrandom.presentation.create.CreateDetailsFragment
+import com.obolonnyy.owlrandom.presentation.details.DetailsFragment
+import com.obolonnyy.owlrandom.presentation.main.MainFragment
 
 class Navigator(
     private val activity: FragmentActivity, //Todo bad

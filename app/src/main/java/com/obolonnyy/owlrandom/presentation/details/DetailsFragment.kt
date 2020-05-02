@@ -1,8 +1,7 @@
-package com.obolonnyy.owlrandom.details
+package com.obolonnyy.owlrandom.presentation.details
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseFragment

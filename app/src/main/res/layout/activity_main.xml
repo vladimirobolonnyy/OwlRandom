@@ -8,7 +8,7 @@
 <!--
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/main_fragment"
-        android:name="com.obolonnyy.owlrandom.main.MainFragment"
+        android:name="com.obolonnyy.owlrandom.presentation.main.MainFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />-->
 

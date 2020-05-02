@@ -1,4 +1,4 @@
-package com.obolonnyy.owlrandom.main
+package com.obolonnyy.owlrandom.presentation.main
 
 data class MainItem(
     val groupId: Long,

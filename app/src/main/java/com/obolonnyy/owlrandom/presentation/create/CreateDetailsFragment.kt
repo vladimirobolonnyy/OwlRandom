@@ -1,4 +1,4 @@
-package com.obolonnyy.owlrandom.create
+package com.obolonnyy.owlrandom.presentation.create
 
 import android.os.Bundle
 import android.view.View

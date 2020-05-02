@@ -1,4 +1,4 @@
-package com.obolonnyy.owlrandom.main
+package com.obolonnyy.owlrandom.presentation.main
 
 import com.obolonnyy.owlrandom.model.MyGroup
 

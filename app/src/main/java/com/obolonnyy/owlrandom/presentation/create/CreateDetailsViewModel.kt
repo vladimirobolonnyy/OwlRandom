@@ -1,4 +1,4 @@
-package com.obolonnyy.owlrandom.create
+package com.obolonnyy.owlrandom.presentation.create
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
