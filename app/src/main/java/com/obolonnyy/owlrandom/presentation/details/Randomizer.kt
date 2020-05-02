@@ -22,4 +22,17 @@ class Randomizer {
         oldItems.addAll(list)
         return oldItems
     }
+
+    fun <T> divideByNTeams(n: Int, list: MutableList<T>): List<MutableList<T>> {
+        if (list.size < n || n < 0) return listOf(list)
+        val resultLists = ArrayList<MutableList<T>>(n)
+        for (i in 0..n) {
+            resultLists.add(mutableListOf())
+        }
+        for (i in 0 until list.size) {
+            val r = random.nextInt(0, list.size)
+            resultLists[i % n].add(list.removeAt(r))
+        }
+        return resultLists
+    }
 }

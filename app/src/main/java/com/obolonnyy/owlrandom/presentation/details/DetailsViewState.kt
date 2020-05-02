@@ -28,8 +28,12 @@ enum class RandomTypes(val index: Int, val text: String) {
     ONE(1, "Pick one"),
     TWO(2, "Pick two"),
     THREE(3, "Pick three"),
-    DIVIDE_TWO(4, "Divide in tho teams"),
-    DIVIDE_THEE(5, "Divide in three teams");
+    FOUR(4, "Pick four"),
+    FIVE(5, "Pick five"),
+    DIVIDE_TWO(6, "Divide in tho teams"),
+    DIVIDE_THEE(7, "Divide in three teams"),
+    DIVIDE_FOUR(8, "Divide in four teams"),
+    DIVIDE_FIVE(9, "Divide in five teams");
 
     companion object {
         fun get(int: Int): RandomTypes? {

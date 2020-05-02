@@ -1,6 +1,8 @@
 package com.obolonnyy.owlrandom.database
 
 import com.obolonnyy.owlrandom.model.MyGroup
+import com.obolonnyy.owlrandom.utils.MyResult
+import com.obolonnyy.owlrandom.utils.asResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
@@ -29,9 +31,8 @@ class MainRepositoryImpl(
         return dao.getGroup(id)?.let { fromEntity(it) }
     }
 
-    suspend fun getFlowGroup(id: Long): Flow<MyGroup> {
-        val flow = dao.getFlowGroup(id)
-        return flow.mapNotNull { fromEntity2(it) }
+    suspend fun getFlowGroup(id: Long): MyResult<Flow<MyGroup>> = asResult {
+        dao.getFlowGroup(id).map { fromEntity(it) }
     }
 
     suspend fun saveGroup(group: MyGroup): MyGroup? {

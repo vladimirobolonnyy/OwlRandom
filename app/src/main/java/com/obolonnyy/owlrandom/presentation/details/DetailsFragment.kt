@@ -61,6 +61,7 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
         when (state) {
             DetailsViewState.Empty -> renderEmptyState()
             DetailsViewState.Error -> {
+                toolbar.title = "Error"
             }
             is DetailsViewState.Loaded -> renderState(state)
         }

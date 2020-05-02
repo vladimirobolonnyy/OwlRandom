@@ -13,7 +13,7 @@ interface GroupsDao {
     suspend fun getGroup(id: Long): GroupEntity?
 
     @Query("SELECT * FROM GroupEntity WHERE id= :id")
-    fun getFlowGroup(id: Long): Flow<GroupEntity?>
+    fun getFlowGroup(id: Long): Flow<GroupEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveGroup(group: GroupEntity): Long
