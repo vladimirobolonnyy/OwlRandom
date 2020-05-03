@@ -4,10 +4,11 @@ import androidx.activity.OnBackPressedCallback
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import com.obolonnyy.owlrandom.app.Navigator
+import com.obolonnyy.owlrandom.app.NavigatorImpl
 
 abstract class BaseFragment(@LayoutRes val res: Int) : Fragment(res) {
 
-    protected val navigator: Navigator by lazy { Navigator(this.activity!!) }
+    protected val navigator: Navigator by lazy { NavigatorImpl(this.activity!!) }
 
     protected open val onBackPressed: (() -> Unit)? = null
 
