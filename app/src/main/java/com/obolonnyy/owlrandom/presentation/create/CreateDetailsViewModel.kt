@@ -3,6 +3,7 @@ package com.obolonnyy.owlrandom.presentation.create
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.obolonnyy.owlrandom.base.BaseViewModel
+import com.obolonnyy.owlrandom.database.MainRepository
 import com.obolonnyy.owlrandom.database.MainRepositoryImpl
 import com.obolonnyy.owlrandom.utils.SingleLiveEvent
 import com.obolonnyy.owlrandom.utils.safeRemoveLast
@@ -14,7 +15,7 @@ import timber.log.Timber
 
 class CreateDetailsViewModel(
     private val groupId: Long,
-    private val repo: MainRepositoryImpl = MainRepositoryImpl()
+    private val repo: MainRepository = MainRepositoryImpl()
 ) : BaseViewModel() {
 
     private var state: CreateDetailsViewState = CreateDetailsViewState.Empty
