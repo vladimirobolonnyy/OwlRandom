@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseFragment
-import com.obolonnyy.owlrandom.base.view.SimpleDividerItemDecoration
 import com.obolonnyy.owlrandom.utils.observe
 import com.obolonnyy.owlrandom.utils.viewModels
 
@@ -26,17 +25,18 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         recycler.apply {
             adapter = mainAdapter
             layoutManager = LinearLayoutManager(context)
-//            addItemDecoration(SimpleDividerItemDecoration(requireContext()))
         }
         emptyText = view.findViewById(R.id.main_empty_text)
-        emptyText.setOnClickListener { addNewItem() }
+        emptyText.setOnClickListener { viewModel.onAddItemClicked() }
 
-        view.findViewById<View>(R.id.main_add_button).setOnClickListener { addNewItem() }
+        view.findViewById<View>(R.id.main_add_button)
+            .setOnClickListener { viewModel.onAddItemClicked() }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         observe(viewModel.viewState, ::render)
+        observe(viewModel.viewEvents, ::process)
     }
 
     private fun render(state: MainViewState) {
@@ -47,18 +47,15 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         }
     }
 
-    private fun onItemClicked(mainItem: MainItem) {
-//        navigator.goToCreateDetails(this, mainItem.groupId)
-        navigator.goToDetails(this, mainItem.groupId)
-    }
-
-    private fun addNewItem() {
-        //todo remove in view model
-        when (val state = viewModel.viewState.value) {
-            MainViewState.Empty -> navigator.goToCreateDetails(this, 1)
-            is MainViewState.Loaded -> {
-                navigator.goToCreateDetails(this, (state.groups.size + 1).toLong())
+    private fun process(event: MainViewEvent) {
+        when (event) {
+            is MainViewEvent.GoToCreateItem -> {
+                navigator.goToCreateDetails(event.groupId)
             }
         }
+    }
+
+    private fun onItemClicked(mainItem: MainItem) {
+        navigator.goToDetails(mainItem.groupId)
     }
 }

@@ -6,6 +6,7 @@ import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseViewModel
 import com.obolonnyy.owlrandom.database.MainRepositoryImpl
 import com.obolonnyy.owlrandom.utils.MyResult
+import com.obolonnyy.owlrandom.utils.SingleLiveEvent
 import com.obolonnyy.owlrandom.utils.warning
 import kotlinx.coroutines.flow.collect
 
@@ -18,6 +19,9 @@ class DetailsViewModel(
     private var state: DetailsViewState = DetailsViewState.Empty
     private val _viewState = MutableLiveData<DetailsViewState>()
     val viewState: LiveData<DetailsViewState> = _viewState
+
+    private val _viewEvents = SingleLiveEvent<DetailsViewEvent>()
+    val viewEvents: LiveData<DetailsViewEvent> = _viewEvents
 
     init {
         loadData()
@@ -110,5 +114,15 @@ class DetailsViewModel(
     private fun DetailsViewState.post() {
         state = this
         _viewState.postValue(state)
+    }
+
+    fun onRollClicked() {
+        _viewEvents.postValue(
+            DetailsViewEvent.ShowPickDialog(items = RandomTypes.values().map { it.text })
+        )
+    }
+
+    fun onEditClicked() {
+        _viewEvents.postValue(DetailsViewEvent.NavigateToEdit(groupId))
     }
 }

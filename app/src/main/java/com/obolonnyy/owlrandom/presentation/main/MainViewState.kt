@@ -6,3 +6,7 @@ sealed class MainViewState {
     object Empty : MainViewState()
     data class Loaded(val groups: List<MyGroup>): MainViewState()
 }
+
+sealed class MainViewEvent {
+    data class GoToCreateItem(val groupId: Long) : MainViewEvent()
+}

@@ -23,6 +23,11 @@ sealed class DetailsViewState {
     }
 }
 
+sealed class DetailsViewEvent {
+    data class ShowPickDialog(val items: List<String>) : DetailsViewEvent()
+    data class NavigateToEdit(val groupId: Long) : DetailsViewEvent()
+}
+
 enum class RandomTypes(val index: Int, val text: String) {
     RANDOMIZE_ALL(0, "Randomize all"),
     ONE(1, "Pick one"),

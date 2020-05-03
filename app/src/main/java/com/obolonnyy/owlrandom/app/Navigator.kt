@@ -16,12 +16,12 @@ class Navigator(
 
     private val fm: FragmentManager = activity.supportFragmentManager
 
-    fun goToCreateDetails(fragmentToHide: Fragment, groupId: Long) {
+    fun goToCreateDetails(groupId: Long) {
         //ToDo add navigation animations
         CreateDetailsFragment.new(groupId).replace()
     }
 
-    fun goToDetails(fragmentToHide: Fragment, groupId: Long) {
+    fun goToDetails(groupId: Long) {
         DetailsFragment.new(groupId).replace()
     }
 

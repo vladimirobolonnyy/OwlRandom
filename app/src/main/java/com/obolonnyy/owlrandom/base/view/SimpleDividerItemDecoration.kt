@@ -22,7 +22,7 @@ class SimpleDividerItemDecoration(
     private val mDivider: Drawable = if (backgroundColor != null) {
         context.getColoredDrawable(backgroundColor, R.drawable.line_divider)
     } else {
-        context.resources.getDrawable(R.drawable.line_divider)
+        context.resources.getDrawable(R.drawable.line_divider, context.theme)
     }
 
     override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {

@@ -41,12 +41,10 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
             layoutManager = LinearLayoutManager(context)
         }
         view.findViewById<View>(R.id.details_btn_roll).setOnClickListener {
-            //todo move to vm
-            showPickDialog()
+            viewModel.onRollClicked()
         }
         view.findViewById<View>(R.id.details_btn_edit).setOnClickListener {
-            //todo move to vm
-            navigator.goToCreateDetails(this, groupId)
+            viewModel.onEditClicked()
         }
         toolbar = view.findViewById(R.id.details_toolbar)
         toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
@@ -55,14 +53,22 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         observe(viewModel.viewState, ::render)
+        observe(viewModel.viewEvents, ::process)
+    }
+
+    private fun process(event: DetailsViewEvent) {
+        when (event) {
+           is  DetailsViewEvent.ShowPickDialog -> showPickDialog(event.items)
+           is DetailsViewEvent.NavigateToEdit -> {
+               navigator.goToCreateDetails(event.groupId)
+           }
+        }
     }
 
     private fun render(state: DetailsViewState) {
         when (state) {
             DetailsViewState.Empty -> renderEmptyState()
-            DetailsViewState.Error -> {
-                toolbar.title = "Error"
-            }
+            DetailsViewState.Error -> toolbar.title = "Error"
             is DetailsViewState.Loaded -> renderState(state)
         }
     }
@@ -77,12 +83,9 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
         toolbar.title = state.group.title
     }
 
-    private fun showPickDialog() {
-        //Todo refactor here
+    private fun showPickDialog(items: List<String>) {
         materialDialog().show {
-            listItemsSingleChoice(
-                items = RandomTypes.values().map { it.text }
-            ) { _, index, text ->
+            listItemsSingleChoice( items = items) { _, index, text ->
                 viewModel.onRandomTypePicked(index, text)
             }
         }

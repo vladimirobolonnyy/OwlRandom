@@ -6,9 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textview.MaterialTextView
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseViewHolder
-import com.obolonnyy.owlrandom.presentation.create.CreateDetailsAdapterItem
 import com.obolonnyy.owlrandom.utils.clearAndAdd
-import com.obolonnyy.owlrandom.utils.setBgColor
+import com.obolonnyy.owlrandom.utils.setTintBg
 
 
 class DetailsAdapter : RecyclerView.Adapter<DetailsViewHolder>() {
@@ -55,7 +54,6 @@ class DetailsViewHolder(viewGroup: ViewGroup) : BaseViewHolder(viewGroup, R.layo
 
     fun bind(item: DetailsAdapterItem) {
         text.text = item.text
-        //Setting a custom background is not supported. todo check this
-        itemView.setBgColor(item.bgColor)
+        itemView.setTintBg(item.bgColor)
     }
 }

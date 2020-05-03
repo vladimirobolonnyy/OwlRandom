@@ -5,37 +5,36 @@ import com.obolonnyy.owlrandom.utils.MyResult
 import com.obolonnyy.owlrandom.utils.asResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 
-//ToDo make stable interface
 interface MainRepository {
-//    suspend fun getAllGroups(): List<MyGroup>
-//    suspend fun getGroup(id: Long): MyGroup?
-//    suspend fun saveGroup(group: MyGroup): MyGroup?
-//    suspend fun deleteGroup(group: MyGroup)
+    suspend fun getAllGroups(): Flow<List<MyGroup>>
+    suspend fun getGroup(id: Long): MyGroup?
+    suspend fun getFlowGroup(id: Long): MyResult<Flow<MyGroup>>
+    suspend fun saveGroup(group: MyGroup): MyGroup?
+    suspend fun deleteGroup(group: MyGroup)
 }
 
 class MainRepositoryImpl(
-
+    database: GroupsDatabase = GROUPS_DATABASE
 ) : MainRepository {
 
-    private val dao = GROUPS_DATABASE.groupsDao()
+    private val dao = database.groupsDao()
 
-    fun getAllGroups(): Flow<List<MyGroup>> {
+    override suspend fun getAllGroups(): Flow<List<MyGroup>> {
         return dao.getAllGroups().map { list: List<GroupEntity> ->
             list.map { fromEntity(it) }
         }
     }
 
-    suspend fun getGroup(id: Long): MyGroup? {
+    override suspend fun getGroup(id: Long): MyGroup? {
         return dao.getGroup(id)?.let { fromEntity(it) }
     }
 
-    suspend fun getFlowGroup(id: Long): MyResult<Flow<MyGroup>> = asResult {
+    override suspend fun getFlowGroup(id: Long): MyResult<Flow<MyGroup>> = asResult {
         dao.getFlowGroup(id).map { fromEntity(it) }
     }
 
-    suspend fun saveGroup(group: MyGroup): MyGroup? {
+    override suspend fun saveGroup(group: MyGroup): MyGroup? {
         val result = if (dao.getGroup(group.id) == null) {
             dao.saveGroup(group.toEntity())
         } else {
@@ -44,16 +43,11 @@ class MainRepositoryImpl(
         return getGroup(result)
     }
 
-    suspend fun deleteGroup(group: MyGroup) {
+    override suspend fun deleteGroup(group: MyGroup) {
         dao.deleteGroup(group.toEntity(group.id))
     }
 
     private fun fromEntity(ent: GroupEntity): MyGroup {
-        return MyGroup(ent.id, ent.title, ent.items)
-    }
-
-    private fun fromEntity2(ent: GroupEntity?): MyGroup? {
-        ent ?: return null
         return MyGroup(ent.id, ent.title, ent.items)
     }
 }

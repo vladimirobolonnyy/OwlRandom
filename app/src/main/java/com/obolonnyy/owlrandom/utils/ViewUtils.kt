@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorRes
 import androidx.annotation.LayoutRes
+import androidx.core.content.ContextCompat
 
 fun ViewGroup.inflateView(context: Context, @LayoutRes resource: Int) {
     LayoutInflater.from(context).inflate(resource, this, true)
@@ -20,5 +21,9 @@ fun View.getColor(@ColorRes colorRes: Int): Int {
 
 fun View.setBgColor(@ColorRes colorRes: Int) {
     this.setBackgroundColor(this.context.getColorCompat(colorRes))
+}
+
+fun View.setTintBg(@ColorRes colorRes: Int) {
+    this.background.setTintList(ContextCompat.getColorStateList(context, colorRes))
 }
 

@@ -75,7 +75,6 @@ class CreateDetailsFragment : BaseFragment(R.layout.fragment_create_details) {
     private fun process(event: CreateDetailsViewEvent) {
         when (event) {
             CreateDetailsViewEvent.NavigateToMain -> {
-                //ToDo make navigation on MainFragment
                navigator.goToMain()
             }
         }

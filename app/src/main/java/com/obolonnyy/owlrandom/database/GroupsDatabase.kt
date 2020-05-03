@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.obolonnyy.owlrandom.app.MainApplication
 
-@Database(entities = [GroupEntity::class], version = 1)
+@Database(entities = [GroupEntity::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class GroupsDatabase : RoomDatabase() {
     abstract fun groupsDao(): GroupsDao
