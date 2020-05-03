@@ -5,7 +5,7 @@ import com.obolonnyy.owlrandom.utils.MyResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class MockMainRepo : MainRepository {
+internal class MockMainRepo : MainRepository {
 
     companion object {
         val group: MyGroup = MyGroup(1, "title", listOf("1", "2", "3"))

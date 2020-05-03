@@ -94,6 +94,7 @@ dependencies {
     implementation "androidx.room:room-runtime:${versions.room}"
     implementation "androidx.room:room-ktx:${versions.room}"
     kapt "androidx.room:room-compiler:${versions.room}"
+    implementation "android.arch.persistence.room:runtime:${versions.room}n"
     kapt "android.arch.persistence.room:compiler:${versions.room}n"
 
     implementation "com.squareup.moshi:moshi:${versions.moshi}"
@@ -101,7 +102,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'android.arch.core:core-testing:1.1.1'
-//    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-//    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
 }

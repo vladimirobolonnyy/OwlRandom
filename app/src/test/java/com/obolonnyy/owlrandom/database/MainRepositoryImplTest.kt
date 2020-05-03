@@ -2,7 +2,7 @@ package com.obolonnyy.owlrandom.database
 
 import org.junit.Test
 
-class MainRepositoryImplTest {
+internal class MainRepositoryImplTest {
 
     @Test
     fun getAllGroups() {

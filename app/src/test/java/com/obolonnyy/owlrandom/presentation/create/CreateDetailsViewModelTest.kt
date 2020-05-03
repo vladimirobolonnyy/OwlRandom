@@ -10,7 +10,7 @@ import org.junit.Rule
 import org.junit.Test
 
 
-class CreateDetailsViewModelTest {
+internal class CreateDetailsViewModelTest {
 
     @get:Rule
     val rule = InstantTaskExecutorRule()
@@ -31,16 +31,13 @@ class CreateDetailsViewModelTest {
         runBlocking { viewModel.viewState.getOrAwaitValue() }
         viewModel.onTitleChanged(newTitle)
         val state = viewModel.viewState.getOrAwaitValue()
-        print (state.toString())
         assert(state is CreateDetailsViewState.Loaded)
         assert((state as CreateDetailsViewState.Loaded).title == newTitle)
     }
 
     @Test
     fun onItemChanged() {
-        (0..100).toList().forEach {
-            onTitleChanged()
-        }
+
     }
 
     @Test
