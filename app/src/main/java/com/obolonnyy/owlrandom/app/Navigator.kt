@@ -23,7 +23,6 @@ class NavigatorImpl(
     private val fm: FragmentManager = activity.supportFragmentManager
 
     override fun goToCreateDetails(groupId: Long) {
-        //ToDo add navigation animations
         CreateDetailsFragment.new(groupId).replace()
     }
 
@@ -38,8 +37,11 @@ class NavigatorImpl(
 
     private fun Fragment.replace() {
         fm.beginTransaction()
+            .setCustomAnimations(
+                R.animator.slide_in_left, R.animator.slide_in_right,
+                R.animator.slide_in_left_exit, R.animator.slide_in_right_exit
+            )
             .replace(container, this, this::class.java.toString())
-            .setCustomAnimations(R.animator.slide_in_left, R.animator.slide_in_right)
             .addToBackStack(this::class.java.toString())
             .commit()
     }
