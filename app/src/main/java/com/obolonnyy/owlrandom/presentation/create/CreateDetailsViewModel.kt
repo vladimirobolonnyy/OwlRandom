@@ -18,8 +18,8 @@ class CreateDetailsViewModel(
     private val repo: MainRepository = MainRepositoryImpl()
 ) : BaseViewModel() {
 
-    private var state: CreateDetailsViewState = CreateDetailsViewState.Empty
-    private val _viewState = MutableLiveData(state)
+    private val _viewState = MutableLiveData<CreateDetailsViewState>(CreateDetailsViewState.Empty)
+    private val state: CreateDetailsViewState get() = _viewState.value!!
     val viewState: LiveData<CreateDetailsViewState> = _viewState
 
     private val _viewEvents = SingleLiveEvent<CreateDetailsViewEvent>()
@@ -30,9 +30,7 @@ class CreateDetailsViewModel(
     }
 
     fun onTitleChanged(newText: String) {
-        (state as? CreateDetailsViewState.Loaded)?.let {
-            it.copy(title = newText).post()
-        }
+        (state as? CreateDetailsViewState.Loaded)?.copy(title = newText)?.post()
     }
 
     fun onItemChanged(newText: String, item: CreateDetailsAdapterItem) {
@@ -69,7 +67,7 @@ class CreateDetailsViewModel(
                 val newGroup = group.copy(items = groupItems)
                 CreateDetailsViewState.Loaded(newGroup).post()
             } else {
-                CreateDetailsViewState.Loaded("", mutableListOf(CreateDetailsAdapterItem(0, ""))).post()
+                CreateDetailsViewState.Loaded("", mutableListOf(CreateDetailsAdapterItem())).post()
             }
         }
     }
@@ -87,7 +85,6 @@ class CreateDetailsViewModel(
     }
 
     private fun CreateDetailsViewState.post() {
-        state = this
-        _viewState.postValue(state)
+        _viewState.postValue(this)
     }
 }
