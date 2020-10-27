@@ -4,9 +4,9 @@ import com.obolonnyy.owlrandom.model.MyGroup
 
 sealed class MainViewState {
     object Empty : MainViewState()
-    data class Loaded(val groups: List<MyGroup>): MainViewState()
+    data class Loaded(val groups: List<MyGroup>) : MainViewState()
 }
 
 sealed class MainViewEvent {
-    data class GoToCreateItem(val groupId: Long) : MainViewEvent()
+    object GoToCreateItem : MainViewEvent()
 }

@@ -14,13 +14,14 @@ import com.obolonnyy.owlrandom.utils.observe
 import com.obolonnyy.owlrandom.utils.sureMaterialDialog
 import com.obolonnyy.owlrandom.utils.viewModels
 
-class CreateDetailsFragment : BaseFragment(R.layout.fragment_create_details) {
+class EditDetailsFragment : BaseFragment(R.layout.fragment_create_details) {
 
     companion object {
         private const val GROUP_ID = "GROUP_ID"
 
-        fun new(groupId: Long): CreateDetailsFragment {
-            return CreateDetailsFragment().apply {
+        fun new(groupId: Long?): EditDetailsFragment {
+            groupId ?: return EditDetailsFragment()
+            return EditDetailsFragment().apply {
                 arguments = Bundle().apply {
                     putLong(GROUP_ID, groupId)
                 }
@@ -32,8 +33,8 @@ class CreateDetailsFragment : BaseFragment(R.layout.fragment_create_details) {
     private lateinit var titleEdit: TextInputEditText
     private lateinit var deleteBtn: View
     private val createDetailsAdapter = CreateDetailsAdapter(::onItemChanged)
-    private val groupId by lazy { arguments!!.getLong(GROUP_ID) }
-    private val viewModel by viewModels { CreateDetailsViewModel(groupId) }
+    private val groupId: Long? by lazy { arguments?.getLong(GROUP_ID) }
+    private val viewModel by viewModels { EditDetailsViewModel(groupId.takeIf { it != -1L }) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,7 +76,7 @@ class CreateDetailsFragment : BaseFragment(R.layout.fragment_create_details) {
     private fun process(event: CreateDetailsViewEvent) {
         when (event) {
             CreateDetailsViewEvent.NavigateToMain -> {
-               navigator.goToMain()
+                navigator.goToMain()
             }
         }
     }
@@ -84,7 +85,7 @@ class CreateDetailsFragment : BaseFragment(R.layout.fragment_create_details) {
         activity?.onBackPressed()
     }
 
-    private fun onItemChanged(text: String, item: CreateDetailsAdapterItem) {
+    private fun onItemChanged(text: String, item: EditDetailsAdapterItem) {
         viewModel.onItemChanged(text, item)
     }
 }

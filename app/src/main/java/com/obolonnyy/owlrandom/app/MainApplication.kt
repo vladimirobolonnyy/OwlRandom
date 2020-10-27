@@ -17,7 +17,7 @@ class MainApplication : Application() {
         super.onCreate()
         context = this
         AndroidThreeTen.init(this);
-        if (BuildInfo.isDedug) {
+        if (BuildInfo.isDebug) {
             Timber.plant(Timber.DebugTree())
         }
     }

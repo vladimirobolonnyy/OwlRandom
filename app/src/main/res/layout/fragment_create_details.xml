@@ -23,13 +23,16 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:text="@string/delete"
+        app:layout_constraintBottom_toBottomOf="@+id/create_details_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/create_details_toolbar" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/create_details_item_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         android:hint="@string/create_details_item_title_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

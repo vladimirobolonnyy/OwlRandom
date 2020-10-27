@@ -50,7 +50,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
     private fun process(event: MainViewEvent) {
         when (event) {
             is MainViewEvent.GoToCreateItem -> {
-                navigator.goToCreateDetails(event.groupId)
+                navigator.goToEditDetails()
             }
         }
     }

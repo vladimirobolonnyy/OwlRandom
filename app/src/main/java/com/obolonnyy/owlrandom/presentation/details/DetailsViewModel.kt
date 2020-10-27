@@ -6,10 +6,12 @@ import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseViewModel
 import com.obolonnyy.owlrandom.database.MainRepository
 import com.obolonnyy.owlrandom.database.MainRepositoryImpl
-import com.obolonnyy.owlrandom.utils.MyResult
 import com.obolonnyy.owlrandom.utils.SingleLiveEvent
 import com.obolonnyy.owlrandom.utils.warning
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.withContext
 
 class DetailsViewModel(
     private val groupId: Long,
@@ -17,8 +19,9 @@ class DetailsViewModel(
     private val repo: MainRepository = MainRepositoryImpl()
 ) : BaseViewModel() {
 
-    private var state: DetailsViewState = DetailsViewState.Empty
-    private val _viewState = MutableLiveData<DetailsViewState>()
+    private val state: DetailsViewState.Loaded?
+        get() = _viewState.value as? DetailsViewState.Loaded
+    private val _viewState = MutableLiveData<DetailsViewState>(DetailsViewState.Empty)
     val viewState: LiveData<DetailsViewState> = _viewState
 
     private val _viewEvents = SingleLiveEvent<DetailsViewEvent>()
@@ -28,17 +31,9 @@ class DetailsViewModel(
         loadData()
     }
 
-    fun onRandomTypePicked(index: Int, text: CharSequence) {
+    fun onRandomTypePicked(index: Int) {
         val type = RandomTypes.get(index)
-        if (type == null) {
-            warning("unknown type. index = ${index}, text:= $text")
-            return
-        }
-        if (state !is DetailsViewState.Loaded) {
-            warning("illegal state, $state")
-            return
-        }
-        val state = (state as DetailsViewState.Loaded)
+        val state = state ?: return
         val adapterItems = state.group.items.toAdapterItems()
         when (type) {
             RandomTypes.RANDOMIZE_ALL -> {
@@ -61,27 +56,18 @@ class DetailsViewModel(
         listOf(R.color.color2, R.color.color1, R.color.color3, R.color.blue, R.color.color5)
 
     private fun pick(colorNumber: Int) {
-        if (state !is DetailsViewState.Loaded) {
-            warning("illegal state, $state")
-            return
-        }
-        val state = (state as DetailsViewState.Loaded)
+        val state = state ?: return
         val adapterItems = state.group.items.toAdapterItems()
         val newItems = random.shuffleFirstN(colorNumber, adapterItems)
         DetailsViewState.Loaded(state.group, newItems).apply {
             for (i in 0 until colorNumber) {
                 changeColor(i, colorList[i])
             }
-            post()
-        }
+        }.post()
     }
 
     private fun divide(colorNumber: Int) {
-        if (state !is DetailsViewState.Loaded) {
-            warning("illegal state, $state")
-            return
-        }
-        val state = (state as DetailsViewState.Loaded)
+        val state = state ?: return
         val adapterItems = state.group.items.toAdapterItems()
         val listNewItems = random.divideByNTeams(colorNumber, adapterItems)
         val newItems = mutableListOf<DetailsAdapterItem>()
@@ -91,19 +77,32 @@ class DetailsViewModel(
         DetailsViewState.Loaded(state.group, newItems).post()
     }
 
-    private fun loadData() {
-        launchIO {
-            DetailsViewState.Empty.post()
-            when (val result = repo.getFlowGroup(groupId)) {
-                is MyResult.Success -> {
-                    result.data.collect { group ->
-                        val adapterItems = group.items.toAdapterItems()
-                        DetailsViewState.Loaded(group, adapterItems).post()
+    private fun loadData() = launchIO {
+        repo.getFlowGroup(groupId)
+            .catch { e ->
+                warning("DetailsViewModel got error $e")
+                _viewEvents.postValue(DetailsViewEvent.NavigateBack)
+            }
+            .collect { group ->
+                if (group == null) {
+                    _viewEvents.postValue(DetailsViewEvent.NavigateBack)
+                } else {
+                    val adapterItems = group.items.toAdapterItems()
+                    withContext(Dispatchers.Main) {
+                        val newState = DetailsViewState.Loaded(group, adapterItems)
+                        mergeStates(state, newState).post()
                     }
                 }
-                is MyResult.Error -> DetailsViewState.Error.post()
             }
-        }
+    }
+
+    private fun mergeStates(
+        oldState: DetailsViewState?,
+        newState: DetailsViewState.Loaded
+    ): DetailsViewState {
+        if (oldState !is DetailsViewState.Loaded) return newState
+        if (oldState.adapterItems.size == newState.adapterItems.size) return oldState
+        return newState
     }
 
     private fun List<String>.toAdapterItems(): MutableList<DetailsAdapterItem> {
@@ -113,8 +112,7 @@ class DetailsViewModel(
     }
 
     private fun DetailsViewState.post() {
-        state = this
-        _viewState.postValue(state)
+        _viewState.postValue(this)
     }
 
     fun onRollClicked() {

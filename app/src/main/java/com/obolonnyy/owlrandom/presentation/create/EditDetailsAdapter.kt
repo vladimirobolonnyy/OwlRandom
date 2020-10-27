@@ -11,10 +11,10 @@ import com.obolonnyy.owlrandom.base.BaseViewHolder
 
 
 class CreateDetailsAdapter (
-    private val onItemChanged: (String, CreateDetailsAdapterItem) -> Unit
+    private val onItemChanged: (String, EditDetailsAdapterItem) -> Unit
 ) : RecyclerView.Adapter<CreateDetailsViewHolder>() {
 
-    private val items = mutableListOf<CreateDetailsAdapterItem>()
+    private val items = mutableListOf<EditDetailsAdapterItem>()
     override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CreateDetailsViewHolder {
@@ -25,7 +25,7 @@ class CreateDetailsAdapter (
         holder.bind(items[position])
     }
 
-    fun setData(list: List<CreateDetailsAdapterItem>){
+    fun setData(list: List<EditDetailsAdapterItem>){
         val callback = CreateDiffUtilCallback(items, list)
         val diffResult = DiffUtil.calculateDiff(callback)
         this.items.clear()
@@ -36,13 +36,13 @@ class CreateDetailsAdapter (
 
 class CreateDetailsViewHolder(
     viewGroup: ViewGroup,
-    private val onItemChanged: (String, CreateDetailsAdapterItem) -> Unit
+    private val onItemChanged: (String, EditDetailsAdapterItem) -> Unit
 ) : BaseViewHolder(viewGroup, R.layout.item_create_details) {
 
     private val edit: TextInputEditText = itemView.findViewById(R.id.create_details_item_edit)
     private var wrapper : SaveEditTextWrapper? = null
 
-    fun bind(item: CreateDetailsAdapterItem) {
+    fun bind(item: EditDetailsAdapterItem) {
         edit.removeTextChangedListener(wrapper)
         edit.setText(item.text)
         wrapper = SaveEditTextWrapper(item, onItemChanged)
@@ -54,8 +54,8 @@ class CreateDetailsViewHolder(
 }
 
 class SaveEditTextWrapper (
-    private val item: CreateDetailsAdapterItem,
-    private val onItemChanged: (String, CreateDetailsAdapterItem) -> Unit
+    private val item: EditDetailsAdapterItem,
+    private val onItemChanged: (String, EditDetailsAdapterItem) -> Unit
 ): TextWatcher {
     override fun afterTextChanged(s: Editable?) {
         onItemChanged(s.toString(), item)
@@ -69,8 +69,8 @@ class SaveEditTextWrapper (
 }
 
 class CreateDiffUtilCallback(
-    private val oldList: List<CreateDetailsAdapterItem>,
-    private val newList: List<CreateDetailsAdapterItem>
+    private val oldList: List<EditDetailsAdapterItem>,
+    private val newList: List<EditDetailsAdapterItem>
 ) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int = oldList.size
@@ -80,18 +80,14 @@ class CreateDiffUtilCallback(
         oldItemPosition: Int,
         newItemPosition: Int
     ): Boolean {
-        val old: CreateDetailsAdapterItem = oldList[oldItemPosition]
-        val new: CreateDetailsAdapterItem = newList[newItemPosition]
-        return old.position == new.position
+        return oldList[oldItemPosition].position == newList[newItemPosition].position
     }
 
     override fun areContentsTheSame(
         oldItemPosition: Int,
         newItemPosition: Int
     ): Boolean {
-        val old: CreateDetailsAdapterItem = oldList[oldItemPosition]
-        val new: CreateDetailsAdapterItem = newList[newItemPosition]
-        return old.position == new.position
+        return oldList[oldItemPosition].position == newList[newItemPosition].position
     }
 
 }

@@ -23,12 +23,7 @@ class MainViewModel(
     }
 
     fun onAddItemClicked() {
-        val groupId = when (val state = viewState.value) {
-            MainViewState.Empty -> 1
-            is MainViewState.Loaded -> (state.groups.size + 1).toLong()
-            else -> 1
-        }
-        _viewEvents.postValue(MainViewEvent.GoToCreateItem(groupId))
+        _viewEvents.postValue(MainViewEvent.GoToCreateItem)
     }
 
     private fun loadData() = launchIO {

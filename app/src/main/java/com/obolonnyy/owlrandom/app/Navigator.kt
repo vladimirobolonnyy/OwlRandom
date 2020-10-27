@@ -5,12 +5,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.obolonnyy.owlrandom.R
-import com.obolonnyy.owlrandom.presentation.create.CreateDetailsFragment
+import com.obolonnyy.owlrandom.presentation.create.EditDetailsFragment
 import com.obolonnyy.owlrandom.presentation.details.DetailsFragment
 import com.obolonnyy.owlrandom.presentation.main.MainFragment
 
 interface Navigator {
-    fun goToCreateDetails(groupId: Long)
+    fun goToEditDetails(groupId: Long? = null)
     fun goToDetails(groupId: Long)
     fun goToMain()
 }
@@ -22,8 +22,8 @@ class NavigatorImpl(
 
     private val fm: FragmentManager = activity.supportFragmentManager
 
-    override fun goToCreateDetails(groupId: Long) {
-        CreateDetailsFragment.new(groupId).replace()
+    override fun goToEditDetails(groupId: Long?) {
+        EditDetailsFragment.new(groupId).replace()
     }
 
     override fun goToDetails(groupId: Long) {

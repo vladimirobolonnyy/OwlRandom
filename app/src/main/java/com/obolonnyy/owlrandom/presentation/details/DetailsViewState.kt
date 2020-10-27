@@ -24,8 +24,9 @@ sealed class DetailsViewState {
 }
 
 sealed class DetailsViewEvent {
-    data class ShowPickDialog(val items: List<String>) : DetailsViewEvent()
-    data class NavigateToEdit(val groupId: Long) : DetailsViewEvent()
+     class ShowPickDialog(val items: List<String>) : DetailsViewEvent()
+     class NavigateToEdit(val groupId: Long) : DetailsViewEvent()
+     object NavigateBack : DetailsViewEvent()
 }
 
 enum class RandomTypes(val index: Int, val text: String) {
@@ -41,8 +42,8 @@ enum class RandomTypes(val index: Int, val text: String) {
     DIVIDE_FIVE(9, "Divide in five teams");
 
     companion object {
-        fun get(int: Int): RandomTypes? {
-            return RandomTypes.values().firstOrNull { it.index == int }
+        fun get(int: Int): RandomTypes {
+            return values().firstOrNull { it.index == int } ?: RANDOMIZE_ALL
         }
     }
 }

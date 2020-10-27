@@ -1,17 +1,16 @@
 package com.obolonnyy.owlrandom.database
 
 import com.obolonnyy.owlrandom.model.MyGroup
-import com.obolonnyy.owlrandom.utils.MyResult
-import com.obolonnyy.owlrandom.utils.asResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 interface MainRepository {
     suspend fun getAllGroups(): Flow<List<MyGroup>>
-    suspend fun getGroup(id: Long): MyGroup?
-    suspend fun getFlowGroup(id: Long): MyResult<Flow<MyGroup>>
+    suspend fun getGroup(id: Long?): MyGroup?
+    suspend fun getFlowGroup(id: Long): Flow<MyGroup?>
     suspend fun saveGroup(group: MyGroup): MyGroup?
     suspend fun deleteGroup(group: MyGroup)
+    suspend fun createEmptyGroup(): MyGroup
 }
 
 class MainRepositoryImpl(
@@ -22,16 +21,17 @@ class MainRepositoryImpl(
 
     override suspend fun getAllGroups(): Flow<List<MyGroup>> {
         return dao.getAllGroups().map { list: List<GroupEntity> ->
-            list.map { fromEntity(it) }
+            list.map { it.toModel() }
         }
     }
 
-    override suspend fun getGroup(id: Long): MyGroup? {
-        return dao.getGroup(id)?.let { fromEntity(it) }
+    override suspend fun getGroup(id: Long?): MyGroup? {
+        id ?: return null
+        return dao.getGroup(id)?.toModel()
     }
 
-    override suspend fun getFlowGroup(id: Long): MyResult<Flow<MyGroup>> = asResult {
-        dao.getFlowGroup(id).map { fromEntity(it) }
+    override suspend fun getFlowGroup(id: Long): Flow<MyGroup?> {
+        return dao.getFlowGroup(id).map { fromEntity(it) }
     }
 
     override suspend fun saveGroup(group: MyGroup): MyGroup? {
@@ -47,7 +47,20 @@ class MainRepositoryImpl(
         dao.deleteGroup(group.toEntity(group.id))
     }
 
-    private fun fromEntity(ent: GroupEntity): MyGroup {
+    override suspend fun createEmptyGroup(): MyGroup {
+        val id = dao.saveGroup(GroupEntity("", emptyList()))
+        return dao.getGroup(id)!!.toModel()
+    }
+
+    private fun fromEntity(ent: GroupEntity?): MyGroup? {
+        // objects can be null, if next screen delete it
+        ent ?: return null
         return MyGroup(ent.id, ent.title, ent.items)
     }
+
+    private fun GroupEntity.toModel(): MyGroup {
+        return MyGroup(this.id, this.title, this.items)
+    }
 }
+
+class ObjectDeletedException : Exception()

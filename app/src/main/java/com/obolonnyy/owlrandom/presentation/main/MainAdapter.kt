@@ -40,7 +40,8 @@ class MainItemViewHolder(
     private val text: MaterialTextView = itemView.findViewById(R.id.main_item_text)
 
     fun bind(item: MainItem) {
-        text.text = "${item.title} (${item.count})"
+        val message = "${item.title} (${item.count})"
+        text.text = message
         itemView.setOnClickListener { onItemClicked(item) }
     }
 }

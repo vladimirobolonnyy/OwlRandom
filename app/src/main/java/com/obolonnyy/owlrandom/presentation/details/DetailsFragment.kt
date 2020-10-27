@@ -56,13 +56,12 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
         observe(viewModel.viewEvents, ::process)
     }
 
-    private fun process(event: DetailsViewEvent) {
-        when (event) {
-            is DetailsViewEvent.ShowPickDialog -> showPickDialog(event.items)
-            is DetailsViewEvent.NavigateToEdit -> {
-                navigator.goToCreateDetails(event.groupId)
-            }
+    private fun process(event: DetailsViewEvent): Unit? = when (event) {
+        is DetailsViewEvent.ShowPickDialog -> showPickDialog(event.items)
+        is DetailsViewEvent.NavigateToEdit -> {
+            navigator.goToEditDetails(event.groupId)
         }
+        DetailsViewEvent.NavigateBack -> activity?.onBackPressed()
     }
 
     private fun render(state: DetailsViewState) {
@@ -85,8 +84,8 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
 
     private fun showPickDialog(items: List<String>) {
         materialDialog().show {
-            listItemsSingleChoice(items = items) { _, index, text ->
-                viewModel.onRandomTypePicked(index, text)
+            listItemsSingleChoice(items = items) { _, index, _ ->
+                viewModel.onRandomTypePicked(index)
             }
         }
     }
