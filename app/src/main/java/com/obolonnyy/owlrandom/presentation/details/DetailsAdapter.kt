@@ -29,7 +29,7 @@ class DetailsAdapter : RecyclerView.Adapter<DetailsViewHolder>() {
         diffResult.dispatchUpdatesTo(this)
     }
 
-    inner class CreateDiffUtilCallback(
+    private class CreateDiffUtilCallback(
         private val oldList: List<DetailsAdapterItem>,
         private val newList: List<DetailsAdapterItem>
     ) : DiffUtil.Callback() {

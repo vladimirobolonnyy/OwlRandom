@@ -43,11 +43,18 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
         view.findViewById<View>(R.id.details_btn_roll).setOnClickListener {
             viewModel.onRollClicked()
         }
-        view.findViewById<View>(R.id.details_btn_edit).setOnClickListener {
-            viewModel.onEditClicked()
-        }
         toolbar = view.findViewById(R.id.details_toolbar)
         toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
+
+        view.findViewById<MaterialToolbar>(R.id.details_toolbar).setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.favorite -> {
+                    viewModel.onEditClicked()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

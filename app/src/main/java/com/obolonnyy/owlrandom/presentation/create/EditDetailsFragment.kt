@@ -3,9 +3,6 @@ package com.obolonnyy.owlrandom.presentation.create
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.core.widget.doAfterTextChanged
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.obolonnyy.owlrandom.R
@@ -29,26 +26,30 @@ class EditDetailsFragment : BaseFragment(R.layout.fragment_create_details) {
         }
     }
 
-    private lateinit var recycler: RecyclerView
     private lateinit var titleEdit: TextInputEditText
+    private lateinit var itemsEdit: TextInputEditText
     private lateinit var deleteBtn: View
-    private val createDetailsAdapter = CreateDetailsAdapter(::onItemChanged)
+
     private val groupId: Long? by lazy { arguments?.getLong(GROUP_ID) }
     private val viewModel by viewModels { EditDetailsViewModel(groupId.takeIf { it != -1L }) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recycler = view.findViewById(R.id.create_details_recycler)
-        recycler.adapter = createDetailsAdapter
-        recycler.layoutManager = LinearLayoutManager(context)
         titleEdit = view.findViewById(R.id.create_details_item_title)
-        titleEdit.doAfterTextChanged { viewModel.onTitleChanged(it.toString()) }
+        itemsEdit = view.findViewById(R.id.create_details_items)
         val toolbar: MaterialToolbar = view.findViewById(R.id.create_details_toolbar)
         toolbar.setNavigationOnClickListener { navigateBack() }
         deleteBtn = view.findViewById<View>(R.id.create_details_btn_delete)
         deleteBtn.setOnClickListener {
             this.sureMaterialDialog(positive = { viewModel.delete() }, negative = {}).show()
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.onTitleChanged(titleEdit.text.toString())
+        viewModel.onItemsChanged(itemsEdit.text.toString())
+        viewModel.saveItems()
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -58,34 +59,20 @@ class EditDetailsFragment : BaseFragment(R.layout.fragment_create_details) {
     }
 
     private fun render(state: CreateDetailsViewState) {
-        when (state) {
-            CreateDetailsViewState.Empty -> {
-                createDetailsAdapter.setData(emptyList())
-                deleteBtn.isVisible = false
-            }
-            is CreateDetailsViewState.Loaded -> {
-                deleteBtn.isVisible = state.deleteBtnIsVisible
-                createDetailsAdapter.setData(state.list)
-                if (titleEdit.text.toString() != state.title) {
-                    titleEdit.setText(state.title)
-                }
-            }
+        deleteBtn.isVisible = state.deleteBtnIsVisible
+        if (titleEdit.text.toString() != state.title) {
+            titleEdit.setText(state.title)
+        }
+        if (itemsEdit.text.toString() != state.items) {
+            itemsEdit.setText(state.items)
         }
     }
 
-    private fun process(event: CreateDetailsViewEvent) {
-        when (event) {
-            CreateDetailsViewEvent.NavigateToMain -> {
-                navigator.goToMain()
-            }
-        }
+    private fun process(event: CreateDetailsViewEvent): Unit? = when (event) {
+        is CreateDetailsViewEvent.NavigateToMain -> navigator.goToMain()
     }
 
     private fun navigateBack() {
         activity?.onBackPressed()
-    }
-
-    private fun onItemChanged(text: String, item: EditDetailsAdapterItem) {
-        viewModel.onItemChanged(text, item)
     }
 }

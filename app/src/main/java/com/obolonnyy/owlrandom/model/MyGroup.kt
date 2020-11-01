@@ -7,6 +7,8 @@ data class MyGroup(
     val title: String,
     val items: List<String>
 ) {
+    val strItems: String = items.joinToString("\n")
+
     fun toEntity(): GroupEntity {
         return GroupEntity(title, items)
     }

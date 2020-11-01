@@ -11,6 +11,7 @@ import com.obolonnyy.owlrandom.utils.warning
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.withContext
 
 class DetailsViewModel(
@@ -38,7 +39,7 @@ class DetailsViewModel(
         when (type) {
             RandomTypes.RANDOMIZE_ALL -> {
                 val newItems = random.shuffle(adapterItems)
-                DetailsViewState.Loaded(state.group, newItems).post()
+                DetailsViewState.Loaded(state.group, newItems).set()
             }
             RandomTypes.ONE -> pick(1)
             RandomTypes.TWO -> pick(2)
@@ -63,7 +64,7 @@ class DetailsViewModel(
             for (i in 0 until colorNumber) {
                 changeColor(i, colorList[i])
             }
-        }.post()
+        }.set()
     }
 
     private fun divide(colorNumber: Int) {
@@ -74,11 +75,12 @@ class DetailsViewModel(
         listNewItems.forEachIndexed { i, t ->
             newItems.addAll(t.map { it.copy(bgColor = colorList[i]) })
         }
-        DetailsViewState.Loaded(state.group, newItems).post()
+        DetailsViewState.Loaded(state.group, newItems).set()
     }
 
     private fun loadData() = launchIO {
         repo.getFlowGroup(groupId)
+            .distinctUntilChanged()
             .catch { e ->
                 warning("DetailsViewModel got error $e")
                 _viewEvents.postValue(DetailsViewEvent.NavigateBack)
@@ -90,7 +92,7 @@ class DetailsViewModel(
                     val adapterItems = group.items.toAdapterItems()
                     withContext(Dispatchers.Main) {
                         val newState = DetailsViewState.Loaded(group, adapterItems)
-                        mergeStates(state, newState).post()
+                        mergeStates(state, newState).set()
                     }
                 }
             }
@@ -101,7 +103,11 @@ class DetailsViewModel(
         newState: DetailsViewState.Loaded
     ): DetailsViewState {
         if (oldState !is DetailsViewState.Loaded) return newState
-        if (oldState.adapterItems.size == newState.adapterItems.size) return oldState
+        if (oldState.adapterItems.size == newState.adapterItems.size) {
+            if (oldState.adapterItems.map { it.text } == newState.adapterItems.map { it.text }) {
+                return oldState
+            }
+        }
         return newState
     }
 
@@ -111,8 +117,8 @@ class DetailsViewModel(
             .toMutableList()
     }
 
-    private fun DetailsViewState.post() {
-        _viewState.postValue(this)
+    private fun DetailsViewState.set() {
+        _viewState.value = this
     }
 
     fun onRollClicked() {
