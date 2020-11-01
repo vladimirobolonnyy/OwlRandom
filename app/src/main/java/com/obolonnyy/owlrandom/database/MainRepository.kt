@@ -62,5 +62,3 @@ class MainRepositoryImpl(
         return MyGroup(this.id, this.title, this.items)
     }
 }
-
-class ObjectDeletedException : Exception()

@@ -1,9 +1,9 @@
 package com.obolonnyy.owlrandom.database
 
 import com.obolonnyy.owlrandom.model.MyGroup
-import com.obolonnyy.owlrandom.utils.MyResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 
 internal class MockMainRepo : MainRepository {
 
@@ -15,12 +15,12 @@ internal class MockMainRepo : MainRepository {
         return flow { listOf(group) }
     }
 
-    override suspend fun getGroup(id: Long): MyGroup? {
+    override suspend fun getGroup(id: Long?): MyGroup? {
         return group
     }
 
-    override suspend fun getFlowGroup(id: Long): MyResult<Flow<MyGroup>> {
-        return MyResult.Success(flow { group })
+    override suspend fun getFlowGroup(id: Long): Flow<MyGroup?> {
+        return flowOf(group)
     }
 
     override suspend fun saveGroup(group: MyGroup): MyGroup? {
@@ -28,6 +28,10 @@ internal class MockMainRepo : MainRepository {
     }
 
     override suspend fun deleteGroup(group: MyGroup) {
+    }
+
+    override suspend fun createEmptyGroup(): MyGroup {
+        return group.copy(id = 2)
     }
 
 }
