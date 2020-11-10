@@ -1,6 +1,7 @@
 package com.obolonnyy.owlrandom.presentation.activity
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.app.Navigator
@@ -16,9 +17,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewModel.viewEvents.observe(this, ::process)
+        findViewById<View>(R.id.btn_main).setOnClickListener { navigator.goToMain() }
+        findViewById<View>(R.id.btn_language).setOnClickListener { navigator.goToMain() }
+        findViewById<View>(R.id.btn_settings).setOnClickListener { navigator.goToMain() }
     }
 
     private fun process(event: MainActivityViewEvent): Unit = when (event) {
         is MainActivityViewEvent.GoToMain -> navigator.goToMain()
+        is MainActivityViewEvent.GoToLanguage -> navigator.goToMain()
+        is MainActivityViewEvent.GoToSettings -> navigator.goToMain()
     }
 }

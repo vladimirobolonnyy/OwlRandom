@@ -7,12 +7,16 @@ import androidx.fragment.app.FragmentManager
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.presentation.create.EditDetailsFragment
 import com.obolonnyy.owlrandom.presentation.details.DetailsFragment
+import com.obolonnyy.owlrandom.presentation.language.LanguageFragment
 import com.obolonnyy.owlrandom.presentation.main.MainFragment
+import com.obolonnyy.owlrandom.presentation.settings.SettingsFragment
 
 interface Navigator {
     fun goToEditDetails(groupId: Long? = null)
     fun goToDetails(groupId: Long)
     fun goToMain()
+    fun goToSettings()
+    fun goToLanguage()
 }
 
 class NavigatorImpl(
@@ -33,6 +37,14 @@ class NavigatorImpl(
     override fun goToMain() {
         fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
         MainFragment::class.java.showOrCreate()
+    }
+
+    override fun goToSettings() {
+        SettingsFragment::class.java.showOrCreate()
+    }
+
+    override fun goToLanguage() {
+        LanguageFragment::class.java.showOrCreate()
     }
 
     private fun Fragment.replace() {
