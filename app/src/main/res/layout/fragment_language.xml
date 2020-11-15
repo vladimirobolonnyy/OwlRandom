@@ -1,6 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:padding="8dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/good_bad_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:textColor="@color/textSecondary"
+            android:textSize="14sp"
+            tools:text="255/252" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/switch_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:text="@string/switch_language"
+            android:textColor="@color/textSecondary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/revert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:text="@string/revert"
+            android:textColor="@color/textSecondary" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/count_words"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:textColor="@color/textSecondary"
+            android:textSize="14sp"
+            tools:text="255/252" />
+    </LinearLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/top_word"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/textPrimary"
+        android:textSize="18sp"
+        tools:text="255/252" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/showed_answered"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="16dp"
+        android:textColor="@color/textSecondary"
+        android:textSize="18sp"
+        tools:text="255/252" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/bottom_word"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="30dp"
+        android:textColor="@color/textPrimary"
+        android:textSize="18sp"
+        tools:text="255/252" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:padding="8dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/show_translation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:text="@string/show_translation"
+            android:textColor="@color/textSecondary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/white"
+            android:text="@string/i_know"
+            android:textColor="@color/textSecondary" />
+
+    </LinearLayout>
+
+</LinearLayout>

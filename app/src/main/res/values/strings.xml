@@ -14,4 +14,8 @@
     <string name="delete">delete</string>
     <string name="material_dialog_delete_title">Delete all group?</string>
     <string name="cancel">cancel</string>
+    <string name="switch_language">switch</string>
+    <string name="revert">revert</string>
+    <string name="show_translation">show translation</string>
+    <string name="i_know">i know</string>
 </resources>

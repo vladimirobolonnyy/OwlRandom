@@ -1,15 +1,10 @@
 package com.obolonnyy.owlrandom.presentation.language
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.ComposeView
-import androidx.ui.tooling.preview.Preview
+import android.widget.TextView
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseFragment
 import com.obolonnyy.owlrandom.utils.observe
@@ -22,22 +17,25 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
 
     private val viewModel by viewModels { LanguageViewModel() }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                MaterialTheme {
-                    NewsStory()
-                }
-            }
-        }
-    }
+    private val goodBadRating by lazy { requireView().findViewById<TextView>(R.id.good_bad_rating) }
+    private val countWords by lazy { requireView().findViewById<TextView>(R.id.count_words) }
+    private val topWord by lazy { requireView().findViewById<TextView>(R.id.top_word) }
+    private val bottomWord by lazy { requireView().findViewById<TextView>(R.id.bottom_word) }
+    private val showedAnswered by lazy { requireView().findViewById<TextView>(R.id.showed_answered) }
+
+    private val switch by lazy { requireView().findViewById<View>(R.id.switch_language) }
+    private val revert by lazy { requireView().findViewById<View>(R.id.revert) }
+    private val translation by lazy { requireView().findViewById<View>(R.id.show_translation) }
+    private val next by lazy { requireView().findViewById<View>(R.id.next) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        switch.setOnClickListener { viewModel.onSwitchClicked() }
+        revert.setOnClickListener { viewModel.onRevertClicked() }
+        translation.setOnClickListener { viewModel.onTranslationClicked() }
+        next.setOnClickListener { viewModel.onNextClicked() }
+
         observe(viewModel.viewState, ::render)
         observe(viewModel.viewEvents, ::process)
     }
@@ -48,20 +46,15 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
     }
 
     private fun render(state: LanguageViewState) {
-        showMessage(state.toString())
+        goodBadRating.text = state.goodBadRating
+        countWords.text = state.countWords
+        topWord.text = state.topWord
+        bottomWord.text = state.bottomWord
+        showedAnswered.text = state.showedAnswered
+        bottomWord.isInvisible = !state.showBottom
     }
 
     private fun process(event: Throwable) {
         showError(event)
-    }
-
-    @Preview
-    @Composable
-    fun NewsStory() {
-        Column {
-            Text("A day in Shark Fin Cove")
-            Text("Davenport, California")
-            Text("December 2018")
-        }
     }
 }
