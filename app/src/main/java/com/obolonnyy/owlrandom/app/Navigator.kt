@@ -44,7 +44,7 @@ class NavigatorImpl(
     }
 
     override fun goToLanguage() {
-        LanguageFragment::class.java.showOrCreate()
+        LanguageFragment::class.java.recreate()
     }
 
     private fun Fragment.replace() {
@@ -60,6 +60,13 @@ class NavigatorImpl(
 
     private fun Class<out Fragment>.showOrCreate() {
         fm.find(this)?.show(add = false) ?: newInstance().show(add = true)
+    }
+
+    private fun Class<out Fragment>.recreate() {
+        fm.find(this)?.let {
+            fm.beginTransaction().remove(it).commit()
+        }
+        newInstance().show(add = true)
     }
 
     private fun Fragment.show(add: Boolean) {

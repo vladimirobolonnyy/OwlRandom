@@ -7,6 +7,6 @@ interface SettingsRepository {
 class SettingsRepositoryImpl : SettingsRepository {
 
     //todo implement later
-    override suspend fun getUserDesiredCount(): Int = 10
+    override suspend fun getUserDesiredCount(): Int = 50
 
 }

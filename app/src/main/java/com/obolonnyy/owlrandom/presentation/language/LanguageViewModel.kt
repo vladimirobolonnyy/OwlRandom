@@ -50,12 +50,14 @@ class LanguageViewModel(
     fun onSkipClicked() {
         val state = _viewState.value ?: return
         notAnswered.add(state.currentItem)
+        answered.remove(state.currentItem)
         onNext(state)
     }
 
     fun onNextClicked() {
         val state = _viewState.value ?: return
         answered.add(state.currentItem)
+        notAnswered.remove(state.currentItem)
         onNext(state)
     }
 
@@ -108,7 +110,8 @@ class LanguageViewModel(
         _timerEvents.postValue(LanguageTimerState(time))
     }
 
-    fun onStart() {
+    fun startTimer() {
+        job?.cancel()
         job = launchIO {
             val time = settingsRepo.getTodaySpendSeconds()
             for (t in time..Long.MAX_VALUE) {
@@ -118,7 +121,7 @@ class LanguageViewModel(
         }
     }
 
-    fun onStop() {
+    fun onPause() {
         val counted = _timerEvents.value?.seconds ?: 0L
         settingsRepo.saveCurrentSeconds(counted)
         job?.cancel()

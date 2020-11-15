@@ -6,16 +6,16 @@ import android.widget.TextView
 import androidx.core.view.isInvisible
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseFragment
+import com.obolonnyy.owlrandom.utils.activityViewModels
 import com.obolonnyy.owlrandom.utils.materialDialog
 import com.obolonnyy.owlrandom.utils.observe
-import com.obolonnyy.owlrandom.utils.viewModels
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 
 class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScope by MainScope() {
 
-    private val viewModel by viewModels { LanguageViewModel() }
+    private val viewModel by activityViewModels { LanguageViewModel() }
 
     private val goodBadRating by lazy { requireView().findViewById<TextView>(R.id.good_bad_rating) }
     private val countWords by lazy { requireView().findViewById<TextView>(R.id.count_words) }
@@ -25,8 +25,8 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
     private val timer by lazy { requireView().findViewById<TextView>(R.id.time) }
 
     private val switch by lazy { requireView().findViewById<View>(R.id.switch_language) }
-    private val revert by lazy { requireView().findViewById<View>(R.id.revert) }
     private val translation by lazy { requireView().findViewById<View>(R.id.show_translation) }
+    private val revert by lazy { requireView().findViewById<View>(R.id.revert) }
     private val next by lazy { requireView().findViewById<View>(R.id.next) }
     private val skip by lazy { requireView().findViewById<View>(R.id.skip) }
 
@@ -49,14 +49,14 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
         cancel()
     }
 
-    override fun onStart() {
-        super.onStart()
-        viewModel.onStart()
+    override fun onResume() {
+        super.onResume()
+        viewModel.startTimer()
     }
 
-    override fun onStop() {
-        super.onStop()
-        viewModel.onStop()
+    override fun onPause() {
+        super.onPause()
+        viewModel.onPause()
     }
 
     private fun render(state: LanguageViewState) {

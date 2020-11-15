@@ -1,7 +1,6 @@
 package com.obolonnyy.owlrandom.database
 
 import com.obolonnyy.owlrandom.core.SimpleStore
-import com.obolonnyy.owlrandom.core.SimpleStoreImpl
 import com.obolonnyy.owlrandom.model.Word
 import com.obolonnyy.owlrandom.network.NetworkModule
 import com.obolonnyy.owlrandom.network.SheetsApi
@@ -13,7 +12,7 @@ interface GoogleSheetsRepository {
 
 class GoogleSheetsRepositoryImpl(
     private val api: SheetsApi = NetworkModule.sheetsApi,
-    private val store: SimpleStore = SimpleStoreImpl()
+    private val store: SimpleStore = Caches.wordsCache
 ) : GoogleSheetsRepository {
 
     private val key = "language_words"

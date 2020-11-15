@@ -17,7 +17,7 @@ data class LanguageViewState(
 
     private val maxItems: Int = words.size
     private val canGoNext = currentItem + 1 >= maxItems
-    val isFull = answered + notAnswered == maxItems
+    val isFull = answered + notAnswered >= maxItems
 
     fun next(answered: Int, notAnswered: Int): LanguageViewState {
         return this.copy(
