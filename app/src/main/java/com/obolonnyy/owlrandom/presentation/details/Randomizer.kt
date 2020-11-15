@@ -1,11 +1,14 @@
 package com.obolonnyy.owlrandom.presentation.details
 
+import com.obolonnyy.owlrandom.core.Clock
+import com.obolonnyy.owlrandom.core.RealtimeClock
 import java.util.*
 import kotlin.random.Random
 
-class Randomizer {
-
-    private val random = Random(1001)
+class Randomizer(
+    val clock: Clock = RealtimeClock(),
+    private val random: Random = Random(clock.nowSeconds())
+) {
 
     fun <T> shuffle(list: MutableList<T>): MutableList<T> {
         list.shuffle(random)
@@ -14,13 +17,13 @@ class Randomizer {
 
     fun <T> shuffleFirstN(n: Int, list: MutableList<T>): MutableList<T> {
         if (list.size < (n + 1) || n < 0) return list
-        val oldItems = LinkedList<T>()
+        val newItems = LinkedList<T>()
         for (i in 0..n) {
             val r = random.nextInt(0, list.size)
-            oldItems.add(list.removeAt(r))
+            newItems.add(list.removeAt(r))
         }
-        oldItems.addAll(list)
-        return oldItems
+        newItems.addAll(list)
+        return newItems
     }
 
     fun <T> divideByNTeams(n: Int, list: MutableList<T>): List<MutableList<T>> {

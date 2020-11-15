@@ -6,6 +6,7 @@ import com.obolonnyy.owlrandom.utils.MyResult
 import com.obolonnyy.owlrandom.utils.onFailure
 import com.obolonnyy.owlrandom.utils.onSuccess
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel : ViewModel() {
@@ -16,8 +17,8 @@ abstract class BaseViewModel : ViewModel() {
         }
     }
 
-    fun launchIO(foo: suspend () -> Unit) {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun launchIO(foo: suspend () -> Unit) : Job {
+        return viewModelScope.launch(Dispatchers.IO) {
             foo.invoke()
         }
     }

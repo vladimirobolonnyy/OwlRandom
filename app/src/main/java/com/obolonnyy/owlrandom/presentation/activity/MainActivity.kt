@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun process(event: MainActivityViewEvent): Unit = when (event) {
         is MainActivityViewEvent.GoToMain -> navigator.goToMain()
-        is MainActivityViewEvent.GoToLanguage -> navigator.goToMain()
-        is MainActivityViewEvent.GoToSettings -> navigator.goToMain()
+        is MainActivityViewEvent.GoToLanguage -> navigator.goToLanguage()
+        is MainActivityViewEvent.GoToSettings -> navigator.goToSettings()
     }
 }

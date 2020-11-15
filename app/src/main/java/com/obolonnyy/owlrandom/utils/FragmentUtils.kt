@@ -31,5 +31,5 @@ inline fun <reified T, LD : LiveData<T>> Fragment.observe(
     liveData: LD,
     crossinline block: (T) -> Unit
 ) {
-    liveData.observe(viewLifecycleOwner, Observer<T> { block(it) })
+    liveData.observe(viewLifecycleOwner, { block(it) })
 }
