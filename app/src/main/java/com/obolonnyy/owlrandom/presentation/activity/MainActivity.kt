@@ -18,8 +18,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         viewModel.viewEvents.observe(this, ::process)
         findViewById<View>(R.id.btn_main).setOnClickListener { navigator.goToMain() }
-        findViewById<View>(R.id.btn_language).setOnClickListener { navigator.goToMain() }
-        findViewById<View>(R.id.btn_settings).setOnClickListener { navigator.goToMain() }
+        findViewById<View>(R.id.btn_language).setOnClickListener { navigator.goToLanguage() }
+        findViewById<View>(R.id.btn_settings).setOnClickListener { navigator.goToSettings() }
     }
 
     private fun process(event: MainActivityViewEvent): Unit = when (event) {

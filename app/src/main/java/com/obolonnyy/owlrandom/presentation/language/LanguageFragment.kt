@@ -27,11 +27,8 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language) {
         }
     }
 
-
     @Composable
     fun NewsStory() {
         Text("A day in Shark Fin Cove")
-        Text("Davenport, California")
-        Text("December 2018")
     }
 }

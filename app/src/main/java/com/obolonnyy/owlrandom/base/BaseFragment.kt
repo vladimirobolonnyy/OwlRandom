@@ -8,8 +8,6 @@ import com.obolonnyy.owlrandom.app.NavigatorImpl
 
 abstract class BaseFragment constructor(@LayoutRes val res: Int) : Fragment(res) {
 
-    constructor()
-
     protected val navigator: Navigator by lazy { NavigatorImpl(this.requireActivity()) }
 
     protected open val onBackPressed: (() -> Unit)? = null
