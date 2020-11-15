@@ -1,5 +1,6 @@
 package com.obolonnyy.owlrandom.base
 
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
@@ -42,4 +43,14 @@ abstract class BaseFragment constructor(@LayoutRes val res: Int) : Fragment(res)
             onBackPressedCallback.remove()
         }
     }
+
+    protected fun showMessage(msg: String) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
+    }
+
+    protected fun showError(e: Throwable) {
+        Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show()
+    }
+
+    private fun Throwable.getMessage() = this.message ?: this.localizedMessage ?: "error"
 }

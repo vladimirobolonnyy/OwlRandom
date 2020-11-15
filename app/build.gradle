@@ -130,4 +130,32 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
+
+    /**
+     * Google sheets
+     */
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    // https://developers.google.com/gsuite/guides/android
+    // https://mvnrepository.com/artifact/com.google.api-client/google-api-client-android
+    implementation('com.google.api-client:google-api-client-android:1.28.0') {
+        exclude group: 'org.apache.httpcomponents'
+        exclude module: 'guava-jdk5'
+    }
+    // https://mvnrepository.com/artifact/com.google.apis/google-api-services-sheets
+    implementation('com.google.apis:google-api-services-sheets:v4-rev571-1.25.0') {
+        exclude group: 'org.apache.httpcomponents'
+        exclude module: 'guava-jdk5'
+    }
+
+    /**
+     * retrofin
+     */
+    //todo clean up
+//Import okHttp dependencies
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+
+//Import Retrofit dependencies
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
 }
