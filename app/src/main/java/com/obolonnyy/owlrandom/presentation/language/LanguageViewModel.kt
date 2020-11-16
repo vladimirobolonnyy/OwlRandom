@@ -3,9 +3,13 @@ package com.obolonnyy.owlrandom.presentation.language
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.obolonnyy.owlrandom.base.BaseViewModel
-import com.obolonnyy.owlrandom.database.UserSettings
-import com.obolonnyy.owlrandom.database.UserSettingsImpl
+import com.obolonnyy.owlrandom.core.ProxyCacheServer
+import com.obolonnyy.owlrandom.core.UriProxyCacheServer
 import com.obolonnyy.owlrandom.domain.WordsInteractor
+import com.obolonnyy.owlrandom.model.GooglePicture
+import com.obolonnyy.owlrandom.model.LanguageImages
+import com.obolonnyy.owlrandom.repository.UserSettings
+import com.obolonnyy.owlrandom.repository.UserSettingsImpl
 import com.obolonnyy.owlrandom.utils.SingleLiveEvent
 import com.obolonnyy.owlrandom.utils.asResult
 import com.obolonnyy.owlrandom.utils.onSuccess
@@ -14,7 +18,8 @@ import kotlinx.coroutines.delay
 
 class LanguageViewModel(
     private val wordsInteractor: WordsInteractor = WordsInteractor(),
-    private val settingsRepo: UserSettings = UserSettingsImpl()
+    private val settingsRepo: UserSettings = UserSettingsImpl(),
+    private val imageCacheServer: ProxyCacheServer = UriProxyCacheServer()
 ) : BaseViewModel() {
 
     private val answered = mutableSetOf<Int>()
@@ -22,6 +27,9 @@ class LanguageViewModel(
 
     private val _viewState = MutableLiveData<LanguageViewState>()
     val viewState: LiveData<LanguageViewState> = _viewState
+
+    private val _pictureState = MutableLiveData<LanguageImages?>()
+    val pictureState: LiveData<LanguageImages?> = _pictureState
 
     private val _viewEvents = SingleLiveEvent<LanguageViewEvent>()
     val viewEvents: LiveData<LanguageViewEvent> = _viewEvents
@@ -65,6 +73,7 @@ class LanguageViewModel(
         val newState = state.next(answered = answered.size, notAnswered = notAnswered.size)
         _viewState.postValue(newState)
         checkFullState(newState)
+        loadPictures(newState.pictures)
     }
 
     private fun checkFullState(state: LanguageViewState) {
@@ -84,7 +93,9 @@ class LanguageViewModel(
         answered.remove(state.currentItem - 1)
         notAnswered.remove(state.currentItem)
         notAnswered.remove(state.currentItem - 1)
-        _viewState.postValue(state.prev(answered = answered.size, notAnswered = notAnswered.size))
+        val newState = state.prev(answered = answered.size, notAnswered = notAnswered.size)
+        _viewState.postValue(newState)
+        loadPictures(newState.pictures)
     }
 
     fun reload() {
@@ -99,8 +110,24 @@ class LanguageViewModel(
                 wordsInteractor.invoke()
             }.onSuccess {
                 _viewState.postValue(LanguageViewState(it))
+                loadPictures(it.first().googlePicture)
             }.onFailureUI {
                 _viewEvents.postValue(LanguageViewEvent.Error(it))
+            }
+        }
+    }
+
+    private fun loadPictures(googlePicture: GooglePicture) {
+        launchIO {
+            asResult {
+                val first = imageCacheServer.getProxyUrl(googlePicture.picture1Url, googlePicture.picture1)
+                val second = imageCacheServer.getProxyUrl(googlePicture.picture2Url, googlePicture.picture2)
+                val third = imageCacheServer.getProxyUrl(googlePicture.picture3Url, googlePicture.picture3)
+                LanguageImages(first, second, third)
+            }.onSuccess {
+                _pictureState.postValue(it)
+            }.onFailureUI {
+                _pictureState.postValue(null)
             }
         }
     }

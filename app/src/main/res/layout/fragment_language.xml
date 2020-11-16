@@ -56,18 +56,55 @@
         app:layout_constraintTop_toTopOf="@+id/good_bad_rating"
         tools:text="255/252" />
 
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toTopOf="@+id/top_word"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch_language">
+
+        <ImageView
+            android:id="@+id/image1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            tools:background="@drawable/common_google_signin_btn_icon_dark" />
+
+        <ImageView
+            android:id="@+id/image2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            tools:background="@drawable/common_google_signin_btn_icon_dark" />
+
+        <ImageView
+            android:id="@+id/image3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:layout_weight="1"
+            tools:background="@drawable/common_google_signin_btn_icon_dark" />
+    </LinearLayout>
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/top_word"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:textColor="@color/textPrimary"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/showed_answered"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch_language"
+        app:layout_constraintTop_toBottomOf="@+id/linear"
         tools:text="top word" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -90,6 +127,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="30dp"
+        android:textAlignment="center"
         android:textColor="@color/textPrimary"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/revert"
@@ -158,6 +196,5 @@
         app:layout_constraintStart_toEndOf="@+id/show_translation"
         app:layout_constraintTop_toTopOf="@+id/show_translation"
         tools:layout_editor_absoluteY="16dp" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

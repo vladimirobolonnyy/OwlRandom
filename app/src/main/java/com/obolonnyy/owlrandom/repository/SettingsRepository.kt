@@ -1,4 +1,4 @@
-package com.obolonnyy.owlrandom.database
+package com.obolonnyy.owlrandom.repository
 
 interface SettingsRepository {
     suspend fun getUserDesiredCount(): Int
@@ -7,6 +7,6 @@ interface SettingsRepository {
 class SettingsRepositoryImpl : SettingsRepository {
 
     //todo implement later
-    override suspend fun getUserDesiredCount(): Int = 50
+    override suspend fun getUserDesiredCount(): Int = 5
 
 }

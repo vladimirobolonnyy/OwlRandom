@@ -6,5 +6,7 @@ data class Word(
     val russian: List<String>,
     val showed: Int = 0,
     val answered: Int = 0,
-    val notAnswered: Int = 0,
-)
+    val notAnswered: Int = 0
+) {
+    val englishOne = english.joinToString (" or ")
+}

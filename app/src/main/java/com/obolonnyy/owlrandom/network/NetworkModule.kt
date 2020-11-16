@@ -18,12 +18,16 @@ object NetworkModule {
         .readTimeout(1, TimeUnit.MINUTES)
         .build()
 
-    private val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl("https://sheets.googleapis.com/v4/spreadsheets/")
+    private fun retrofit(baseUrl: String): Retrofit = Retrofit.Builder()
+        .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
         .build()
 
-    val sheetsApi: SheetsApi = retrofit.create(SheetsApi::class.java)
+    val sheetsApi: SheetsApi =
+        retrofit("https://sheets.googleapis.com/v4/spreadsheets/").create(SheetsApi::class.java)
+
+    val googlePicturesApi: GooglePicturesApi =
+        retrofit("https://www.googleapis.com").create(GooglePicturesApi::class.java)
 
 }

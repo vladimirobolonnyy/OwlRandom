@@ -1,9 +1,9 @@
 package com.obolonnyy.owlrandom.presentation.language
 
-import com.obolonnyy.owlrandom.model.Word
+import com.obolonnyy.owlrandom.model.PicturedWord
 
 data class LanguageViewState(
-    private val words: List<Word>,
+    private val words: List<PicturedWord>,
     private val answered: Int = 0,
     private val notAnswered: Int = 0,
     val currentItem: Int = 0,
@@ -40,7 +40,8 @@ data class LanguageViewState(
 
     val goodBadRating: String = "$answered / $notAnswered"
 
-    private val word = words[currentItem]
+    private val word = words[currentItem].word
+    val pictures = words[currentItem].googlePicture
     private val english: String = word.english.joinToString(" / ")
     private val russian: String = word.russian.joinToString(" / ")
     val showedAnswered: String = "${word.showed} / ${word.answered}"

@@ -1,4 +1,4 @@
-package com.obolonnyy.owlrandom.database
+package com.obolonnyy.owlrandom.repository
 
 import com.obolonnyy.owlrandom.core.Clock
 import com.obolonnyy.owlrandom.core.PreferencesHelper

@@ -1,6 +1,7 @@
-package com.obolonnyy.owlrandom.database
+package com.obolonnyy.owlrandom.repository
 
 import com.obolonnyy.owlrandom.core.SimpleStore
+import com.obolonnyy.owlrandom.database.Caches
 import com.obolonnyy.owlrandom.model.Word
 import com.obolonnyy.owlrandom.network.NetworkModule
 import com.obolonnyy.owlrandom.network.SheetsApi

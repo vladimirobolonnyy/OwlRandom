@@ -5,4 +5,5 @@ import com.obolonnyy.owlrandom.core.SimpleStoreImpl
 
 object Caches {
     val wordsCache: SimpleStore = SimpleStoreImpl()
+    val picturesCache: SimpleStore = SimpleStoreImpl()
 }
