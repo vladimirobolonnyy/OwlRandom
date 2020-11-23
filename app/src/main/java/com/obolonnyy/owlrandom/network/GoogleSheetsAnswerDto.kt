@@ -8,6 +8,7 @@ class GoogleSheetsAnswerDto {
 
     fun convert(): List<Word> {
         val result = mutableListOf<Word>()
+        val startIndex = RangeMin // because in googlesheets we start from index 2
         values?.forEachIndexed { index, triple ->
             val first = triple.getOrNull(0)
             val second = triple.getOrNull(1)
@@ -15,7 +16,7 @@ class GoogleSheetsAnswerDto {
             val showed = triple.getOrElse(3, ::zero).toInt()
             val answered = triple.getOrElse(4, ::zero).toInt()
             val notAnswered = triple.getOrElse(5, ::zero).toInt()
-            val word = getWord(index, first, second, third, showed, answered, notAnswered)
+            val word = getWord(startIndex + index, first, second, third, showed, answered, notAnswered)
             if (word != null) {
                 result.add(word)
             }

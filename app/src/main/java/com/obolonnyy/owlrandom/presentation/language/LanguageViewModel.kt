@@ -2,19 +2,21 @@ package com.obolonnyy.owlrandom.presentation.language
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.api.services.sheets.v4.Sheets
 import com.obolonnyy.owlrandom.base.BaseViewModel
 import com.obolonnyy.owlrandom.core.ProxyCacheServer
 import com.obolonnyy.owlrandom.core.UriProxyCacheServer
+import com.obolonnyy.owlrandom.database.GROUPS_DATABASE
+import com.obolonnyy.owlrandom.database.LANGUAGE_DATABASE
 import com.obolonnyy.owlrandom.domain.WordsInteractor
 import com.obolonnyy.owlrandom.model.GooglePicture
 import com.obolonnyy.owlrandom.model.LanguageImages
 import com.obolonnyy.owlrandom.repository.UserSettings
 import com.obolonnyy.owlrandom.repository.UserSettingsImpl
-import com.obolonnyy.owlrandom.utils.SingleLiveEvent
-import com.obolonnyy.owlrandom.utils.asResult
-import com.obolonnyy.owlrandom.utils.onSuccess
+import com.obolonnyy.owlrandom.utils.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+
 
 class LanguageViewModel(
     private val wordsInteractor: WordsInteractor = WordsInteractor(),
@@ -37,6 +39,8 @@ class LanguageViewModel(
     private val _timerEvents = MutableLiveData<LanguageTimerState>()
     val timerEvents: LiveData<LanguageTimerState> = _timerEvents
     private var job: Job? = null
+
+    var service: Sheets? = null
 
     init {
         load()
@@ -78,12 +82,26 @@ class LanguageViewModel(
 
     private fun checkFullState(state: LanguageViewState) {
         if (state.isFull) {
-            _viewEvents.postValue(
-                LanguageViewEvent.Retry(
-                    answered = answered.size,
-                    notAnswered = notAnswered.size
+            postResults(state)
+        }
+    }
+
+    private fun postResults(state: LanguageViewState) {
+        service ?: return
+        launchIO {
+            asResult {
+                val sheetsRepo = SheetsRepo(service!!)
+                sheetsRepo.postResuls(state.words, answered, notAnswered)
+            }.onSuccess {
+                _viewEvents.postValue(
+                    LanguageViewEvent.Retry(
+                        answered = answered.size,
+                        notAnswered = notAnswered.size
+                    )
                 )
-            )
+            }.onFailure {
+                warning(it)
+            }
         }
     }
 
@@ -118,15 +136,26 @@ class LanguageViewModel(
     }
 
     private fun loadPictures(googlePicture: GooglePicture) {
+        _pictureState.postValue(null)
         launchIO {
             asResult {
-                val first = imageCacheServer.getProxyUrl(googlePicture.picture1Url, googlePicture.picture1)
-                val second = imageCacheServer.getProxyUrl(googlePicture.picture2Url, googlePicture.picture2)
-                val third = imageCacheServer.getProxyUrl(googlePicture.picture3Url, googlePicture.picture3)
+                val first = imageCacheServer.getProxyUrl(
+                    googlePicture.picture1Url,
+                    googlePicture.picture1
+                )
+                val second = imageCacheServer.getProxyUrl(
+                    googlePicture.picture2Url,
+                    googlePicture.picture2
+                )
+                val third = imageCacheServer.getProxyUrl(
+                    googlePicture.picture3Url,
+                    googlePicture.picture3
+                )
                 LanguageImages(first, second, third)
             }.onSuccess {
                 _pictureState.postValue(it)
             }.onFailureUI {
+                warning(it)
                 _pictureState.postValue(null)
             }
         }

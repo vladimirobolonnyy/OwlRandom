@@ -8,7 +8,7 @@ import java.io.IOException
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-public suspend fun Call.await(recordStack: Boolean = true): Response {
+suspend fun Call.await(recordStack: Boolean = true): Response {
     val callStack = if (recordStack) {
         IOException().apply {
             // Remove unnecessary lines from stacktrace
@@ -37,6 +37,7 @@ public suspend fun Call.await(recordStack: Boolean = true): Response {
                 cancel()
             } catch (ex: Throwable) {
                 //Ignore cancel exception
+                warning(ex)
             }
         }
     }

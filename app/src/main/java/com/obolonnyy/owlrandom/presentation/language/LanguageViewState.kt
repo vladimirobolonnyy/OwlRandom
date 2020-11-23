@@ -3,7 +3,7 @@ package com.obolonnyy.owlrandom.presentation.language
 import com.obolonnyy.owlrandom.model.PicturedWord
 
 data class LanguageViewState(
-    private val words: List<PicturedWord>,
+    val words: List<PicturedWord>,
     private val answered: Int = 0,
     private val notAnswered: Int = 0,
     val currentItem: Int = 0,

@@ -26,6 +26,7 @@ import com.google.api.services.sheets.v4.model.SpreadsheetProperties
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.app.MainApplication
 import com.obolonnyy.owlrandom.base.BaseFragment
+import com.obolonnyy.owlrandom.utils.log
 import kotlinx.coroutines.*
 import timber.log.Timber
 
@@ -88,19 +89,11 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) , CoroutineSco
 
 
     private fun requestSignIn(context: Context) {
-        /*
-        GoogleSignIn.getLastSignedInAccount(context)?.also { account ->
-            Timber.d("account=${account.displayName}")
-        }
-         */
-
         val signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            // .requestEmail()
-            // .requestScopes(Scope(SheetsScopes.SPREADSHEETS_READONLY))
+             .requestScopes(Scope(SheetsScopes.SPREADSHEETS_READONLY))
             .requestScopes(Scope(SheetsScopes.SPREADSHEETS))
             .build()
         val client = GoogleSignIn.getClient(context, signInOptions)
-
         startActivityForResult(client.signInIntent, REQUEST_SIGN_IN)
     }
 
@@ -115,8 +108,9 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) , CoroutineSco
 //            spreadsheet = service.spreadsheets().create(spreadsheet).execute()
 //            Timber.d("ID: ${spreadsheet.spreadsheetId}")
 
-            service.spreadsheets().get("1b_itSmdduwk6OX_fXr7GrReSAEeuqU27jCJMFEmcWi8").apply {
-                Timber.i("## values:= ${this.values}")
+            val spr = service.spreadsheets().get("1b_itSmdduwk6OX_fXr7GrReSAEeuqU27jCJMFEmcWi8").apply {
+                log("## values:= ${this.values}")
+
             }
         }
     }

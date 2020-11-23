@@ -9,8 +9,8 @@ sealed class MyResult<out T> private constructor(private val value: Any?) {
     val isSuccess: Boolean get() = this is Success
 
     fun exceptionOrNull(): Throwable? =
-        when (value) {
-            is Error -> value.err
+        when (this) {
+            is Error -> this.err
             else -> null
         }
 
@@ -28,6 +28,11 @@ suspend fun <T> asResult(foo: suspend () -> T): MyResult<T> {
 
 public inline fun <T> MyResult<T>.onFailure(action: (exception: Throwable) -> Unit): MyResult<T> {
     exceptionOrNull()?.let { action(it) }
+    return this
+}
+
+public inline fun <T> MyResult<T>.logFailure(): MyResult<T> {
+    exceptionOrNull()?.let { warning(it) }
     return this
 }
 

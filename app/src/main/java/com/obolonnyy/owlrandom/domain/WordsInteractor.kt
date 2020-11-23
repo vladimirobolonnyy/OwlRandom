@@ -26,7 +26,7 @@ class WordsInteractor(
             asyncAll(resultWords) { picturesRepo.getPictures(it.englishOne) }
         }.getOrNull()
         val resultList = mutableListOf<PicturedWord>()
-        for (i in 0 until resultWords.size) {
+        for (i in resultWords.indices) {
             val word = resultWords[i]
             resultList.add(PicturedWord(word, pictures?.get(i) ?: GooglePicture(word.englishOne)))
         }

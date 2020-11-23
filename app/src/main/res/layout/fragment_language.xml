@@ -71,24 +71,24 @@
         <ImageView
             android:id="@+id/image1"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_margin="4dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             tools:background="@drawable/common_google_signin_btn_icon_dark" />
 
         <ImageView
             android:id="@+id/image2"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_margin="4dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             tools:background="@drawable/common_google_signin_btn_icon_dark" />
 
         <ImageView
             android:id="@+id/image3"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_margin="4dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             tools:background="@drawable/common_google_signin_btn_icon_dark" />
     </LinearLayout>

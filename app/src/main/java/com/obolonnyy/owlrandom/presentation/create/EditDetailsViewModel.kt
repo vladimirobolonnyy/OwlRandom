@@ -8,10 +8,10 @@ import com.obolonnyy.owlrandom.database.MainRepositoryImpl
 import com.obolonnyy.owlrandom.model.MyGroup
 import com.obolonnyy.owlrandom.utils.SingleLiveEvent
 import com.obolonnyy.owlrandom.utils.asResult
+import com.obolonnyy.owlrandom.utils.log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 
 class EditDetailsViewModel(
@@ -69,10 +69,10 @@ class EditDetailsViewModel(
             val group = state.getGroup()
             if (group.items.all { it.isEmpty() }) {
                 repo.deleteGroup(group)
-                Timber.i("CreateDetailsViewModel deleted group with id:= ${group.id}")
+                log("CreateDetailsViewModel deleted group with id:= ${group.id}")
             } else {
                 repo.saveGroup(group)
-                Timber.i("CreateDetailsViewModel saved group with id:= ${group.id}")
+                log("CreateDetailsViewModel saved group with id:= ${group.id}")
             }
         }
     }

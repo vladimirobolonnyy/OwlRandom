@@ -1,13 +1,25 @@
 package com.obolonnyy.owlrandom.presentation.language
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import coil.load
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.Scope
+import com.google.api.client.extensions.android.http.AndroidHttp
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.json.jackson2.JacksonFactory
+import com.google.api.services.sheets.v4.Sheets
+import com.google.api.services.sheets.v4.SheetsScopes
 import com.obolonnyy.owlrandom.R
+import com.obolonnyy.owlrandom.app.MainApplication
 import com.obolonnyy.owlrandom.base.BaseFragment
 import com.obolonnyy.owlrandom.model.LanguageImages
 import com.obolonnyy.owlrandom.utils.activityViewModels
@@ -16,6 +28,7 @@ import com.obolonnyy.owlrandom.utils.observe
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import timber.log.Timber
 
 class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScope by MainScope() {
 
@@ -50,6 +63,8 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
         observe(viewModel.pictureState, ::renderPictures)
         observe(viewModel.viewEvents, ::process)
         observe(viewModel.timerEvents, { timer.text = it.getHumanTime() })
+
+        requestSignIn(requireContext())
     }
 
     override fun onDestroy() {
@@ -67,6 +82,43 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
         viewModel.onPause()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_SIGN_IN) {
+            if (resultCode == AppCompatActivity.RESULT_OK) {
+                GoogleSignIn.getSignedInAccountFromIntent(data)
+                    .addOnSuccessListener { account ->
+                        val scopes = listOf(SheetsScopes.SPREADSHEETS)
+                        val credential =
+                            GoogleAccountCredential.usingOAuth2(MainApplication.context, scopes)
+                        credential.selectedAccount = account.account
+
+                        val jsonFactory = JacksonFactory.getDefaultInstance()
+//                        GoogleNetHttpTransport.newTrustedTransport()
+                        val httpTransport = AndroidHttp.newCompatibleTransport()
+                        val service = Sheets.Builder(httpTransport, jsonFactory, credential)
+                            .setApplicationName(getString(R.string.app_name))
+                            .build()
+
+                        viewModel.service = service
+                    }
+                    .addOnFailureListener { e ->
+                        Timber.e(e)
+                    }
+            }
+        }
+    }
+
+    private fun requestSignIn(context: Context) {
+        val signInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestScopes(Scope(SheetsScopes.SPREADSHEETS))
+            .requestEmail()
+            .build()
+        val client = GoogleSignIn.getClient(context, signInOptions)
+        startActivityForResult(client.signInIntent, REQUEST_SIGN_IN)
+    }
+
     private fun render(state: LanguageViewState) {
         goodBadRating.text = state.goodBadRating
         countWords.text = state.countWords
@@ -78,15 +130,9 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
 
     private fun renderPictures(state: LanguageImages?) {
         if (state != null) {
-            picture1.load(state.picture1Uri) {
-                placeholder(R.drawable.common_google_signin_btn_icon_dark)
-            }
-            picture2.load(state.picture2Uri) {
-                placeholder(R.drawable.common_google_signin_btn_icon_dark)
-            }
-            picture3.load(state.picture3Uri) {
-                placeholder(R.drawable.common_google_signin_btn_icon_dark)
-            }
+            picture1.load(state.picture1Uri)
+            picture2.load(state.picture2Uri)
+            picture3.load(state.picture3Uri)
         }
         picture1.isVisible = state != null
         picture2.isVisible = state != null
@@ -112,5 +158,9 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
             positiveButton(res = R.string.retry, click = { viewModel.reload() })
             negativeButton(res = R.string.cancel, click = {})
         }.show()
+    }
+
+    companion object {
+        private const val REQUEST_SIGN_IN = 1
     }
 }
