@@ -130,19 +130,19 @@
         android:textAlignment="center"
         android:textColor="@color/textPrimary"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/revert"
+        app:layout_constraintBottom_toTopOf="@+id/skip_new"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/showed_answered"
         tools:text="255/252" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/revert"
+        android:id="@+id/skip_new"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:backgroundTint="@color/white"
-        android:text="@string/revert"
+        android:text="@string/skip"
         android:textColor="@color/textSecondary"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/show_translation"
@@ -160,11 +160,11 @@
         android:text="@string/i_know"
         android:textColor="@color/textSecondary"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/revert"
+        app:layout_constraintBottom_toBottomOf="@+id/skip_new"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/revert"
-        app:layout_constraintTop_toTopOf="@+id/revert" />
+        app:layout_constraintStart_toEndOf="@+id/skip_new"
+        app:layout_constraintTop_toTopOf="@+id/skip_new" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/show_translation"
@@ -175,19 +175,19 @@
         android:text="@string/show_translation"
         android:textColor="@color/textSecondary"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/skip"
+        app:layout_constraintEnd_toStartOf="@+id/revert"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/revert"
+        app:layout_constraintTop_toBottomOf="@+id/skip_new"
         app:layout_constraintVertical_bias="0" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/skip"
+        android:id="@+id/revert"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:backgroundTint="@color/white"
-        android:text="@string/skip"
+        android:text="@string/revert"
         android:textColor="@color/textSecondary"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/show_translation"

@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import coil.load
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.Scope
@@ -48,7 +50,7 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
     private val translation by lazy { requireView().findViewById<View>(R.id.show_translation) }
     private val revert by lazy { requireView().findViewById<View>(R.id.revert) }
     private val next by lazy { requireView().findViewById<View>(R.id.next) }
-    private val skip by lazy { requireView().findViewById<View>(R.id.skip) }
+    private val skip by lazy { requireView().findViewById<View>(R.id.skip_new) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,7 +58,7 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
         switch.setOnClickListener { viewModel.onSwitchClicked() }
         revert.setOnClickListener { viewModel.onRevertClicked() }
         translation.setOnClickListener { viewModel.onTranslationClicked() }
-        next.setOnClickListener { viewModel.onNextClicked() }
+        next.run { setOnClickListener({ viewModel.onNextClicked() }) }
         skip.setOnClickListener { viewModel.onSkipClicked() }
 
         observe(viewModel.viewState, ::render)
@@ -126,6 +128,8 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
         bottomWord.text = state.bottomWord
         showedAnswered.text = state.showedAnswered
         bottomWord.isInvisible = !state.showBottom
+        next.isClickable = state.clickEnable
+        skip.isClickable = state.clickEnable
     }
 
     private fun renderPictures(state: LanguageImages?) {
@@ -146,8 +150,10 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
         }
     }
 
+    private var dialog: MaterialDialog? = null
     private fun showRetryDialog(event: LanguageViewEvent.Retry) {
-        this.materialDialog().apply {
+        dialog = this.materialDialog()
+        dialog!!.apply {
             title(
                 text = getString(
                     R.string.material_dialog_retry_language_title,
@@ -155,9 +161,17 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
                     event.notAnswered.toString()
                 )
             )
-            positiveButton(res = R.string.retry, click = { viewModel.reload() })
-            negativeButton(res = R.string.cancel, click = {})
-        }.show()
+            positiveButton(res = R.string.new_try, click = {
+                viewModel.reload()
+                dialog = null
+            })
+            negativeButton(res = R.string.retry_this, click = {
+                viewModel.tryAgain()
+                dialog = null
+            })
+            onDismiss { dialog = null }
+        }
+        dialog!!.show()
     }
 
     companion object {

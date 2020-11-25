@@ -9,6 +9,7 @@ data class LanguageViewState(
     val currentItem: Int = 0,
     val showBottom: Boolean = false,
     val showEngTop: Boolean = true,
+    val clickEnable: Boolean = true
 ) {
 
     init {
@@ -44,7 +45,7 @@ data class LanguageViewState(
     val pictures = words[currentItem].googlePicture
     private val english: String = word.english.joinToString(" / ")
     private val russian: String = word.russian.joinToString(" / ")
-    val showedAnswered: String = "${word.showed} / ${word.answered}"
+    val showedAnswered: String = "answered: ${word.answered} / notAnswered: ${word.notAnswered}"
 
     val countWords = "${currentItem + 1} / $maxItems"
     val topWord = if (showEngTop) english else russian

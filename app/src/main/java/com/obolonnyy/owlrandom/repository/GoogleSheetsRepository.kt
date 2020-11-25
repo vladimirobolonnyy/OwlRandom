@@ -9,6 +9,7 @@ import com.obolonnyy.owlrandom.network.SheetsApi
 
 interface GoogleSheetsRepository {
     suspend fun getAllWords(): List<Word>
+    suspend fun getAllWordsMap(): Map<String, Word>
 }
 
 class GoogleSheetsRepositoryImpl(
@@ -23,5 +24,9 @@ class GoogleSheetsRepositoryImpl(
 //        cached?.run { return cached }
         return api.getAllWords().convert()
             .also { store.set(key, it) }
+    }
+
+    override suspend fun getAllWordsMap(): Map<String, Word> {
+        return api.getAllWords().convert().associateBy({ it.englishOne }, { it })
     }
 }

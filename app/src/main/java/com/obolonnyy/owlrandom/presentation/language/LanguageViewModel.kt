@@ -6,8 +6,6 @@ import com.google.api.services.sheets.v4.Sheets
 import com.obolonnyy.owlrandom.base.BaseViewModel
 import com.obolonnyy.owlrandom.core.ProxyCacheServer
 import com.obolonnyy.owlrandom.core.UriProxyCacheServer
-import com.obolonnyy.owlrandom.database.GROUPS_DATABASE
-import com.obolonnyy.owlrandom.database.LANGUAGE_DATABASE
 import com.obolonnyy.owlrandom.domain.WordsInteractor
 import com.obolonnyy.owlrandom.model.GooglePicture
 import com.obolonnyy.owlrandom.model.LanguageImages
@@ -73,6 +71,12 @@ class LanguageViewModel(
         onNext(state)
     }
 
+    fun tryAgain() {
+        loadSame()
+        answered.clear()
+        notAnswered.clear()
+    }
+
     private fun onNext(state: LanguageViewState) {
         val newState = state.next(answered = answered.size, notAnswered = notAnswered.size)
         _viewState.postValue(newState)
@@ -87,22 +91,30 @@ class LanguageViewModel(
     }
 
     private fun postResults(state: LanguageViewState) {
+        _viewState.value = state.copy(clickEnable = false)
         service ?: return
         launchIO {
             asResult {
                 val sheetsRepo = SheetsRepo(service!!)
                 sheetsRepo.postResuls(state.words, answered, notAnswered)
             }.onSuccess {
-                _viewEvents.postValue(
-                    LanguageViewEvent.Retry(
-                        answered = answered.size,
-                        notAnswered = notAnswered.size
-                    )
-                )
+                showDialog()
             }.onFailure {
                 warning(it)
+                _viewState.postValue(state.copy(clickEnable = true))
             }
         }
+    }
+
+    private fun showDialog() {
+        val state = _viewState.value ?: return
+        _viewState.postValue(state.copy(clickEnable = true))
+        _viewEvents.postValue(
+            LanguageViewEvent.Retry(
+                answered = answered.size,
+                notAnswered = notAnswered.size
+            )
+        )
     }
 
     fun onRevertClicked() {
@@ -122,6 +134,23 @@ class LanguageViewModel(
         load()
     }
 
+    fun startTimer() {
+        job?.cancel()
+        job = launchIO {
+            val time = settingsRepo.getTodaySpendSeconds()
+            for (t in time..Long.MAX_VALUE) {
+                _timerEvents.postValue(LanguageTimerState(t))
+                delay(1000)
+            }
+        }
+    }
+
+    fun onPause() {
+        val counted = _timerEvents.value?.seconds ?: 0L
+        settingsRepo.saveCurrentSeconds(counted)
+        job?.cancel()
+    }
+
     private fun load() {
         launchIO {
             asResult {
@@ -130,6 +159,21 @@ class LanguageViewModel(
                 _viewState.postValue(LanguageViewState(it))
                 loadPictures(it.first().googlePicture)
             }.onFailureUI {
+                warning(it)
+                _viewEvents.postValue(LanguageViewEvent.Error(it))
+            }
+        }
+    }
+
+    private fun loadSame() {
+        launchIO {
+            asResult {
+                wordsInteractor.invokeTheSame(_viewState.value!!.words, answered, notAnswered)
+            }.onSuccess {
+                _viewState.postValue(LanguageViewState(it))
+                loadPictures(it.first().googlePicture)
+            }.onFailureUI {
+                warning(it)
                 _viewEvents.postValue(LanguageViewEvent.Error(it))
             }
         }
@@ -166,20 +210,4 @@ class LanguageViewModel(
         _timerEvents.postValue(LanguageTimerState(time))
     }
 
-    fun startTimer() {
-        job?.cancel()
-        job = launchIO {
-            val time = settingsRepo.getTodaySpendSeconds()
-            for (t in time..Long.MAX_VALUE) {
-                _timerEvents.postValue(LanguageTimerState(t))
-                delay(1000)
-            }
-        }
-    }
-
-    fun onPause() {
-        val counted = _timerEvents.value?.seconds ?: 0L
-        settingsRepo.saveCurrentSeconds(counted)
-        job?.cancel()
-    }
 }

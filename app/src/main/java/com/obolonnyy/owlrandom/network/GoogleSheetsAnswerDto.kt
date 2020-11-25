@@ -13,18 +13,17 @@ class GoogleSheetsAnswerDto {
             val first = triple.getOrNull(0)
             val second = triple.getOrNull(1)
             val third = triple.getOrNull(2)
-            val showed = triple.getOrElse(3, ::zero).toInt()
-            val answered = triple.getOrElse(4, ::zero).toInt()
-            val notAnswered = triple.getOrElse(5, ::zero).toInt()
-            val word = getWord(startIndex + index, first, second, third, showed, answered, notAnswered)
+            val showed = triple.getOrNull(3)?.toIntOrNull() ?: 0
+            val answered = triple.getOrNull(4)?.toIntOrNull() ?: 0
+            val notAnswered = triple.getOrNull(5)?.toIntOrNull() ?: 0
+            val word =
+                getWord(startIndex + index, first, second, third, showed, answered, notAnswered)
             if (word != null) {
                 result.add(word)
             }
         }
         return result
     }
-
-    private fun zero(ignore: Int): String = "0"
 
     private fun getWord(
         index: Int,
