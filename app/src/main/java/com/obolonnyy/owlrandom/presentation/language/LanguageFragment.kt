@@ -2,6 +2,7 @@ package com.obolonnyy.owlrandom.presentation.language
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -27,6 +28,7 @@ import com.obolonnyy.owlrandom.model.LanguageImages
 import com.obolonnyy.owlrandom.utils.activityViewModels
 import com.obolonnyy.owlrandom.utils.materialDialog
 import com.obolonnyy.owlrandom.utils.observe
+import com.obolonnyy.owlrandom.utils.openImage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -45,6 +47,7 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
     private val picture1 by lazy { requireView().findViewById<ImageView>(R.id.image1) }
     private val picture2 by lazy { requireView().findViewById<ImageView>(R.id.image2) }
     private val picture3 by lazy { requireView().findViewById<ImageView>(R.id.image3) }
+    private val pictures by lazy { listOf(picture1, picture2, picture3) }
 
     private val switch by lazy { requireView().findViewById<View>(R.id.switch_language) }
     private val translation by lazy { requireView().findViewById<View>(R.id.show_translation) }
@@ -58,13 +61,15 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
         switch.setOnClickListener { viewModel.onSwitchClicked() }
         revert.setOnClickListener { viewModel.onRevertClicked() }
         translation.setOnClickListener { viewModel.onTranslationClicked() }
-        next.run { setOnClickListener({ viewModel.onNextClicked() }) }
+        next.setOnClickListener { viewModel.onNextClicked() }
         skip.setOnClickListener { viewModel.onSkipClicked() }
 
         observe(viewModel.viewState, ::render)
         observe(viewModel.pictureState, ::renderPictures)
+        observe(viewModel.wordNumberState, { clearImages() })
         observe(viewModel.viewEvents, ::process)
         observe(viewModel.timerEvents, { timer.text = it.getHumanTime() })
+        observe(viewModel.errorViewState, ::showMessage)
 
         requestSignIn(requireContext())
     }
@@ -128,19 +133,25 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
         bottomWord.text = state.bottomWord
         showedAnswered.text = state.showedAnswered
         bottomWord.isInvisible = !state.showBottom
-        next.isClickable = state.clickEnable
-        skip.isClickable = state.clickEnable
     }
 
     private fun renderPictures(state: LanguageImages?) {
-        if (state != null) {
-            picture1.load(state.picture1Uri)
-            picture2.load(state.picture2Uri)
-            picture3.load(state.picture3Uri)
+        pictures.forEach {
+            it.isVisible = state != null
         }
-        picture1.isVisible = state != null
-        picture2.isVisible = state != null
-        picture3.isVisible = state != null
+        if (state != null) {
+            pictures.forEachIndexed { i, view ->
+                view.load(state.picturesUri[i])
+                view.onClickOpenUri(state.picturesUri[i])
+            }
+        }
+    }
+
+    private fun clearImages() {
+        pictures.forEach {
+            it.isVisible = false
+            it.setOnClickListener(null)
+        }
     }
 
     private fun process(event: LanguageViewEvent) {
@@ -172,6 +183,10 @@ class LanguageFragment : BaseFragment(R.layout.fragment_language), CoroutineScop
             onDismiss { dialog = null }
         }
         dialog!!.show()
+    }
+
+    private fun View.onClickOpenUri(uri: Uri) {
+        this.setOnClickListener { requireContext().openImage(uri) }
     }
 
     companion object {

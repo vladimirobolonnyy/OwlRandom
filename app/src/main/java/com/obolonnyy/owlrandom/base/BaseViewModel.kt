@@ -1,8 +1,11 @@
 package com.obolonnyy.owlrandom.base
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.obolonnyy.owlrandom.utils.MyResult
+import com.obolonnyy.owlrandom.utils.SingleLiveEvent
 import com.obolonnyy.owlrandom.utils.onFailure
 import com.obolonnyy.owlrandom.utils.onSuccess
 import kotlinx.coroutines.Dispatchers
@@ -10,6 +13,9 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel : ViewModel() {
+
+    protected val _errorViewState = SingleLiveEvent<String>()
+    val errorViewState: LiveData<String> = _errorViewState
 
     fun launch(foo: suspend () -> Unit) {
         viewModelScope.launch {

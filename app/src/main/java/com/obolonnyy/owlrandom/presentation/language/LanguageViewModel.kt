@@ -9,6 +9,7 @@ import com.obolonnyy.owlrandom.core.UriProxyCacheServer
 import com.obolonnyy.owlrandom.domain.WordsInteractor
 import com.obolonnyy.owlrandom.model.GooglePicture
 import com.obolonnyy.owlrandom.model.LanguageImages
+import com.obolonnyy.owlrandom.repository.SheetsRepo
 import com.obolonnyy.owlrandom.repository.UserSettings
 import com.obolonnyy.owlrandom.repository.UserSettingsImpl
 import com.obolonnyy.owlrandom.utils.*
@@ -27,6 +28,7 @@ class LanguageViewModel(
 
     private val _viewState = MutableLiveData<LanguageViewState>()
     val viewState: LiveData<LanguageViewState> = _viewState
+    val wordNumberState: LiveData<Int> = viewState.mapDistinct{ it.currentItem }
 
     private val _pictureState = MutableLiveData<LanguageImages?>()
     val pictureState: LiveData<LanguageImages?> = _pictureState
@@ -81,12 +83,13 @@ class LanguageViewModel(
         val newState = state.next(answered = answered.size, notAnswered = notAnswered.size)
         _viewState.postValue(newState)
         checkFullState(newState)
-        loadPictures(newState.pictures)
     }
 
     private fun checkFullState(state: LanguageViewState) {
         if (state.isFull) {
             postResults(state)
+        } else {
+            loadPictures(state.pictures)
         }
     }
 
@@ -101,6 +104,7 @@ class LanguageViewModel(
                 showDialog()
             }.onFailure {
                 warning(it)
+                _errorViewState.postValue("Failed to post results")
                 _viewState.postValue(state.copy(clickEnable = true))
             }
         }
