@@ -10,6 +10,6 @@ class MainActivityViewModel : BaseViewModel() {
     val viewEvents: LiveData<MainActivityViewEvent> = _viewEvents
 
     init {
-        _viewEvents.postValue(MainActivityViewEvent.GoToLanguage)
+        _viewEvents.postValue(MainActivityViewEvent.GoToSettings)
     }
 }

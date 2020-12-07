@@ -43,8 +43,24 @@ fun SharedPreferences.string(key: String? = null, default: String? = null): Read
     return internalDelegate(key, default, SharedPreferences::getString, SharedPreferences.Editor::putString)
 }
 
-fun SharedPreferences.long(key: String? = null, default: Long = -1): ReadWriteProperty<Any, Long> {
+fun SharedPreferences.int(key: String? = null, default: Int = 0): ReadWriteProperty<Any, Int> {
+    return internalDelegate(key, default, SharedPreferences::getInt, SharedPreferences.Editor::putInt)
+}
+
+fun SharedPreferences.long(key: String? = null, default: Long = 0): ReadWriteProperty<Any, Long> {
     return internalDelegate(key, default, SharedPreferences::getLong, SharedPreferences.Editor::putLong)
+}
+
+fun SharedPreferences.float(key: String? = null, default: Float = 0f): ReadWriteProperty<Any, Float> {
+    return internalDelegate(key, default, SharedPreferences::getFloat, SharedPreferences.Editor::putFloat)
+}
+
+fun SharedPreferences.bool(key: String? = null, default: Boolean = false): ReadWriteProperty<Any, Boolean> {
+    return internalDelegate(key, default, SharedPreferences::getBoolean, SharedPreferences.Editor::putBoolean)
+}
+
+fun SharedPreferences.getStringSet(key: String? = null, default: Set<String> = setOf()): ReadWriteProperty<Any, Set<String>?> {
+    return internalDelegate(key, default, SharedPreferences::getStringSet, SharedPreferences.Editor::putStringSet)
 }
 
 /**

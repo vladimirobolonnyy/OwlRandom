@@ -120,8 +120,8 @@ dependencies {
     implementation "androidx.compose.ui:ui:${versions.compose_version}"
     implementation "androidx.compose.material:material:${versions.compose_version}"
     implementation "androidx.ui:ui-tooling:${versions.compose_version}"
-//    implementation "androidx.compose.runtime:runtime:1.0.0-alpha06"
-//    implementation 'androidx.compose.runtime:runtime-livedata:1.0.0-alph6'
+    implementation "androidx.compose.runtime:runtime:${versions.compose_version}"
+    implementation "androidx.compose.runtime:runtime-livedata:${versions.compose_version}"
 
 
     testImplementation 'junit:junit:4.13.1'

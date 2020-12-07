@@ -4,10 +4,14 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.app.Navigator
 import com.obolonnyy.owlrandom.app.NavigatorImpl
 
-abstract class BaseFragment constructor(@LayoutRes val res: Int) : Fragment(res) {
+abstract class BaseFragment constructor(
+    @LayoutRes val res: Int = R.layout.fragment_empty
+) :
+    Fragment(res) {
 
     protected val navigator: Navigator by lazy { NavigatorImpl(this.requireActivity()) }
 

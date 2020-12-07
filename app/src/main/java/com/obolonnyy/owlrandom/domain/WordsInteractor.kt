@@ -10,28 +10,41 @@ import com.obolonnyy.owlrandom.utils.asyncAll
 class WordsInteractor(
     private val wordsRepo: GoogleSheetsRepository = GoogleSheetsRepositoryImpl(),
     private val picturesRepo: GooglePicturesRepository = GooglePicturesRepositoryImpl(),
-    private val settingsRepo: SettingsRepository = SettingsRepositoryImpl(),
+    private val settingsRepo: UserSettings = UserSettingsImpl(),
     private val random: Randomizer = Randomizer(),
 ) {
 
     suspend fun invoke(): List<PicturedWord> {
         val words = wordsRepo.getAllWords()
         val shuffledWords = random.shuffle(words.toMutableList())
-        val userDesiredCount = settingsRepo.getUserDesiredCount()
+        val userDesiredCount = settingsRepo.wordsDesiredCount
         val resultWords = if (shuffledWords.size < userDesiredCount) {
             shuffledWords
         } else {
             shuffledWords.subList(0, userDesiredCount)
         }
-        val pictures = kotlin.runCatching {
-            asyncAll(resultWords) { picturesRepo.getPictures(it.englishOne) }
-        }.getOrNull()
+        val pictures = getPictures(resultWords)
         val resultList = mutableListOf<PicturedWord>()
         for (i in resultWords.indices) {
             val word = resultWords[i]
-            resultList.add(PicturedWord(word, pictures?.get(i) ?: GooglePicture(word.englishOne)))
+            resultList.add(
+                PicturedWord(
+                    word,
+                    pictures.getOrNull(i) ?: GooglePicture(word.englishOne)
+                )
+            )
         }
         return resultList
+    }
+
+    private suspend fun getPictures(resultWords: List<Word>): List<GooglePicture> {
+        return if (!settingsRepo.loadPictures) {
+            emptyList()
+        } else {
+            kotlin.runCatching {
+                asyncAll(resultWords) { picturesRepo.getPictures(it.englishOne) }
+            }.getOrElse { emptyList() }
+        }
     }
 
     suspend fun invokeTheSame(
@@ -57,6 +70,10 @@ class WordsInteractor(
             val word = newWordsList[i]
             resultList.add(PicturedWord(word, pictures?.get(i) ?: GooglePicture(word.englishOne)))
         }
-        return resultList
+
+        val shuffled = random.shuffle(resultList)
+        val removeKnown = shuffled.filter { it.word.answered < (it.word.notAnswered + 1) * 3 }
+
+        return removeKnown
     }
 }

@@ -184,6 +184,10 @@ class LanguageViewModel(
     }
 
     private fun loadPictures(googlePicture: GooglePicture) {
+        if (!settingsRepo.loadPictures) {
+            return
+        }
+
         _pictureState.postValue(null)
         launchIO {
             asResult {
