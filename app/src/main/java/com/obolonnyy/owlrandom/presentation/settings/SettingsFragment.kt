@@ -6,14 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Slider
 import androidx.compose.material.Switch
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -57,6 +56,8 @@ class SettingsFragment : BaseFragment(R.layout.fragment_empty), CoroutineScope b
     fun MakeContent() {
         val checked = viewModel.switchEnabled.observeAsState(false)
         val wordsDesiredCount = viewModel.wordsDesiredCount.observeAsState(0)
+        val mainTabs = viewModel.viewState.value?.mainTabValues ?: emptyList()
+        val mainTab =  viewModel.viewState.observeAsState().value?.mainTab
 
         Column {
             Row(
@@ -90,15 +91,11 @@ class SettingsFragment : BaseFragment(R.layout.fragment_empty), CoroutineScope b
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
-//                val sliderPosition = remember { mutableStateOf(wordsDesiredCount.value.toFloat()) }
-
                 Text(
                     modifier = Modifier.weight(1f),
                     text = "Random words count: = ${wordsDesiredCount.value}",
                     style = typography.body2
                 )
-
                 Slider(
                     modifier = Modifier.weight(1f),
                     value = wordsDesiredCount.value.toFloat() / 100,
@@ -107,10 +104,33 @@ class SettingsFragment : BaseFragment(R.layout.fragment_empty), CoroutineScope b
                     thumbColor = Color.Red,
                     activeTrackColor = Color.Red,
                     inactiveTrackColor = Color.Red,
-                    onValueChange = {
-//                        sliderPosition.value = it
-                        viewModel.onDesiredUpdated(it)
-                    })
+                    onValueChange = { viewModel.onDesiredUpdated(it) }
+                )
+            }
+            Spacer(Modifier.height(10.dp))
+            Row(
+                modifier = Modifier.padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                mainTabs.forEach {
+                    val color = if (it == mainTab) {
+                        Color.Red
+                    } else {
+                        Color.White
+                    }
+                    Button(
+                        onClick = { viewModel.onMainTabSelected(it) },
+                        modifier = Modifier.weight(1f).padding(4.dp),
+                    ) {
+                        Text(
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.weight(1f),
+                            text = it,
+                            style = typography.body2,
+                            color = color
+                        )
+                    }
+                }
             }
         }
     }

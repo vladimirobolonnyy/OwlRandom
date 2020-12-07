@@ -48,7 +48,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
             android:layout_weight="1"
-            android:text="later"
+            android:text="@string/settings"
             android:textSize="12sp" />
     </LinearLayout>
 

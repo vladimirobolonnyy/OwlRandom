@@ -20,8 +20,6 @@ class GoogleSheetsRepositoryImpl(
     private val key = "language_words"
 
     override suspend fun getAllWords(): List<Word> {
-//        val cached = store.get(key) as? List<Word>
-//        cached?.run { return cached }
         return api.getAllWords().convert()
             .also { store.set(key, it) }
     }

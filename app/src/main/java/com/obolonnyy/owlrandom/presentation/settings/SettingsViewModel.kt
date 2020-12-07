@@ -3,6 +3,7 @@ package com.obolonnyy.owlrandom.presentation.settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.obolonnyy.owlrandom.base.BaseViewModel
+import com.obolonnyy.owlrandom.model.toMainTab
 import com.obolonnyy.owlrandom.repository.UserSettings
 import com.obolonnyy.owlrandom.repository.UserSettingsImpl
 import com.obolonnyy.owlrandom.utils.mapDistinct
@@ -16,6 +17,7 @@ class SettingsViewModel(
 
     val switchEnabled: LiveData<Boolean> = _viewState.mapDistinct { it.loadPictures }
     val wordsDesiredCount: LiveData<Int> = _viewState.mapDistinct { it.wordsDesiredCount }
+    val mainTab: LiveData<String> = _viewState.mapDistinct { it.mainTab }
 
     init {
         loadStateFromRepo()
@@ -27,22 +29,23 @@ class SettingsViewModel(
     }
 
     fun onDesiredUpdated(newValue: Float) {
-        try {
-            val i = (newValue * 100).toInt()
-            settingsRepo.wordsDesiredCount = i
-            loadStateFromRepo()
-        } catch (e: NumberFormatException) {
-            //ingore
-        }
+        val i = (newValue * 100).toInt()
+        settingsRepo.wordsDesiredCount = i
+        loadStateFromRepo()
     }
 
     private fun loadStateFromRepo() {
         _viewState.setValue(
             SettingsFragmentViewState(
                 loadPictures = settingsRepo.loadPictures,
-                wordsDesiredCount = settingsRepo.wordsDesiredCount
+                wordsDesiredCount = settingsRepo.wordsDesiredCount,
+                mainTab = settingsRepo.getMainTab().str
             )
         )
     }
 
+    fun onMainTabSelected(it: String) {
+        settingsRepo.setMainTab(it.toMainTab())
+        loadStateFromRepo()
+    }
 }

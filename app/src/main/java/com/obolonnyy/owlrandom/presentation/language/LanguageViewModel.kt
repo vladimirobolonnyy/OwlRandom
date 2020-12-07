@@ -161,7 +161,7 @@ class LanguageViewModel(
                 wordsInteractor.invoke()
             }.onSuccess {
                 _viewState.postValue(LanguageViewState(it))
-                loadPictures(it.first().googlePicture)
+                it.firstOrNull()?.let { loadPictures(it.googlePicture) }
             }.onFailureUI {
                 warning(it)
                 _viewEvents.postValue(LanguageViewEvent.Error(it))

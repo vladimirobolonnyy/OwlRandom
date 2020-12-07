@@ -1,6 +1,8 @@
 package com.obolonnyy.owlrandom.repository
 
 import com.obolonnyy.owlrandom.core.*
+import com.obolonnyy.owlrandom.model.MainTabs
+import com.obolonnyy.owlrandom.model.toMainTab
 
 interface UserSettings {
 
@@ -10,6 +12,9 @@ interface UserSettings {
 
     var wordsDesiredCount: Int
     var loadPictures: Boolean
+
+    fun getMainTab(): MainTabs
+    fun setMainTab(tab: MainTabs)
 }
 
 class UserSettingsImpl(
@@ -22,6 +27,15 @@ class UserSettingsImpl(
 
     override var wordsDesiredCount by prefs.pref.int("wordsDesiredCount", 40)
     override var loadPictures by prefs.pref.bool("loadPictures", false)
+    private var mainTabPref by prefs.pref.string("mainTab", "")
+
+    override fun getMainTab(): MainTabs {
+        return mainTabPref.toMainTab()
+    }
+
+    override fun setMainTab(tab: MainTabs) {
+        mainTabPref = tab.str
+    }
 
     override fun getTodaySpendSeconds(): Long {
         if (lastDate != clock.today()) return 0
