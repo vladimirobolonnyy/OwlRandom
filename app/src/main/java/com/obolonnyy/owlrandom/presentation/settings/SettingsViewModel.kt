@@ -17,7 +17,6 @@ class SettingsViewModel(
 
     val switchEnabled: LiveData<Boolean> = _viewState.mapDistinct { it.loadPictures }
     val wordsDesiredCount: LiveData<Int> = _viewState.mapDistinct { it.wordsDesiredCount }
-    val mainTab: LiveData<String> = _viewState.mapDistinct { it.mainTab }
 
     init {
         loadStateFromRepo()

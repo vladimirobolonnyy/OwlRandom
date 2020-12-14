@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseViewModel
-import com.obolonnyy.owlrandom.database.MainRepository
-import com.obolonnyy.owlrandom.database.MainRepositoryImpl
+import com.obolonnyy.owlrandom.repository.MainRepository
+import com.obolonnyy.owlrandom.repository.MainRepositoryImpl
 import com.obolonnyy.owlrandom.utils.SingleLiveEvent
 import com.obolonnyy.owlrandom.utils.warning
 import kotlinx.coroutines.Dispatchers
@@ -54,7 +54,7 @@ class DetailsViewModel(
     }
 
     private val colorList: List<Int> =
-        listOf(R.color.color2, R.color.color1, R.color.color3, R.color.blue, R.color.color5)
+        listOf(R.color.color2_orange, R.color.color1, R.color.color3_red, R.color.blue, R.color.color5)
 
     private fun pick(colorNumber: Int) {
         val state = state ?: return

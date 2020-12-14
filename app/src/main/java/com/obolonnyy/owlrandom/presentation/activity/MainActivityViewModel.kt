@@ -19,6 +19,7 @@ class MainActivityViewModel(
             MainTabs.RANDOM -> MainActivityViewEvent.GoToMain
             MainTabs.LEARN -> MainActivityViewEvent.GoToLanguage
             MainTabs.SETTINGS -> MainActivityViewEvent.GoToSettings
+            MainTabs.STATS -> MainActivityViewEvent.GoToStats
         }
         _viewEvents.postValue(event)
     }

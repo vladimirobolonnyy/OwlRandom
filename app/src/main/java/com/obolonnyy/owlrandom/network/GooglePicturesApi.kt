@@ -1,10 +1,10 @@
 package com.obolonnyy.owlrandom.network
 
+import com.obolonnyy.owlrandom.app.BuildInfo.ApiKey
+import com.obolonnyy.owlrandom.app.BuildInfo.CX
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-private const val ApiKey = "AIzaSyDkYHGDk1IyyJu1RnmaMLqDuP6SVU84htg"
-private const val CX = "d7a80698f10795d96"
 
 interface GooglePicturesApi {
 

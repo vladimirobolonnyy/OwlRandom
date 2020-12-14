@@ -1,10 +1,11 @@
 package com.obolonnyy.owlrandom.network
 
+import com.obolonnyy.owlrandom.app.BuildInfo.ApiKey
+import com.obolonnyy.owlrandom.app.BuildInfo.SheetId
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-private const val SheetId = "1b_itSmdduwk6OX_fXr7GrReSAEeuqU27jCJMFEmcWi8"
-private const val ApiKey = "AIzaSyDkYHGDk1IyyJu1RnmaMLqDuP6SVU84htg"
+
 const val RangeMin = 2
 private const val Range = "english!A${RangeMin}:F1000"
 

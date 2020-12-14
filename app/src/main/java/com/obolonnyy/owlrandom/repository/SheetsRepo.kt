@@ -3,16 +3,17 @@ package com.obolonnyy.owlrandom.repository
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.model.BatchUpdateValuesRequest
 import com.google.api.services.sheets.v4.model.ValueRange
+import com.obolonnyy.owlrandom.app.BuildInfo.spreadsheetId
 import com.obolonnyy.owlrandom.model.PicturedWord
 import com.obolonnyy.owlrandom.utils.log
 
 
-const val spreadsheetId = "1b_itSmdduwk6OX_fXr7GrReSAEeuqU27jCJMFEmcWi8"
 
 class SheetsRepo(
     private val service: Sheets
 ) {
-    suspend fun postResuls(
+    @Suppress("RedundantSuspendModifier", "BlockingMethodInNonBlockingContext")
+    suspend fun postResults(
         words: List<PicturedWord>,
         answered: MutableSet<Int>,
         notAnswered: MutableSet<Int>

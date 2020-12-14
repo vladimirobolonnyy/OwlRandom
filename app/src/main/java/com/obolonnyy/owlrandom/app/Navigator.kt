@@ -10,6 +10,7 @@ import com.obolonnyy.owlrandom.presentation.details.DetailsFragment
 import com.obolonnyy.owlrandom.presentation.language.LanguageFragment
 import com.obolonnyy.owlrandom.presentation.main.MainFragment
 import com.obolonnyy.owlrandom.presentation.settings.SettingsFragment
+import com.obolonnyy.owlrandom.presentation.stats.StatsFragment
 
 interface Navigator {
     fun goToEditDetails(groupId: Long? = null)
@@ -17,6 +18,7 @@ interface Navigator {
     fun goToMain()
     fun goToSettings()
     fun goToLanguage()
+    fun goToStats()
 }
 
 class NavigatorImpl(
@@ -45,6 +47,10 @@ class NavigatorImpl(
 
     override fun goToLanguage() {
         LanguageFragment::class.java.recreate()
+    }
+
+    override fun goToStats() {
+        StatsFragment::class.java.showOrCreate()
     }
 
     private fun Fragment.replace() {

@@ -3,6 +3,7 @@ package com.obolonnyy.owlrandom.model
 enum class MainTabs(val str: String) {
     RANDOM("random"),
     LEARN("learn"),
+    STATS("stats"),
     SETTINGS("settings")
 }
 

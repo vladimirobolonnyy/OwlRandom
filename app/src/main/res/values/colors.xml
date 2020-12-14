@@ -11,8 +11,8 @@
     <color name="textSecondary">@color/color5</color>
 
     <color name="color1">#ECD078</color>
-    <color name="color2">#D95B43</color>
-    <color name="color3">#C02942</color>
+    <color name="color2_orange">#D95B43</color>
+    <color name="color3_red">#C02942</color>
     <color name="color4">#542437</color>
     <color name="color5">#53777A</color>
 

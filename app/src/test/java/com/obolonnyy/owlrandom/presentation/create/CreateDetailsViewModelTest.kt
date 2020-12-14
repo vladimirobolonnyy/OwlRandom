@@ -1,7 +1,7 @@
 package com.obolonnyy.owlrandom.presentation.create
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.obolonnyy.owlrandom.database.MainRepository
+import com.obolonnyy.owlrandom.repository.MainRepository
 import com.obolonnyy.owlrandom.database.MockMainRepo
 import com.obolonnyy.owlrandom.utils.observeOnce
 import kotlinx.coroutines.Dispatchers

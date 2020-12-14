@@ -3,8 +3,8 @@ package com.obolonnyy.owlrandom.presentation.create
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.obolonnyy.owlrandom.base.BaseViewModel
-import com.obolonnyy.owlrandom.database.MainRepository
-import com.obolonnyy.owlrandom.database.MainRepositoryImpl
+import com.obolonnyy.owlrandom.repository.MainRepository
+import com.obolonnyy.owlrandom.repository.MainRepositoryImpl
 import com.obolonnyy.owlrandom.model.MyGroup
 import com.obolonnyy.owlrandom.utils.SingleLiveEvent
 import com.obolonnyy.owlrandom.utils.asResult

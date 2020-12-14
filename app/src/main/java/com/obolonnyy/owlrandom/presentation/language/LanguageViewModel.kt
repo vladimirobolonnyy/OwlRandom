@@ -4,23 +4,30 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.api.services.sheets.v4.Sheets
 import com.obolonnyy.owlrandom.base.BaseViewModel
+import com.obolonnyy.owlrandom.core.Clock
 import com.obolonnyy.owlrandom.core.ProxyCacheServer
+import com.obolonnyy.owlrandom.core.RealtimeClock
 import com.obolonnyy.owlrandom.core.UriProxyCacheServer
+import com.obolonnyy.owlrandom.database.STATS_DATABASE
+import com.obolonnyy.owlrandom.database.StatsDatabase
+import com.obolonnyy.owlrandom.database.toEntity
 import com.obolonnyy.owlrandom.domain.WordsInteractor
 import com.obolonnyy.owlrandom.model.GooglePicture
 import com.obolonnyy.owlrandom.model.LanguageImages
+import com.obolonnyy.owlrandom.model.TimeStats
 import com.obolonnyy.owlrandom.repository.SheetsRepo
 import com.obolonnyy.owlrandom.repository.UserSettings
 import com.obolonnyy.owlrandom.repository.UserSettingsImpl
 import com.obolonnyy.owlrandom.utils.*
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 
 
 class LanguageViewModel(
     private val wordsInteractor: WordsInteractor = WordsInteractor(),
     private val settingsRepo: UserSettings = UserSettingsImpl(),
-    private val imageCacheServer: ProxyCacheServer = UriProxyCacheServer()
+    private val imageCacheServer: ProxyCacheServer = UriProxyCacheServer(),
+    private val clock: Clock = RealtimeClock(),
+    private val stateDataBase: StatsDatabase = STATS_DATABASE,
 ) : BaseViewModel() {
 
     private val answered = mutableSetOf<Int>()
@@ -28,7 +35,7 @@ class LanguageViewModel(
 
     private val _viewState = MutableLiveData<LanguageViewState>()
     val viewState: LiveData<LanguageViewState> = _viewState
-    val wordNumberState: LiveData<Int> = viewState.mapDistinct{ it.currentItem }
+    val wordNumberState: LiveData<Int> = viewState.mapDistinct { it.currentItem }
 
     private val _pictureState = MutableLiveData<LanguageImages?>()
     val pictureState: LiveData<LanguageImages?> = _pictureState
@@ -99,7 +106,7 @@ class LanguageViewModel(
         launchIO {
             asResult {
                 val sheetsRepo = SheetsRepo(service!!)
-                sheetsRepo.postResuls(state.words, answered, notAnswered)
+                sheetsRepo.postResults(state.words, answered, notAnswered)
             }.onSuccess {
                 showDialog()
             }.onFailure {
@@ -152,6 +159,7 @@ class LanguageViewModel(
     fun onPause() {
         val counted = _timerEvents.value?.seconds ?: 0L
         settingsRepo.saveCurrentSeconds(counted)
+        saveStats()
         job?.cancel()
     }
 
@@ -216,6 +224,19 @@ class LanguageViewModel(
     private fun loadTimer() {
         val time = settingsRepo.getTodaySpendSeconds()
         _timerEvents.postValue(LanguageTimerState(time))
+    }
+
+    private fun saveStats() {
+        GlobalScope.launch(Dispatchers.IO) {
+            val time = settingsRepo.getTodaySpendSeconds()
+            val today = clock.localDate()
+            val stats = TimeStats(today, time)
+            asResult {
+                stateDataBase.statsDao().saveStats(stats.toEntity())
+            }.onFailure {
+                warning(it)
+            }
+        }
     }
 
 }
