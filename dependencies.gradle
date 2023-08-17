@@ -3,7 +3,7 @@ def versions = [
         coroutines        : '1.3.9',
         arch              : '2.2.0',
         koin              : '2.0.1',
-        room              : '2.2.5',
+        room              : '2.5.2',
 
         appcompat         : '1.1.0',
         constraintlayout  : '2.0.2',
@@ -28,3 +28,86 @@ def versions = [
 ]
 
 ext.versions = versions
+
+ext {
+    compileSdkVersion = 33
+    minSdkVersion = 24
+    targetSdkVersion = 33
+
+    jvmTargetValue = "17"
+    sourceCompatibilityValue = JavaVersion.VERSION_17
+
+    buildToolsVersion = '30.0.3'
+    multiDEXVersion = '2.0.1'
+    gradleVersion = '7.4.2'
+    kotlinVersion = '1.8.21'
+    lifecycleVersion = '2.6.1'
+    coreKtxVersion = '1.10.1'
+    fragmentVersion = '1.5.7'
+    preference = '1.1.1'
+    composeVersion = "1.4.3"
+    composeCompilerVersion = "1.4.7"
+    coroutinesVersion = '1.6.4'
+    retrofitVersion = '2.9.0'
+    okHttpVersion = '4.9.3'
+
+    kotlinImpl = [
+            stdLib7             : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
+            stdLib              : "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+            collectionsImmutable: "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
+    ]
+
+    gradlePlugin = "com.android.tools.build:gradle:$gradleVersion"
+    kotlinPlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+
+    androidxLib = [
+            coreKtx           : "androidx.core:core-ktx:$coreKtxVersion",
+            livedata_ktx      : "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion",
+            lifecycle         : "androidx.lifecycle:lifecycle-extensions:2.2.0",
+            lifecycleRuntime  : "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion",
+            fragmentRuntime   : "androidx.fragment:fragment:$fragmentVersion",
+            fragmentRuntimeKtx: "androidx.fragment:fragment-ktx:$fragmentVersion",
+            preference        : "androidx.preference:preference-ktx:$preference",
+    ]
+
+    compose = [
+            composeUI              : "androidx.compose.ui:ui:$composeVersion",
+            composeMaterial        : "androidx.compose.material3:material3:1.1.0",
+            composeUIText          : "androidx.compose.ui:ui-text:$composeVersion",
+            composeUIToolingPreview: "androidx.compose.ui:ui-tooling-preview:$composeVersion",
+            composeUIFoundation    : "androidx.compose.foundation:foundation:$composeVersion",
+            composeActivity        : "androidx.activity:activity-compose:1.7.1",
+            composeViewModel       : "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1",
+            composeObserevrs       : "androidx.compose.runtime:runtime-livedata:$composeVersion",
+            coil                   : "io.coil-kt:coil-compose:2.3.0",
+            shimmer                : "com.valentinilk.shimmer:compose-shimmer:1.0.3"
+    ]
+    debugCompose = [
+            composeUITooling: "androidx.compose.ui:ui-tooling:$composeVersion",
+            manifest        : "androidx.compose.ui:ui-test-manifest",
+    ]
+
+    multiDEXLib = "androidx.multidex:multidex:$multiDEXVersion"
+
+    coroutines = [
+            core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion",
+            android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion",
+    ]
+
+    retrofit = [
+            retrofit: "com.squareup.retrofit2:retrofit:$retrofitVersion",
+            scalars : "com.squareup.retrofit2:converter-scalars:$retrofitVersion",
+            adapter : "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0"
+    ]
+
+    okHttp = [
+            "com.squareup.okhttp3:okhttp:$okHttpVersion",
+            "com.squareup.okhttp3:okhttp-tls:$okHttpVersion"
+    ]
+
+    serialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
+    datetime = "joda-time:joda-time:2.12.5"
+
+    coilUsial = "io.coil-kt:coil:2.2.2"
+    junit4Compose = "androidx.compose.ui:ui-test-junit4:${composeVersion}"
+}
