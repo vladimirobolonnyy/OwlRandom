@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.afollestad.materialdialogs.list.listItemsSingleChoice
 import com.google.android.material.appbar.MaterialToolbar
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseFragment
-import com.obolonnyy.owlrandom.utils.materialDialog
 import com.obolonnyy.owlrandom.utils.observe
 import com.obolonnyy.owlrandom.utils.viewModels
 
@@ -90,10 +88,10 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
     }
 
     private fun showPickDialog(items: List<String>) {
-        materialDialog().show {
-            listItemsSingleChoice(items = items) { _, index, _ ->
-                viewModel.onRandomTypePicked(index)
-            }
-        }
+//        materialDialog().show {
+//            listItemsSingleChoice(items = items) { _, index, _ ->
+//                viewModel.onRandomTypePicked(index)
+//            }
+//        }
     }
 }

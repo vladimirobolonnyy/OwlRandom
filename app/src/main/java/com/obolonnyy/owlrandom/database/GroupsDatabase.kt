@@ -12,7 +12,9 @@ abstract class GroupsDatabase : RoomDatabase() {
     abstract fun groupsDao(): GroupsDao
 }
 
-val GROUPS_DATABASE = Room.databaseBuilder(
-    MainApplication.context,
-    GroupsDatabase::class.java, "groups_database"
-).build()
+val GROUPS_DATABASE by lazy {
+    Room.databaseBuilder(
+        MainApplication.context,
+        GroupsDatabase::class.java, "groups_database"
+    ).build()
+}

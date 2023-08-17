@@ -1,109 +1,113 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android-extensions'
-
+buildscript {
+    apply from: '../dependencies.gradle'
+}
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.serialization'
+    id 'kotlin-kapt'
+}
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "29.0.2"
+    namespace 'com.obolonnyy.owlrandom'
+    compileSdk 33
+
     defaultConfig {
         applicationId "com.obolonnyy.owlrandom"
-        minSdkVersion 21
-        targetSdkVersion 30
+        minSdk 24
+        targetSdk 33
         versionCode 1
-        versionName "1.0"
+        versionName "0.1.0"
+        multiDexEnabled true
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        resConfigs "en"
+        vectorDrawables {
+            useSupportLibrary true
+        }
     }
+
     buildTypes {
-        debug {
-            minifyEnabled false
-            shrinkResources false
-        }
         release {
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        alphaRelease {
-            initWith debug
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            outputFileName = "owl-random.apk"
-        }
-    }
-
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility sourceCompatibilityValue
+        targetCompatibility sourceCompatibilityValue
     }
-
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = jvmTargetValue
     }
-
-    /**
-     room.incremental: Enables Gradle incremental annotation proccesor.
-     room.expandProjection: Configures Room to rewrite queries such that their top star projection
-     is expanded to only contain the columns defined in the DAO method return type.
-     */
-    defaultConfig {
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [
-                        "room.incremental"     : "true",
-                        "room.expandProjection": "true"
-                ]
-            }
+    buildFeatures {
+        buildConfig = true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = composeCompilerVersion
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
-    lintOptions {
-        // if true, treat all warnings as errors
-        warningsAsErrors true
+
+    applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                outputFileName = "owl-random-${variant.name}-${variant.versionCode}-v${variant.versionName}.apk"
+            }
     }
+
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
 
-    implementation 'androidx.core:core-ktx:1.3.0'
-    implementation "androidx.appcompat:appcompat:$versions.appcompat"
-    implementation "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
-    implementation "com.google.android.material:material:$versions.material"
-    implementation "com.afollestad.material-dialogs:core:$versions.material_dialog"
-    implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation project(path: ':core-ui')
 
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:${versions.arch}"
-    implementation "androidx.lifecycle:lifecycle-extensions:${versions.arch}"
+    implementation platform('androidx.compose:compose-bom:2022.10.00')
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
+    implementation androidxLib.values()
+    implementation compose.values()
+    implementation multiDEXLib
+    implementation coilUsial
 
+    implementation kotlinImpl.values()
+    implementation coroutines.values()
+    implementation retrofit.values()
+    implementation okHttp
+    implementation serialization
+    implementation datetime
+
+    //todo remove later
+    //todo remove later
+    implementation 'com.google.android.material:material:1.9.0'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
     implementation "com.jakewharton.timber:timber:$versions.timber"
-
     implementation "androidx.multidex:multidex:$versions.multidex"
-
     implementation "androidx.room:room-runtime:${versions.room}"
     implementation "androidx.room:room-ktx:${versions.room}"
-    kapt "androidx.room:room-compiler:${versions.room}"
-    implementation "android.arch.persistence.room:runtime:${versions.room}n"
-    kapt "android.arch.persistence.room:compiler:${versions.room}n"
 
+    kapt("androidx.room:room-compiler:${versions.room}")
+
+    def room_version = "1.1.1"
+
+    implementation "android.arch.persistence.room:runtime:$room_version"
+    kapt "android.arch.persistence.room:compiler:$room_version"
+    //    kapt "android.arch.persistence.room:compiler:${versions.room}n"
+
+//    kapt "androidx.room:room-compiler:${versions.room}"
+//    ksp("androidx.room:room-compiler:${versions.room}")
+
+//    implementation "android.arch.persistence.room:runtime:$room_version"
     implementation "com.squareup.moshi:moshi:${versions.moshi}"
 
 
-    testImplementation 'junit:junit:4.13.1'
-    testImplementation 'android.arch.core:core-testing:1.1.1'
-    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.0'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    debugImplementation debugCompose.values()
 
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
 }

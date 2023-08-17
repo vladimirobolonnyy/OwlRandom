@@ -8,7 +8,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseFragment
 import com.obolonnyy.owlrandom.utils.observe
-import com.obolonnyy.owlrandom.utils.sureMaterialDialog
 import com.obolonnyy.owlrandom.utils.viewModels
 
 class EditDetailsFragment : BaseFragment(R.layout.fragment_create_details) {
@@ -41,7 +40,7 @@ class EditDetailsFragment : BaseFragment(R.layout.fragment_create_details) {
         toolbar.setNavigationOnClickListener { navigateBack() }
         deleteBtn = view.findViewById<View>(R.id.create_details_btn_delete)
         deleteBtn.setOnClickListener {
-            this.sureMaterialDialog(positive = { viewModel.delete() }, negative = {}).show()
+//            this.sureMaterialDialog(positive = { viewModel.delete() }, negative = {}).show()
         }
     }
 

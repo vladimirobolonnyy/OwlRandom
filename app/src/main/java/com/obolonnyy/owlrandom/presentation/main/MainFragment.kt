@@ -44,6 +44,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         recycler.isGone = state is MainViewState.Empty
         when (state) {
             is MainViewState.Loaded -> mainAdapter.setData(state.groups)
+            else -> {}
         }
     }
 
