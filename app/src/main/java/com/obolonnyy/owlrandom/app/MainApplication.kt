@@ -4,13 +4,18 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import com.jakewharton.threetenabp.AndroidThreeTen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 
-class MainApplication : Application() {
+class MainApplication : Application(), AppScope {
 
     companion object {
         @SuppressLint("StaticFieldLeak")
         lateinit var context: Context
     }
+
+    override val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     override fun onCreate() {
         super.onCreate()
@@ -21,3 +26,10 @@ class MainApplication : Application() {
         }
     }
 }
+
+
+interface AppScope {
+    val applicationScope: CoroutineScope
+}
+
+val appScope = (MainApplication.context as AppScope).applicationScope

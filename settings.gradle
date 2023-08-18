@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 rootProject.name = "Owl Random"
 include ':app'
 include ':core-ui'
+include ':core-presentation'

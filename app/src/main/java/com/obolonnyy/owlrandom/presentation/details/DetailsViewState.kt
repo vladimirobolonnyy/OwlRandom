@@ -1,49 +1,25 @@
 package com.obolonnyy.owlrandom.presentation.details
 
-import androidx.annotation.ColorRes
+import androidx.compose.ui.graphics.Color
 import com.obolonnyy.owlrandom.model.MyGroup
 
-sealed class DetailsViewState {
-    object Empty : DetailsViewState()
-    object Error : DetailsViewState()
+data class DetailsViewState(
+    val group: MyGroup,
+    val items: List<DetailsAdapterItem>
+) {
 
-    data class Loaded(
-        val group: MyGroup,
-        private val items: MutableList<DetailsAdapterItem>
-    ) : DetailsViewState() {
-
-        fun changeColor(index: Int, @ColorRes colorRes: Int) : Loaded {
-            if (index > items.size - 1) return this
-            items[index] = items[index].copy(bgColor = colorRes)
-            return this
-        }
-
-        val adapterItems: List<DetailsAdapterItem>
-            get() = items
+    fun changeColor(index: Int, colorRes: Color): DetailsViewState {
+        if (index > this.items.size - 1) return this
+        val newList = this.items.toMutableList()
+        newList[index] = newList[index].copy(bgColor = colorRes)
+        return this.copy(items = newList)
     }
+
+    val title get() = group.title
 }
 
-sealed class DetailsViewEvent {
-     class ShowPickDialog(val items: List<String>) : DetailsViewEvent()
-     class NavigateToEdit(val groupId: Long) : DetailsViewEvent()
-     object NavigateBack : DetailsViewEvent()
-}
-
-enum class RandomTypes(val index: Int, val text: String) {
-    RANDOMIZE_ALL(0, "Randomize all"),
-    ONE(1, "Pick one"),
-    TWO(2, "Pick two"),
-    THREE(3, "Pick three"),
-    FOUR(4, "Pick four"),
-    FIVE(5, "Pick five"),
-    DIVIDE_TWO(6, "Divide in tho teams"),
-    DIVIDE_THEE(7, "Divide in three teams"),
-    DIVIDE_FOUR(8, "Divide in four teams"),
-    DIVIDE_FIVE(9, "Divide in five teams");
-
-    companion object {
-        fun get(int: Int): RandomTypes {
-            return values().firstOrNull { it.index == int } ?: RANDOMIZE_ALL
-        }
-    }
-}
+data class DetailsAdapterItem(
+    val position: Int,
+    val text: String = "",
+    val bgColor: Color
+)

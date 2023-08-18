@@ -2,15 +2,37 @@ package com.obolonnyy.owlrandom.presentation.details
 
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.appbar.MaterialToolbar
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.obolonnyy.owlrandom.R
-import com.obolonnyy.owlrandom.base.BaseFragment
+import com.obolonnyy.owlrandom.app.Navigator
+import com.obolonnyy.owlrandom.app.NavigatorImpl
+import com.obolonnyy.owlrandom.presentation.details.random.RandomTypes
 import com.obolonnyy.owlrandom.utils.observe
-import com.obolonnyy.owlrandom.utils.viewModels
+import com.orra.core_presentation.base.BaseFragment
+import com.orra.core_presentation.utils.fragmentViewModel
+import com.orra.core_ui.button.BaseButton
+import com.orra.core_ui.navbar.NavBar
+import com.orra.core_ui.text.TextElement
+import com.orra.core_ui.theme.AppTheme
+import com.orra.core_ui.utils.Space
 
-class DetailsFragment : BaseFragment(R.layout.fragment_details) {
+class DetailsFragment : BaseFragment() {
 
     companion object {
         private const val GROUP_ID = "GROUP_ID"
@@ -24,74 +46,72 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
         }
     }
 
-    private val groupId by lazy { arguments!!.getLong(GROUP_ID) }
-    private lateinit var recycler: RecyclerView
-    private val detailsAdapter: DetailsAdapter = DetailsAdapter()
-    private lateinit var toolbar: MaterialToolbar
-
-    private val viewModel by viewModels { DetailsViewModel(groupId) }
+    private val groupId by lazy { requireArguments().getLong(GROUP_ID) }
+    private val viewModel by fragmentViewModel { DetailsViewModel(groupId) }
+    private val navigator: Navigator by lazy { NavigatorImpl(this.requireActivity()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recycler = view.findViewById(R.id.details_recycler)
-        recycler.apply {
-            adapter = detailsAdapter
-            layoutManager = LinearLayoutManager(context)
-        }
-        view.findViewById<View>(R.id.details_btn_roll).setOnClickListener {
-            viewModel.onRollClicked()
-        }
-        toolbar = view.findViewById(R.id.details_toolbar)
-        toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
-
-        view.findViewById<MaterialToolbar>(R.id.details_toolbar).setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.favorite -> {
-                    viewModel.onEditClicked()
-                    true
-                }
-                else -> false
-            }
-        }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        observe(viewModel.viewState, ::render)
         observe(viewModel.viewEvents, ::process)
     }
 
-    private fun process(event: DetailsViewEvent): Unit? = when (event) {
+    @Composable
+    override fun FragmentContent() {
+        val state = viewModel.viewState.observeAsState().value
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(AppTheme.colors.background.primary)
+                .systemBarsPadding()
+        ) {
+            NavBar(
+                title = state?.title.orEmpty(),
+                onLeftIconClicked = ::onBack,
+                iconRight = R.drawable.ic_baseline_edit_24,
+                onRightIconClicked = viewModel::onEditClicked
+            )
+            Column(modifier = Modifier.weight(1f)) {
+                LazyColumn(content = {
+                    state?.items?.forEach { item ->
+                        item(key = item.position) { RenderItem(item) }
+                    }
+                })
+            }
+            BaseButton(
+                text = stringResource(id = R.string.roll),
+                bgColor = AppTheme.colors.static.primary,
+                onClick = viewModel::onRollClicked
+            )
+            Space(size = 10.dp)
+        }
+    }
+
+    @OptIn(ExperimentalFoundationApi::class)
+    @Composable
+    private fun LazyItemScope.RenderItem(item: DetailsAdapterItem) {
+        Box(
+            modifier = Modifier
+                .animateItemPlacement()
+                .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .border(1.dp, AppTheme.colors.elements.divider)
+                .background(item.bgColor)
+                .padding(8.dp)
+        ) {
+            TextElement(item.text)
+        }
+    }
+
+    private fun process(event: DetailsViewEvent) = when (event) {
         is DetailsViewEvent.ShowPickDialog -> showPickDialog(event.items)
-        is DetailsViewEvent.NavigateToEdit -> {
-            navigator.goToEditDetails(event.groupId)
-        }
-        DetailsViewEvent.NavigateBack -> activity?.onBackPressed()
+        is DetailsViewEvent.NavigateToEdit -> navigator.goToEditDetails(event.groupId)
+        is DetailsViewEvent.NavigateBack -> onBack()
     }
 
-    private fun render(state: DetailsViewState) {
-        when (state) {
-            DetailsViewState.Empty -> renderEmptyState()
-            DetailsViewState.Error -> toolbar.title = "Error"
-            is DetailsViewState.Loaded -> renderState(state)
-        }
-    }
-
-    private fun renderEmptyState() {
-        detailsAdapter.setData(emptyList())
-        toolbar.title = ""
-    }
-
-    private fun renderState(state: DetailsViewState.Loaded) {
-        detailsAdapter.setData(state.adapterItems)
-        toolbar.title = state.group.title
-    }
-
-    private fun showPickDialog(items: List<String>) {
-//        materialDialog().show {
-//            listItemsSingleChoice(items = items) { _, index, _ ->
-//                viewModel.onRandomTypePicked(index)
-//            }
-//        }
+    private fun showPickDialog(items: List<RandomTypes>) {
+        PickItemsBottomSheet.newInstance(
+            items = items,
+            onItemClicked = { viewModel.onRandomTypePicked(it) }
+        ).showBottomSheet()
     }
 }

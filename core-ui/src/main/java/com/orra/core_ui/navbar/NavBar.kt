@@ -27,7 +27,7 @@ import com.orra.core_ui.utils.iconClickable
 fun NavBar(
     title: String = "",
     subtitle: String = "",
-    @DrawableRes iconLeft: Int = R.drawable.ic_back_24,
+    @DrawableRes iconLeft: Int? = R.drawable.ic_back_24,
     @DrawableRes iconRight: Int? = null,
     onLeftIconClicked: (() -> Unit)? = null,
     onRightIconClicked: (() -> Unit)? = null,
@@ -104,7 +104,7 @@ private fun TextBlock(
         if (hasTitle) {
             Text(
                 text = title,
-                style = AppTheme.styles.LabelPrimary,
+                style = AppTheme.styles.TitleSecondary,
                 color = AppTheme.colors.text.primary,
                 textAlign = TextAlign.Center,
             )
@@ -113,7 +113,7 @@ private fun TextBlock(
         if (hasSubtitle) {
             Text(
                 text = subtitle,
-                style = AppTheme.styles.LabelSecondary,
+                style = AppTheme.styles.BodySecondary,
                 color = AppTheme.colors.text.secondary,
                 textAlign = TextAlign.Center,
                 maxLines = 1

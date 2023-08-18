@@ -2,8 +2,6 @@ package com.orra.core_ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-private val ColorUnspecified = Color(0xFFF800F8)
-
 class TextColors(
     val primary: Color,
     val secondary: Color,
@@ -30,7 +28,8 @@ class StaticColors(
     val red: Color = Color(0xFFFF6E57),
     val green: Color = Color(0xFF47B36E),
     val blue: Color = Color(0xFF5280FC),
-    val white: Color = Color(0xFFFFFFFF)
+    val white: Color = Color(0xFFFFFFFF),
+    val primary: Color = Color(0xFF542437)
 )
 
 class AppColors(

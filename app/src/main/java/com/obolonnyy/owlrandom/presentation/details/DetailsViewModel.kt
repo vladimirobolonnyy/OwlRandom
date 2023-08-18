@@ -1,16 +1,16 @@
 package com.obolonnyy.owlrandom.presentation.details
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.obolonnyy.owlrandom.R
-import com.obolonnyy.owlrandom.base.BaseViewModel
 import com.obolonnyy.owlrandom.database.MainRepository
 import com.obolonnyy.owlrandom.database.MainRepositoryImpl
-import com.obolonnyy.owlrandom.utils.SingleLiveEvent
+import com.obolonnyy.owlrandom.presentation.details.random.RandomTypes
+import com.obolonnyy.owlrandom.presentation.details.random.Randomizer
 import com.obolonnyy.owlrandom.utils.warning
+import com.orra.core_presentation.base.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.withContext
 
@@ -18,29 +18,35 @@ class DetailsViewModel(
     private val groupId: Long,
     private val random: Randomizer = Randomizer(),
     private val repo: MainRepository = MainRepositoryImpl()
-) : BaseViewModel() {
+) : BaseViewModel<DetailsViewEvent>() {
 
-    private val state: DetailsViewState.Loaded?
-        get() = _viewState.value as? DetailsViewState.Loaded
-    private val _viewState = MutableLiveData<DetailsViewState>(DetailsViewState.Empty)
-    val viewState: LiveData<DetailsViewState> = _viewState
+    private val state: DetailsViewState? get() = _viewState.value
+    private val _viewState = MutableLiveData<DetailsViewState?>(null)
+    val viewState: LiveData<DetailsViewState?> = _viewState
 
-    private val _viewEvents = SingleLiveEvent<DetailsViewEvent>()
-    val viewEvents: LiveData<DetailsViewEvent> = _viewEvents
+    private val colorList: List<Color> =
+        listOf(
+            Color(0xFFECD078),
+            Color(0xFFD95B43),
+            Color(0xFFC02942),
+            Color(0xFFBFCFFF),
+            Color(0xFFA1BDFF),
+            Color(0xCC542437),
+        )
 
     init {
         loadData()
     }
 
-    fun onRandomTypePicked(index: Int) {
-        val type = RandomTypes.get(index)
+    fun onRandomTypePicked(type: RandomTypes) {
         val state = state ?: return
         val adapterItems = state.group.items.toAdapterItems()
         when (type) {
             RandomTypes.RANDOMIZE_ALL -> {
                 val newItems = random.shuffle(adapterItems)
-                DetailsViewState.Loaded(state.group, newItems).set()
+                DetailsViewState(state.group, newItems).set()
             }
+
             RandomTypes.ONE -> pick(1)
             RandomTypes.TWO -> pick(2)
             RandomTypes.THREE -> pick(3)
@@ -53,18 +59,15 @@ class DetailsViewModel(
         }
     }
 
-    private val colorList: List<Int> =
-        listOf(R.color.color2, R.color.color1, R.color.color3, R.color.blue, R.color.color5)
-
     private fun pick(colorNumber: Int) {
         val state = state ?: return
         val adapterItems = state.group.items.toAdapterItems()
         val newItems = random.shuffleFirstN(colorNumber, adapterItems)
-        DetailsViewState.Loaded(state.group, newItems).apply {
-            for (i in 0 until colorNumber) {
-                changeColor(i, colorList[i])
-            }
-        }.set()
+        var newState = DetailsViewState(state.group, newItems)
+        for (i in 0 until colorNumber) {
+            newState = newState.changeColor(i, colorList[i])
+        }
+        newState.set()
     }
 
     private fun divide(colorNumber: Int) {
@@ -75,7 +78,7 @@ class DetailsViewModel(
         listNewItems.forEachIndexed { i, t ->
             newItems.addAll(t.map { it.copy(bgColor = colorList[i]) })
         }
-        DetailsViewState.Loaded(state.group, newItems).set()
+        DetailsViewState(state.group, newItems).set()
     }
 
     private fun loadData() = launchIO {
@@ -83,15 +86,16 @@ class DetailsViewModel(
             .distinctUntilChanged()
             .catch { e ->
                 warning("DetailsViewModel got error $e")
-                _viewEvents.postValue(DetailsViewEvent.NavigateBack)
+//                _viewEvents.postValue(DetailsViewEvent.NavigateBack)
+                showErrorMessage()
             }
             .collect { group ->
                 if (group == null) {
-                    _viewEvents.postValue(DetailsViewEvent.NavigateBack)
+//                    _viewEvents.postValue(DetailsViewEvent.NavigateBack)
                 } else {
                     val adapterItems = group.items.toAdapterItems()
                     withContext(Dispatchers.Main) {
-                        val newState = DetailsViewState.Loaded(group, adapterItems)
+                        val newState = DetailsViewState(group, adapterItems)
                         mergeStates(state, newState).set()
                     }
                 }
@@ -100,11 +104,11 @@ class DetailsViewModel(
 
     private fun mergeStates(
         oldState: DetailsViewState?,
-        newState: DetailsViewState.Loaded
+        newState: DetailsViewState
     ): DetailsViewState {
-        if (oldState !is DetailsViewState.Loaded) return newState
-        if (oldState.adapterItems.size == newState.adapterItems.size) {
-            if (oldState.adapterItems.map { it.text } == newState.adapterItems.map { it.text }) {
+        if (oldState == null) return newState
+        if (oldState.items.size == newState.items.size) {
+            if (oldState.items.map { it.text } == newState.items.map { it.text }) {
                 return oldState
             }
         }
@@ -113,7 +117,7 @@ class DetailsViewModel(
 
     private fun List<String>.toAdapterItems(): MutableList<DetailsAdapterItem> {
         return this
-            .mapIndexed { i, s -> DetailsAdapterItem(i, s) }
+            .mapIndexed { i, s -> DetailsAdapterItem(i, s, Color.Transparent) }
             .toMutableList()
     }
 
@@ -122,9 +126,7 @@ class DetailsViewModel(
     }
 
     fun onRollClicked() {
-        _viewEvents.postValue(
-            DetailsViewEvent.ShowPickDialog(items = RandomTypes.values().map { it.text })
-        )
+        DetailsViewEvent.ShowPickDialog(items = RandomTypes.values().toList()).post()
     }
 
     fun onEditClicked() {

@@ -4,12 +4,12 @@
     <string name="submit">submit</string>
 
     <!--Main Fragment-->
-    <string name="main_empty_text">Tab here to add new items</string>
+    <string name="main_empty_text">Tab anywhere to add new items</string>
     <string name="create_details_title">Create your items</string>
     <string name="create_details_item_title_hint">Title for your items</string>
-    <string name="create_details_item_hint">Type here any text</string>
+    <string name="create_details_item_hint">Type here items, divided by enter</string>
     <string name="main_title">Your items</string>
-    <string name="main_add_button">Add new item</string>
+    <string name="main_add_button">Add new list</string>
     <string name="edit">edit</string>
     <string name="delete">delete</string>
     <string name="material_dialog_delete_title">Delete all group?</string>
