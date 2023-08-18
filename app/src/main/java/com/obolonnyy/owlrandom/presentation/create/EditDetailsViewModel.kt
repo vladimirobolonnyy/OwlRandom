@@ -2,12 +2,11 @@ package com.obolonnyy.owlrandom.presentation.create
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.obolonnyy.owlrandom.base.BaseViewModel
 import com.obolonnyy.owlrandom.database.MainRepository
 import com.obolonnyy.owlrandom.database.MainRepositoryImpl
 import com.obolonnyy.owlrandom.model.MyGroup
-import com.obolonnyy.owlrandom.utils.SingleLiveEvent
-import com.obolonnyy.owlrandom.utils.asResult
+import com.orra.core_presentation.base.BaseViewModel
+import com.orra.core_presentation.utils.asResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -17,14 +16,11 @@ import timber.log.Timber
 class EditDetailsViewModel(
     private val groupId: Long?,
     private val repo: MainRepository = MainRepositoryImpl()
-) : BaseViewModel() {
+) : BaseViewModel<CreateDetailsViewEvent>() {
 
     private val _viewState = MutableLiveData(CreateDetailsViewState())
     private val state: CreateDetailsViewState get() = _viewState.value!!
     val viewState: LiveData<CreateDetailsViewState> = _viewState
-
-    private val _viewEvents = SingleLiveEvent<CreateDetailsViewEvent>()
-    val viewEvents: LiveData<CreateDetailsViewEvent> = _viewEvents
 
     init {
         loadData()
@@ -42,7 +38,7 @@ class EditDetailsViewModel(
         launchIO {
             asResult {
                 repo.deleteGroup(state.getGroup())
-            }.onSuccessUI {
+            }.onSuccess {
                 CreateDetailsViewState().set()
                 _viewEvents.postValue(CreateDetailsViewEvent.NavigateToMain)
             }

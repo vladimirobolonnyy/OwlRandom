@@ -1,0 +1,52 @@
+buildscript {
+    apply from: '../dependencies.gradle'
+}
+
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.orra.core_ui'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 24
+        targetSdk 33
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = composeCompilerVersion
+    }
+    compileOptions {
+        sourceCompatibility sourceCompatibilityValue
+        targetCompatibility sourceCompatibilityValue
+    }
+    kotlinOptions {
+        jvmTarget = jvmTargetValue
+    }
+}
+
+dependencies {
+    implementation project(path: ':core-ui')
+
+    implementation kotlinImpl.values()
+    implementation compose.values()
+    implementation androidxLib.values()
+
+    implementation datetime
+
+}

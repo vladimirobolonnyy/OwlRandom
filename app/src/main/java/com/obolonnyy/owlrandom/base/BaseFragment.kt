@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import com.obolonnyy.owlrandom.app.Navigator
 import com.obolonnyy.owlrandom.app.NavigatorImpl
 
+@Deprecated("delete")
 abstract class BaseFragment(@LayoutRes val res: Int) : Fragment(res) {
 
     protected val navigator: Navigator by lazy { NavigatorImpl(this.requireActivity()) }

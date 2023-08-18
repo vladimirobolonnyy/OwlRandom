@@ -2,21 +2,16 @@ package com.obolonnyy.owlrandom.presentation.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.obolonnyy.owlrandom.base.BaseViewModel
 import com.obolonnyy.owlrandom.database.MainRepository
 import com.obolonnyy.owlrandom.database.MainRepositoryImpl
-import com.obolonnyy.owlrandom.utils.SingleLiveEvent
-import kotlinx.coroutines.flow.collect
+import com.orra.core_presentation.base.BaseViewModel
 
 class MainViewModel(
     private val repo: MainRepository = MainRepositoryImpl()
-) : BaseViewModel() {
+) : BaseViewModel<MainViewEvent>() {
 
     private val _viewState = MutableLiveData<MainViewState>(MainViewState.Empty)
     val viewState: LiveData<MainViewState> = _viewState
-
-    private val _viewEvents = SingleLiveEvent<MainViewEvent>()
-    val viewEvents: LiveData<MainViewEvent> = _viewEvents
 
     init {
         loadData()

@@ -3,14 +3,11 @@ package com.obolonnyy.owlrandom.presentation.details
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.obolonnyy.owlrandom.R
-import com.obolonnyy.owlrandom.base.BaseViewModel
 import com.obolonnyy.owlrandom.database.MainRepository
 import com.obolonnyy.owlrandom.database.MainRepositoryImpl
-import com.obolonnyy.owlrandom.utils.SingleLiveEvent
 import com.obolonnyy.owlrandom.utils.warning
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.withContext
 
@@ -18,15 +15,12 @@ class DetailsViewModel(
     private val groupId: Long,
     private val random: Randomizer = Randomizer(),
     private val repo: MainRepository = MainRepositoryImpl()
-) : BaseViewModel() {
+) : com.orra.core_presentation.base.BaseViewModel<DetailsViewEvent>() {
 
     private val state: DetailsViewState.Loaded?
         get() = _viewState.value as? DetailsViewState.Loaded
     private val _viewState = MutableLiveData<DetailsViewState>(DetailsViewState.Empty)
     val viewState: LiveData<DetailsViewState> = _viewState
-
-    private val _viewEvents = SingleLiveEvent<DetailsViewEvent>()
-    val viewEvents: LiveData<DetailsViewEvent> = _viewEvents
 
     init {
         loadData()
@@ -41,6 +35,7 @@ class DetailsViewModel(
                 val newItems = random.shuffle(adapterItems)
                 DetailsViewState.Loaded(state.group, newItems).set()
             }
+
             RandomTypes.ONE -> pick(1)
             RandomTypes.TWO -> pick(2)
             RandomTypes.THREE -> pick(3)
