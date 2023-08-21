@@ -26,7 +26,13 @@ class DetailsViewModel(
         loadData()
     }
 
-    fun onRandomTypePicked(index: Int) {
+    fun onRandomTypePicked(item: String) {
+        val items = state?.adapterItems ?: return
+        val index = items.indexOfFirst { it.text == item }
+        onRandomTypePicked(index)
+    }
+
+    private fun onRandomTypePicked(index: Int) {
         val type = RandomTypes.get(index)
         val state = state ?: return
         val adapterItems = state.group.items.toAdapterItems()
@@ -55,11 +61,11 @@ class DetailsViewModel(
         val state = state ?: return
         val adapterItems = state.group.items.toAdapterItems()
         val newItems = random.shuffleFirstN(colorNumber, adapterItems)
-        DetailsViewState.Loaded(state.group, newItems).apply {
-            for (i in 0 until colorNumber) {
-                changeColor(i, colorList[i])
-            }
-        }.set()
+        var newState = DetailsViewState.Loaded(state.group, newItems)
+        for (i in 0 until colorNumber) {
+            newState = newState.changeColor(i, colorList[i])
+        }
+        newState.set()
     }
 
     private fun divide(colorNumber: Int) {

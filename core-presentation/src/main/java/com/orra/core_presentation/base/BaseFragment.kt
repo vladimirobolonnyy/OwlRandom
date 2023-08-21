@@ -59,7 +59,7 @@ abstract class BaseFragment : Fragment(R.layout.fragment_base) {
 
     }
 
-    protected fun DialogFragment.showDialog() {
+    protected fun DialogFragment.showBottomSheet() {
         val manager = this@BaseFragment.requireActivity().supportFragmentManager
         manager.fragments.lastOrNull()?.let {
             if (it::class.java == this::class.java) {

@@ -2,12 +2,14 @@ package com.obolonnyy.owlrandom.base
 
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.LayoutRes
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.obolonnyy.owlrandom.app.Navigator
 import com.obolonnyy.owlrandom.app.NavigatorImpl
+import com.orra.core_presentation.utils.className
 
 @Deprecated("delete")
-abstract class BaseFragment(@LayoutRes val res: Int) : Fragment(res) {
+abstract class BaseFragmentDepricated(@LayoutRes val res: Int) : Fragment(res) {
 
     protected val navigator: Navigator by lazy { NavigatorImpl(this.requireActivity()) }
 
@@ -35,6 +37,16 @@ abstract class BaseFragment(@LayoutRes val res: Int) : Fragment(res) {
         if (onBackPressed != null) {
             requireActivity().onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         }
+    }
+
+    protected fun DialogFragment.showBottomSheet() {
+        val manager = this@BaseFragmentDepricated.requireActivity().supportFragmentManager
+        manager.fragments.lastOrNull()?.let {
+            if (it::class.java == this::class.java) {
+                return
+            }
+        }
+        show(manager, className())
     }
 
     override fun onStop() {

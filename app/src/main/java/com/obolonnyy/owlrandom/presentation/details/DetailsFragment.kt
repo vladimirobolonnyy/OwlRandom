@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.obolonnyy.owlrandom.R
-import com.obolonnyy.owlrandom.base.BaseFragment
+import com.obolonnyy.owlrandom.base.BaseFragmentDepricated
 import com.obolonnyy.owlrandom.utils.observe
 import com.obolonnyy.owlrandom.utils.viewModels
 
-class DetailsFragment : BaseFragment(R.layout.fragment_details) {
+class DetailsFragment : BaseFragmentDepricated(R.layout.fragment_details) {
 
     companion object {
         private const val GROUP_ID = "GROUP_ID"
@@ -24,7 +24,7 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
         }
     }
 
-    private val groupId by lazy { arguments!!.getLong(GROUP_ID) }
+    private val groupId by lazy { requireArguments().getLong(GROUP_ID) }
     private lateinit var recycler: RecyclerView
     private val detailsAdapter: DetailsAdapter = DetailsAdapter()
     private lateinit var toolbar: MaterialToolbar
@@ -44,15 +44,17 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
         toolbar = view.findViewById(R.id.details_toolbar)
         toolbar.setNavigationOnClickListener { activity?.onBackPressed() }
 
-        view.findViewById<MaterialToolbar>(R.id.details_toolbar).setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.favorite -> {
-                    viewModel.onEditClicked()
-                    true
+        view.findViewById<MaterialToolbar>(R.id.details_toolbar)
+            .setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.favorite -> {
+                        viewModel.onEditClicked()
+                        true
+                    }
+
+                    else -> false
                 }
-                else -> false
             }
-        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -66,6 +68,7 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
         is DetailsViewEvent.NavigateToEdit -> {
             navigator.goToEditDetails(event.groupId)
         }
+
         DetailsViewEvent.NavigateBack -> activity?.onBackPressed()
     }
 
@@ -75,6 +78,8 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
             DetailsViewState.Error -> toolbar.title = "Error"
             is DetailsViewState.Loaded -> renderState(state)
         }
+
+
     }
 
     private fun renderEmptyState() {
@@ -88,10 +93,9 @@ class DetailsFragment : BaseFragment(R.layout.fragment_details) {
     }
 
     private fun showPickDialog(items: List<String>) {
-//        materialDialog().show {
-//            listItemsSingleChoice(items = items) { _, index, _ ->
-//                viewModel.onRandomTypePicked(index)
-//            }
-//        }
+        PickItemsBottomSheet.newInstance(
+            items = items,
+            onItemClicked = { viewModel.onRandomTypePicked(it) }
+        ).showBottomSheet()
     }
 }

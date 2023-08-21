@@ -43,6 +43,9 @@ android {
 dependencies {
     implementation project(path: ':core-ui')
 
+    //todo needs for bottomsheet
+    implementation 'com.google.android.material:material:1.9.0'
+
     implementation kotlinImpl.values()
     implementation compose.values()
     implementation androidxLib.values()

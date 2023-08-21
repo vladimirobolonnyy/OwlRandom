@@ -6,11 +6,11 @@ import androidx.core.view.isVisible
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.obolonnyy.owlrandom.R
-import com.obolonnyy.owlrandom.base.BaseFragment
+import com.obolonnyy.owlrandom.base.BaseFragmentDepricated
 import com.obolonnyy.owlrandom.utils.observe
 import com.obolonnyy.owlrandom.utils.viewModels
 
-class EditDetailsFragment : BaseFragment(R.layout.fragment_create_details) {
+class EditDetailsFragment : BaseFragmentDepricated(R.layout.fragment_create_details) {
 
     companion object {
         private const val GROUP_ID = "GROUP_ID"
