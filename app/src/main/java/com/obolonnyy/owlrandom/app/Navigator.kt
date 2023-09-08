@@ -8,11 +8,13 @@ import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.presentation.create.EditDetailsFragment
 import com.obolonnyy.owlrandom.presentation.details.DetailsFragment
 import com.obolonnyy.owlrandom.presentation.main.MainFragment
+import com.orra.core_presentation.utils.className
 
 interface Navigator {
     fun goToEditDetails(groupId: Long? = null)
     fun goToDetails(groupId: Long)
-    fun goToMain()
+    fun showMain()
+    fun backToMain()
 }
 
 class NavigatorImpl(
@@ -22,6 +24,10 @@ class NavigatorImpl(
 
     private val fm: FragmentManager = activity.supportFragmentManager
 
+    override fun showMain() {
+        MainFragment().replace()
+    }
+
     override fun goToEditDetails(groupId: Long?) {
         EditDetailsFragment.new(groupId).replace()
     }
@@ -30,9 +36,8 @@ class NavigatorImpl(
         DetailsFragment.new(groupId).replace()
     }
 
-    override fun goToMain() {
-        fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-        MainFragment::class.java.showOrCreate()
+    override fun backToMain() {
+        MainFragment().replace()
     }
 
     private fun Fragment.replace() {
@@ -41,8 +46,19 @@ class NavigatorImpl(
                 R.animator.slide_in_left, R.animator.slide_in_right,
                 R.animator.slide_in_left_exit, R.animator.slide_in_right_exit
             )
-            .replace(container, this, this::class.java.toString())
-            .addToBackStack(this::class.java.toString())
+            .replace(container, this, this.className())
+            .addToBackStack(this.className())
+            .commit()
+    }
+
+    private fun Fragment.add() {
+        fm.beginTransaction()
+            .setCustomAnimations(
+                R.animator.slide_in_left, R.animator.slide_in_right,
+                R.animator.slide_in_left_exit, R.animator.slide_in_right_exit
+            )
+            .add(container, this, this.className())
+            .addToBackStack(this.className())
             .commit()
     }
 
@@ -51,14 +67,15 @@ class NavigatorImpl(
     }
 
     private fun Fragment.show(add: Boolean) {
+        val fragment = this
         fm.beginTransaction()
             .apply { fm.currentVisibleFragment()?.let(this::hide) }
             .apply {
-                if (add) add(
-                    container,
-                    this@show,
-                    this::class.java.simpleName
-                ) else show(this@show)
+                if (add) {
+                    add(container, fragment, fragment::class.java.simpleName)
+                } else {
+                    show(fragment)
+                }
             }
             .commit()
     }

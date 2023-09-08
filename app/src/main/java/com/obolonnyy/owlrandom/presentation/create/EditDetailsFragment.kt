@@ -92,7 +92,7 @@ class EditDetailsFragment : BaseFragment() {
     }
 
     private fun process(event: CreateDetailsViewEvent): Unit = when (event) {
-        is CreateDetailsViewEvent.NavigateToMain -> navigator.goToMain()
+        is CreateDetailsViewEvent.NavigateToMain -> navigator.backToMain()
     }
 
 }

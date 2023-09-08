@@ -36,16 +36,8 @@ class EditDetailsViewModel(
         state.copy(items = newText).set()
     }
 
-    //todo finish with shure dialog
     fun onDeleteClicked() {
-        launchIO {
-            asResult {
-                repo.deleteGroup(state.getGroup())
-            }.onSuccessUI {
-                CreateDetailsViewState().set()
-                _viewEvents.postValue(CreateDetailsViewEvent.NavigateToMain)
-            }
-        }
+        //todo finish with shure dialog
     }
 
     fun delete() {
@@ -53,8 +45,10 @@ class EditDetailsViewModel(
             asResult {
                 repo.deleteGroup(state.getGroup())
             }.onSuccessUI {
-//                CreateDetailsViewState().set()
-                _viewEvents.postValue(CreateDetailsViewEvent.NavigateToMain)
+                CreateDetailsViewState().set()
+                CreateDetailsViewEvent.NavigateToMain.post()
+            }.onFailureUI {
+                showErrorMessage()
             }
         }
     }
@@ -63,7 +57,7 @@ class EditDetailsViewModel(
         val state = _viewState.value ?: return
         onTitleChanged(state.title)
         onItemsChanged(state.items)
-        saveItems()
+        saveItems(state)
     }
 
     private fun loadData() {
@@ -81,9 +75,10 @@ class EditDetailsViewModel(
         }
     }
 
-    private fun saveItems() {
+    private fun saveItems(state: CreateDetailsViewState) {
+        if (state.isEmpty) return
         applicationScope.launch(Dispatchers.IO) {
-            val group = state.getGroup()
+            val group = this@EditDetailsViewModel.state.getGroup()
             if (group.items.all { it.isEmpty() }) {
                 repo.deleteGroup(group)
                 Timber.i("CreateDetailsViewModel deleted group with id:= ${group.id}")

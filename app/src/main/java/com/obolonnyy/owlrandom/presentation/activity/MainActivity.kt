@@ -16,12 +16,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         viewModel.viewEvents.observe(this, ::process)
-
+        navigator.showMain()
         //todo activity?.lightNavBar
         // todo navigation bar показывается
     }
 
     private fun process(event: MainActivityViewEvent): Unit = when (event) {
-        is MainActivityViewEvent.GoToMain -> navigator.goToMain()
+        is MainActivityViewEvent.GoToMain -> {}
     }
 }

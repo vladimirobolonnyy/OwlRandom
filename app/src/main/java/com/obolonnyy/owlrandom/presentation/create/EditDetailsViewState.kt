@@ -9,6 +9,8 @@ data class CreateDetailsViewState(
     val items: String = "",
 ) {
 
+    val isEmpty = groupId == -1L
+
     val deleteBtnIsVisible
         get() = items.isNotEmpty()
 

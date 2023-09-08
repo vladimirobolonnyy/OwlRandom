@@ -86,11 +86,12 @@ class DetailsViewModel(
             .distinctUntilChanged()
             .catch { e ->
                 warning("DetailsViewModel got error $e")
-                _viewEvents.postValue(DetailsViewEvent.NavigateBack)
+//                _viewEvents.postValue(DetailsViewEvent.NavigateBack)
+                showErrorMessage()
             }
             .collect { group ->
                 if (group == null) {
-                    _viewEvents.postValue(DetailsViewEvent.NavigateBack)
+//                    _viewEvents.postValue(DetailsViewEvent.NavigateBack)
                 } else {
                     val adapterItems = group.items.toAdapterItems()
                     withContext(Dispatchers.Main) {
