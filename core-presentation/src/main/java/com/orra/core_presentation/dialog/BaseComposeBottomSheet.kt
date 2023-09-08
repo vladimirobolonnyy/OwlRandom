@@ -4,37 +4,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.unit.dp
 import com.orra.core_presentation.utils.setThemedContent
+import com.orra.core_ui.theme.AppTheme
 
 abstract class BaseComposeBottomSheet : BaseBottomSheet(0) {
 
     @Composable
     abstract fun Content()
 
-    /**
-     * Если нужен скролл внутри шторки, можно юзать так :
-
-     * LazyColumn(
-     *      modifier = Modifier
-     *      .fillMaxSize()
-     *      .nestedScroll(rememberNestedScrollInteropConnection()),
-     */
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(inflater.context).apply {
         setThemedContent {
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+            ModalBottomSheet(
+                sheetState = rememberModalBottomSheetState(true),
+                containerColor = AppTheme.colors.background.primary,
+                onDismissRequest = { dismiss() },
             ) {
                 this@BaseComposeBottomSheet.Content()
             }

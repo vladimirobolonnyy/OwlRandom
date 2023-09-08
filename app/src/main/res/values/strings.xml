@@ -9,7 +9,7 @@
     <string name="create_details_item_title_hint">Title for your items</string>
     <string name="create_details_item_hint">Type here any text</string>
     <string name="main_title">Your items</string>
-    <string name="main_add_button">Add new item</string>
+    <string name="main_add_button">Add new list</string>
     <string name="edit">edit</string>
     <string name="delete">delete</string>
     <string name="material_dialog_delete_title">Delete all group?</string>

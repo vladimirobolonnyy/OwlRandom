@@ -106,4 +106,11 @@ abstract class BaseViewModel<E : Any> : ViewModel() {
 
     private fun Notification.post() = _notificationLiveData.postValue(this)
 
+    protected fun E.post(immediately: Boolean = false) {
+        if (immediately) {
+            _viewEvents.value = this
+        } else {
+            _viewEvents.postValue(this)
+        }
+    }
 }

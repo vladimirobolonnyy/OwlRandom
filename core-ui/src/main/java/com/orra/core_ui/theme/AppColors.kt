@@ -2,8 +2,6 @@ package com.orra.core_ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-private val ColorUnspecified = Color(0xFFF800F8)
-
 class TextColors(
     val primary: Color,
     val secondary: Color,

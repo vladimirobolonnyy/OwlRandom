@@ -1,6 +1,6 @@
-package com.obolonnyy.owlrandom.presentation.details
+package com.obolonnyy.owlrandom.presentation.details.random
 
-import java.util.*
+import java.util.LinkedList
 import kotlin.random.Random
 
 class Randomizer {
@@ -23,8 +23,8 @@ class Randomizer {
         return oldItems
     }
 
-    fun <T> divideByNTeams(n: Int, list: MutableList<T>): List<MutableList<T>> {
-        if (list.size < n || n < 0) return listOf(list)
+    fun <T> divideByNTeams(wantedN: Int, list: MutableList<T>): List<MutableList<T>> {
+        val n = if (list.size < wantedN || wantedN < 0) list.size else wantedN
         val resultLists = ArrayList<MutableList<T>>(n)
         for (i in 0..n) {
             resultLists.add(mutableListOf())

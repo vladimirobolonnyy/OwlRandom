@@ -8,7 +8,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.base.BaseFragmentDepricated
 import com.obolonnyy.owlrandom.utils.observe
-import com.obolonnyy.owlrandom.utils.viewModels
+import com.orra.core_presentation.utils.fragmentViewModel
 
 class EditDetailsFragment : BaseFragmentDepricated(R.layout.fragment_create_details) {
 
@@ -30,7 +30,7 @@ class EditDetailsFragment : BaseFragmentDepricated(R.layout.fragment_create_deta
     private lateinit var deleteBtn: View
 
     private val groupId: Long? by lazy { arguments?.getLong(GROUP_ID) }
-    private val viewModel by viewModels { EditDetailsViewModel(groupId.takeIf { it != -1L }) }
+    private val viewModel by fragmentViewModel { EditDetailsViewModel(groupId.takeIf { it != -1L }) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
