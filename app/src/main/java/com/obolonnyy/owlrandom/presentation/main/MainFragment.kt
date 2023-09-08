@@ -75,6 +75,7 @@ class MainFragment : BaseFragment() {
             }
             BaseButton(
                 text = stringResource(id = R.string.main_add_button),
+                bgColor = AppTheme.colors.static.primary,
                 onClick = viewModel::onAddItemClicked
             )
             Space(size = 10.dp)

@@ -79,6 +79,7 @@ class DetailsFragment : BaseFragment() {
             }
             BaseButton(
                 text = stringResource(id = R.string.roll),
+                bgColor = AppTheme.colors.static.primary,
                 onClick = viewModel::onRollClicked
             )
             Space(size = 10.dp)

@@ -36,15 +36,34 @@ class EditDetailsViewModel(
         state.copy(items = newText).set()
     }
 
-    fun delete() {
+    //todo finish with shure dialog
+    fun onDeleteClicked() {
         launchIO {
             asResult {
                 repo.deleteGroup(state.getGroup())
-            }.onSuccess {
+            }.onSuccessUI {
                 CreateDetailsViewState().set()
                 _viewEvents.postValue(CreateDetailsViewEvent.NavigateToMain)
             }
         }
+    }
+
+    fun delete() {
+        launchIO {
+            asResult {
+                repo.deleteGroup(state.getGroup())
+            }.onSuccessUI {
+//                CreateDetailsViewState().set()
+                _viewEvents.postValue(CreateDetailsViewEvent.NavigateToMain)
+            }
+        }
+    }
+
+    fun onStop() {
+        val state = _viewState.value ?: return
+        onTitleChanged(state.title)
+        onItemsChanged(state.items)
+        saveItems()
     }
 
     private fun loadData() {
@@ -62,7 +81,7 @@ class EditDetailsViewModel(
         }
     }
 
-    fun saveItems() {
+    private fun saveItems() {
         applicationScope.launch(Dispatchers.IO) {
             val group = state.getGroup()
             if (group.items.all { it.isEmpty() }) {
@@ -86,4 +105,5 @@ class EditDetailsViewModel(
     private fun CreateDetailsViewState.set() {
         _viewState.value = this
     }
+
 }

@@ -19,13 +19,20 @@ import com.orra.core_ui.theme.AppTheme
 fun BaseButton(
     text: String,
     enabled: Boolean = true,
+    bgColor: Color? = null,
     onClick: (() -> Unit),
 ) {
+    val colors = ButtonDefaults.buttonColors(
+        containerColor = bgColor ?: AppTheme.colors.elements.primary,
+        contentColor = Color.White,
+        disabledContainerColor = bgColor ?: AppTheme.colors.elements.disabled,
+        disabledContentColor = Color.White,
+    )
     Button(
         modifier = Modifier
             .padding(start = 16.dp, end = 16.dp)
             .fillMaxWidth(),
-        colors = colors(),
+        colors = colors,
         enabled = enabled,
         shape = RoundedCornerShape(16.dp),
         onClick = onClick,
@@ -41,11 +48,3 @@ fun BaseButton(
         }
     )
 }
-
-@Composable
-private fun colors() = ButtonDefaults.buttonColors(
-    containerColor = AppTheme.colors.elements.primary,
-    contentColor = Color.White,
-    disabledContainerColor = AppTheme.colors.elements.disabled,
-    disabledContentColor = Color.White,
-)

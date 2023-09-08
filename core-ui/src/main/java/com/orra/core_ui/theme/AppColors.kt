@@ -28,7 +28,8 @@ class StaticColors(
     val red: Color = Color(0xFFFF6E57),
     val green: Color = Color(0xFF47B36E),
     val blue: Color = Color(0xFF5280FC),
-    val white: Color = Color(0xFFFFFFFF)
+    val white: Color = Color(0xFFFFFFFF),
+    val primary: Color = Color(0xFF542437)
 )
 
 class AppColors(
