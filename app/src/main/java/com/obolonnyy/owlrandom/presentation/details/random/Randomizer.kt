@@ -1,11 +1,24 @@
 package com.obolonnyy.owlrandom.presentation.details.random
 
+import com.obolonnyy.owlrandom.utils.Clock
+import com.obolonnyy.owlrandom.utils.RealtimeClock
 import java.util.LinkedList
 import kotlin.random.Random
 
-class Randomizer {
+class Randomizer(
+    private val clock: Clock = RealtimeClock(),
+    private val startNumber: Int = clock.nowSeconds().toInt(),
+) {
 
-    private val random = Random(1001)
+    private val random = Random(startNumber)
+
+    fun getFrom(from: Int, to: Int): Int {
+        return random.nextInt(from, to)
+    }
+
+    fun getBool(): Boolean {
+        return random.nextBoolean()
+    }
 
     fun <T> shuffle(list: MutableList<T>): MutableList<T> {
         list.shuffle(random)

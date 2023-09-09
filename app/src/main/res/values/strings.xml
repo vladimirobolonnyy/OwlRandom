@@ -14,4 +14,9 @@
     <string name="delete">delete</string>
     <string name="material_dialog_delete_title">Delete all group?</string>
     <string name="cancel">cancel</string>
+    <string name="coin_title">Heads or tails</string>
+    <string name="coin_roll_button">Roll</string>
+    <string name="main_coil_text">Roll Coin</string>
+    <string name="coin_head">Head</string>
+    <string name="coin_tail">Tail</string>
 </resources>

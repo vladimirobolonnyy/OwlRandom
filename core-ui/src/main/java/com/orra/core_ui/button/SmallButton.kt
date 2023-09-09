@@ -11,7 +11,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.orra.core_ui.theme.AppTheme
-
+import com.orra.core_ui.utils.throttled
 
 
 @Composable
@@ -24,7 +24,7 @@ fun SmallButton(
         colors = colors(),
         enabled = enabled,
         shape = RoundedCornerShape(8.dp),
-        onClick = onClick,
+        onClick = throttled(onClick),
         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
         content = {
             Text(

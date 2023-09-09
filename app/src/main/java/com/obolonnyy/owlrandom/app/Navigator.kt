@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.obolonnyy.owlrandom.R
+import com.obolonnyy.owlrandom.presentation.coin.CoinFragment
 import com.obolonnyy.owlrandom.presentation.create.EditDetailsFragment
 import com.obolonnyy.owlrandom.presentation.details.DetailsFragment
 import com.obolonnyy.owlrandom.presentation.main.MainFragment
@@ -15,6 +16,7 @@ interface Navigator {
     fun goToDetails(groupId: Long)
     fun showMain()
     fun backToMain()
+    fun goToCoin()
 }
 
 class NavigatorImpl(
@@ -38,6 +40,10 @@ class NavigatorImpl(
 
     override fun backToMain() {
         MainFragment().replace()
+    }
+
+    override fun goToCoin() {
+        CoinFragment().replace()
     }
 
     private fun Fragment.replace() {

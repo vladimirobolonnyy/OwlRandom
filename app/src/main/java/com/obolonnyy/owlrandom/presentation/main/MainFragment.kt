@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -28,7 +29,6 @@ import com.orra.core_ui.button.BaseButton
 import com.orra.core_ui.navbar.NavBar
 import com.orra.core_ui.text.BodyText
 import com.orra.core_ui.text.TextElement
-import com.orra.core_ui.text.Title
 import com.orra.core_ui.theme.AppTheme
 import com.orra.core_ui.utils.Space
 import com.orra.core_ui.utils.clearClickable
@@ -80,13 +80,25 @@ class MainFragment : BaseFragment() {
                     }
 
                     else -> {
-                        Box(
+                        Column(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .weight(1f)
                                 .clearClickable(onClick = viewModel::onAddItemClicked)
                         ) {
                             BodyText(text = stringResource(id = R.string.main_empty_text))
+
+
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                                    .padding(16.dp)
+                                    .elementClickable { navigator.goToCoin() }
+                            ) {
+                                BodyText(text = stringResource(id = R.string.main_coil_text))
+                            }
+
                         }
                     }
                 }

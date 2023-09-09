@@ -80,6 +80,10 @@ dependencies {
     implementation serialization
     implementation datetime
 
+    //todo recactor later
+    implementation "com.wajahatkarim:flippable:1.0.6"
+
+
     //todo remove later
     //todo remove later
     implementation 'com.google.android.material:material:1.9.0'
