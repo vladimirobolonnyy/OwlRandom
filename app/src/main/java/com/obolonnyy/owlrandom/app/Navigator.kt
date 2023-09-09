@@ -10,6 +10,7 @@ import com.obolonnyy.owlrandom.presentation.create.EditDetailsFragment
 import com.obolonnyy.owlrandom.presentation.details.DetailsFragment
 import com.obolonnyy.owlrandom.presentation.dice.DiceFragment
 import com.obolonnyy.owlrandom.presentation.main.MainFragment
+import com.obolonnyy.owlrandom.presentation.numbers.NumbersFragment
 import com.orra.core_presentation.utils.className
 
 interface Navigator {
@@ -19,6 +20,7 @@ interface Navigator {
     fun backToMain()
     fun goToCoin()
     fun goToDice()
+    fun goToNumbers()
 }
 
 class NavigatorImpl(
@@ -50,6 +52,10 @@ class NavigatorImpl(
 
     override fun goToDice() {
         DiceFragment().replace()
+    }
+
+    override fun goToNumbers() {
+        NumbersFragment().replace()
     }
 
     private fun Fragment.replace() {

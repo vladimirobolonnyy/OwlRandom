@@ -87,30 +87,10 @@ class MainFragment : BaseFragment() {
                                 .clearClickable(onClick = viewModel::onAddItemClicked)
                         ) {
                             BodyText(text = stringResource(id = R.string.main_empty_text))
-
-
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentHeight()
-                                    .padding(16.dp)
-                                    .elementClickable { navigator.goToCoin() }
-                            ) {
-                                BodyText(text = stringResource(id = R.string.main_coil_text))
-                            }
-
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .wrapContentHeight()
-                                    .padding(16.dp)
-                                    .elementClickable { navigator.goToDice() }
-                            ) {
-                                BodyText(text = stringResource(id = R.string.main_dice_text))
-                            }
                         }
                     }
                 }
+                RenderOtherTabs()
             }
             BaseButton(
                 text = stringResource(id = R.string.main_add_button),
@@ -118,6 +98,38 @@ class MainFragment : BaseFragment() {
                 onClick = viewModel::onAddItemClicked
             )
             Space(size = 10.dp)
+        }
+    }
+
+    @Composable
+    private fun RenderOtherTabs() {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(16.dp)
+                .elementClickable { navigator.goToCoin() }
+        ) {
+            BodyText(text = stringResource(id = R.string.main_coil_text))
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(16.dp)
+                .elementClickable { navigator.goToDice() }
+        ) {
+            BodyText(text = stringResource(id = R.string.main_dice_text))
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(16.dp)
+                .elementClickable { navigator.goToNumbers() }
+        ) {
+            BodyText(text = stringResource(id = R.string.main_numbers_text))
         }
     }
 

@@ -16,6 +16,10 @@ class Randomizer(
         return random.nextInt(from, to)
     }
 
+    fun getFrom(from: Long, to: Long): Long {
+        return random.nextLong(from, to)
+    }
+
     fun getBool(): Boolean {
         return random.nextBoolean()
     }
