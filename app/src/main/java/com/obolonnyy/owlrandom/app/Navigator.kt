@@ -8,6 +8,7 @@ import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.presentation.coin.CoinFragment
 import com.obolonnyy.owlrandom.presentation.create.EditDetailsFragment
 import com.obolonnyy.owlrandom.presentation.details.DetailsFragment
+import com.obolonnyy.owlrandom.presentation.dice.DiceFragment
 import com.obolonnyy.owlrandom.presentation.main.MainFragment
 import com.orra.core_presentation.utils.className
 
@@ -17,6 +18,7 @@ interface Navigator {
     fun showMain()
     fun backToMain()
     fun goToCoin()
+    fun goToDice()
 }
 
 class NavigatorImpl(
@@ -44,6 +46,10 @@ class NavigatorImpl(
 
     override fun goToCoin() {
         CoinFragment().replace()
+    }
+
+    override fun goToDice() {
+        DiceFragment().replace()
     }
 
     private fun Fragment.replace() {

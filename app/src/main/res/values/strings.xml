@@ -19,4 +19,9 @@
     <string name="main_coil_text">Roll Coin</string>
     <string name="coin_head">Head</string>
     <string name="coin_tail">Tail</string>
+    <string name="main_dice_text">Roll Dice</string>
+    <string name="dice_title">Roll Dice</string>
+    <string name="dice_max_valie_hint">Enter here max dice value</string>
+    <string name="dice_dices_number_hint">Enter here dices number</string>
+    <string name="dice_stats">stats:</string>
 </resources>

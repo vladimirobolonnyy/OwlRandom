@@ -99,6 +99,15 @@ class MainFragment : BaseFragment() {
                                 BodyText(text = stringResource(id = R.string.main_coil_text))
                             }
 
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                                    .padding(16.dp)
+                                    .elementClickable { navigator.goToDice() }
+                            ) {
+                                BodyText(text = stringResource(id = R.string.main_dice_text))
+                            }
                         }
                     }
                 }
