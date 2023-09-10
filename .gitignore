@@ -33,6 +33,9 @@ Thumbs.db
 .gradle
 build/
 captures/
+app/mapping.txt
+app/seeds.txt
+app/unused.txt
 #old gitignore
 #.gradle
 #/local.properties
