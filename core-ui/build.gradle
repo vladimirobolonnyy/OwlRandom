@@ -9,11 +9,11 @@ plugins {
 
 android {
     namespace 'com.orra.core_ui'
-    compileSdk 33
+    compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        minSdk 24
-        targetSdk 33
+        minSdk rootProject.ext.minSdkVersion
+        targetSdk rootProject.ext.targetSdkVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -34,6 +34,10 @@ android {
     compileOptions {
         sourceCompatibility sourceCompatibilityValue
         targetCompatibility sourceCompatibilityValue
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
         jvmTarget = jvmTargetValue

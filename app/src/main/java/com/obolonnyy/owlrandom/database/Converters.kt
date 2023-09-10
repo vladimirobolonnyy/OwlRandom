@@ -1,25 +1,22 @@
 package com.obolonnyy.owlrandom.database
 
 import androidx.room.TypeConverter
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.Types
-import java.lang.reflect.ParameterizedType
+import com.obolonnyy.owlrandom.app.Modules
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class Converters {
-
-    private val moshi = Moshi.Builder().build()
-    private val listMyData: ParameterizedType =
-        Types.newParameterizedType(List::class.java, String::class.java)
-    private val jsonAdapter: JsonAdapter<List<String>> = moshi.adapter(listMyData)
+    private val json: Json = Modules.json
 
     @TypeConverter
     fun listMyModelToJsonStr(listMyModel: List<String>?): String? {
-        return jsonAdapter.toJson(listMyModel)
+        listMyModel ?: return null
+        return json.encodeToString(listMyModel)
     }
 
     @TypeConverter
     fun jsonStrToListMyModel(jsonStr: String?): List<String>? {
-        return jsonStr?.let { jsonAdapter.fromJson(jsonStr) }
+        jsonStr ?: return null
+        return json.decodeFromString<List<String>>(jsonStr)
     }
 }
