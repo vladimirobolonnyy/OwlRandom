@@ -5,14 +5,21 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.obolonnyy.owlrandom.R
@@ -20,11 +27,8 @@ import com.obolonnyy.owlrandom.app.Navigator
 import com.obolonnyy.owlrandom.app.NavigatorImpl
 import com.obolonnyy.owlrandom.utils.observe
 import com.orra.core_presentation.base.BaseFragment
-import com.orra.core_presentation.dialog.BaseDialogFragment
 import com.orra.core_presentation.utils.fragmentViewModel
-import com.orra.core_ui.button.BaseButton
 import com.orra.core_ui.navbar.NavBar
-import com.orra.core_ui.text.BodyText
 import com.orra.core_ui.theme.AppTheme
 import com.orra.core_ui.utils.Space
 import com.orra.core_ui.utils.elementClickable
@@ -69,50 +73,72 @@ class MainFragment : BaseFragment() {
             Column(modifier = Modifier.weight(1f)) {
                 RenderOtherTabs()
             }
-            //todo delete
-            BaseButton(
-                text = stringResource(id = R.string.main_add_button),
-                bgColor = AppTheme.colors.static.primary,
-                onClick = {  navigator.goToEditDetails() }
-            )
             Space(size = 10.dp)
         }
     }
 
     @Composable
     private fun RenderOtherTabs() {
-        RenderType(
-            name = stringResource(id = R.string.main_groups_text),
-            icon = R.drawable.error,
-            onClick = { navigator.goToGroups() }
-        )
-        RenderType(
-            name = stringResource(id = R.string.main_coil_text),
-            icon = R.drawable.error,
-            onClick = { navigator.goToCoin() }
-        )
-        RenderType(
-            name = stringResource(id = R.string.main_dice_text),
-            icon = R.drawable.error,
-            onClick = { navigator.goToDice() }
-        )
-        RenderType(
-            name = stringResource(id = R.string.main_numbers_text),
-            icon = R.drawable.error,
-            onClick = { navigator.goToNumbers() }
-        )
+        Column(
+            modifier = Modifier,
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Row {
+                RenderType(
+                    name = stringResource(id = R.string.main_groups_text),
+                    icon = R.drawable.ic_user_group,
+                    onClick = { navigator.goToGroups() }
+                )
+            }
+            Row() {
+                RenderType(
+                    name = stringResource(id = R.string.main_coil_text),
+                    icon = R.drawable.ic_coin,
+                    onClick = { navigator.goToCoin() }
+                )
+                RenderType(
+                    name = stringResource(id = R.string.main_dice_text),
+                    icon = R.drawable.baseline_casino_24,
+                    onClick = { navigator.goToDice() }
+                )
+            }
+            Row {
+                RenderType(
+                    name = stringResource(id = R.string.main_numbers_text),
+                    icon = R.drawable.baseline_looks_5_24,
+                    onClick = { navigator.goToNumbers() }
+                )
+            }
+        }
     }
 
     @Composable
-    private fun RenderType(name: String, icon: Int, onClick: () -> Unit) {
-        Box(
+    private fun RowScope.RenderType(name: String, icon: Int, onClick: () -> Unit) {
+        Row(
             modifier = Modifier
-                .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
-                .border(1.dp, AppTheme.colors.elements.divider, RoundedCornerShape(4.dp))
+                .weight(1f)
+                .padding(horizontal = 16.dp)
+                .border(1.dp, AppTheme.colors.elements.secondary, RoundedCornerShape(6.dp))
                 .elementClickable(onClick = onClick)
-                .padding(8.dp)
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            BodyText(text = name)
+            Text(
+                modifier = Modifier
+                    .weight(1f)
+                    .background(AppTheme.colors.background.primary),
+                text = name,
+                style = AppTheme.styles.BodyPrimary,
+                color = AppTheme.colors.text.primary,
+            )
+            Icon(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .size(24.dp),
+                painter = painterResource(id = icon),
+                contentDescription = null,
+                tint = AppTheme.colors.elements.primary
+            )
         }
     }
 
