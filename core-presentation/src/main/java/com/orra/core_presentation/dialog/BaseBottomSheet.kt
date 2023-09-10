@@ -9,7 +9,6 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.orra.core_presentation.utils.className
-import com.orra.core_ui.R
 
 open class BaseBottomSheet(
     @LayoutRes private val layoutResId: Int = 0
