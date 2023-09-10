@@ -29,7 +29,9 @@ class StaticColors(
     val green: Color = Color(0xFF47B36E),
     val blue: Color = Color(0xFF5280FC),
     val white: Color = Color(0xFFFFFFFF),
-    val primary: Color = Color(0xFF542437)
+    val primary: Color = Color(0xFF542437),
+    val bluePrimary: Color = Color(0xFF5280FC),
+    val blueSecondary: Color = Color(0xFF5280FC),
 )
 
 class AppColors(

@@ -12,8 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +34,7 @@ import com.orra.core_ui.navbar.NavBar
 import com.orra.core_ui.text.TextElement
 import com.orra.core_ui.theme.AppTheme
 import com.orra.core_ui.utils.Space
+import kotlinx.coroutines.delay
 
 class DetailsFragment : BaseFragment() {
 
@@ -70,13 +74,14 @@ class DetailsFragment : BaseFragment() {
                 iconRight = R.drawable.ic_baseline_edit_24,
                 onRightIconClicked = viewModel::onEditClicked
             )
+            val lazyListState = rememberLazyListState()
             Column(modifier = Modifier.weight(1f)) {
-                LazyColumn(content = {
-                    state?.items?.forEach { item ->
-                        item(key = item.position) { RenderItem(item) }
-                    }
-                })
+                RenderList(state?.items.orEmpty(), lazyListState)
             }
+            LaunchedEffect(key1 = state?.items, block = {
+                delay(400)
+                lazyListState.animateScrollToItem(0)
+            })
             BaseButton(
                 text = stringResource(id = R.string.roll),
                 bgColor = AppTheme.colors.static.primary,
@@ -84,6 +89,17 @@ class DetailsFragment : BaseFragment() {
             )
             Space(size = 10.dp)
         }
+    }
+
+    @Composable
+    private fun RenderList(items: List<DetailsAdapterItem>, lazyListState: LazyListState) {
+        LazyColumn(
+            state = lazyListState,
+            content = {
+                items.forEach { item ->
+                    item(key = item.position) { RenderItem(item) }
+                }
+            })
     }
 
     @OptIn(ExperimentalFoundationApi::class)

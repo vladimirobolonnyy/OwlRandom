@@ -15,13 +15,14 @@ import com.orra.core_ui.utils.elementClickable
 @Composable
 fun BodyText(
     text: String,
+    textAlign: TextAlign = TextAlign.Start,
     onClick: (() -> Unit)? = null
 ) {
     Text(
         text = text,
         style = AppTheme.styles.BodySecondary,
         color = AppTheme.colors.text.primary,
-        textAlign = TextAlign.Start,
+        textAlign = textAlign,
         modifier = Modifier
             .fillMaxWidth()
             .elementClickable(onClick = onClick)

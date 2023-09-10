@@ -35,7 +35,7 @@ fun BaseButton(
             .fillMaxWidth(),
         colors = colors,
         enabled = enabled,
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(12.dp),
         onClick = throttled(onClick),
         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
         content = {

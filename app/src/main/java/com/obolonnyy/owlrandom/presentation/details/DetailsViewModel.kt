@@ -28,9 +28,10 @@ class DetailsViewModel(
         listOf(
             Color(0xFFECD078),
             Color(0xFFD95B43),
-            Color(0xFFC02942),
             Color(0xFFBFCFFF),
-            Color(0xFFA1BDFF),
+            Color(0xFF5888FC),
+            Color(0xFFFF5370),
+            Color(0xFFC02942),
             Color(0xCC542437),
         )
 
@@ -86,38 +87,19 @@ class DetailsViewModel(
             .distinctUntilChanged()
             .catch { e ->
                 warning("DetailsViewModel got error $e")
-//                _viewEvents.postValue(DetailsViewEvent.NavigateBack)
                 showErrorMessage()
             }
             .collect { group ->
-                if (group == null) {
-//                    _viewEvents.postValue(DetailsViewEvent.NavigateBack)
-                } else {
-                    val adapterItems = group.items.toAdapterItems()
+                if (group != null) {
                     withContext(Dispatchers.Main) {
-                        val newState = DetailsViewState(group, adapterItems)
-                        mergeStates(state, newState).set()
+                        DetailsViewState(group, group.items.toAdapterItems()).set()
                     }
                 }
             }
     }
 
-    private fun mergeStates(
-        oldState: DetailsViewState?,
-        newState: DetailsViewState
-    ): DetailsViewState {
-        if (oldState == null) return newState
-        if (oldState.items.size == newState.items.size) {
-            if (oldState.items.map { it.text } == newState.items.map { it.text }) {
-                return oldState
-            }
-        }
-        return newState
-    }
-
     private fun List<String>.toAdapterItems(): MutableList<DetailsAdapterItem> {
-        return this
-            .mapIndexed { i, s -> DetailsAdapterItem(i, s, Color.Transparent) }
+        return this.mapIndexed { i, s -> DetailsAdapterItem(i, s, Color.Transparent) }
             .toMutableList()
     }
 
@@ -132,4 +114,5 @@ class DetailsViewModel(
     fun onEditClicked() {
         _viewEvents.postValue(DetailsViewEvent.NavigateToEdit(groupId))
     }
+
 }

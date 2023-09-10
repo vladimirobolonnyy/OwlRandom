@@ -3,9 +3,12 @@ package com.obolonnyy.owlrandom.presentation.create
 import android.os.Bundle
 import android.view.View
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -15,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.app.Navigator
 import com.obolonnyy.owlrandom.app.NavigatorImpl
+import com.obolonnyy.owlrandom.utils.isKeyboardVisible
 import com.obolonnyy.owlrandom.utils.observe
 import com.orra.core_presentation.base.BaseFragment
 import com.orra.core_presentation.dialog.BaseDialogFragment
@@ -25,8 +29,6 @@ import com.orra.core_ui.text.EditText
 import com.orra.core_ui.theme.AppTheme
 import com.orra.core_ui.utils.Space
 
-//todo 1. Кнопку делать над клавиатурой
-// todo есть только кнопка удалить - вот её надо доработать. Сделать кнопку создать
 class CreateGroupFragment : BaseFragment() {
 
     companion object {
@@ -78,14 +80,31 @@ class CreateGroupFragment : BaseFragment() {
                     onValueChange = viewModel::onItemsChanged
                 )
             }
-            if (state?.deleteBtnIsVisible == true) {
+
+            val isKeyboardVisible = WindowInsets.Companion.isKeyboardVisible
+            if (isKeyboardVisible) {
+                Box(modifier = Modifier.imePadding()) {
+                    BaseButton(
+                        text = stringResource(id = R.string.save),
+                        bgColor = AppTheme.colors.static.primary,
+                        onClick = viewModel::onSaveClicked
+                    )
+                }
+            } else {
                 BaseButton(
-                    text = stringResource(id = R.string.delete),
+                    text = stringResource(id = R.string.save),
                     bgColor = AppTheme.colors.static.primary,
-                    onClick = viewModel::onDeleteClicked
+                    onClick = viewModel::onSaveClicked
                 )
+                if (state?.deleteBtnIsVisible == true) {
+                    BaseButton(
+                        text = stringResource(id = R.string.delete),
+                        bgColor = AppTheme.colors.static.primary,
+                        onClick = viewModel::onDeleteClicked
+                    )
+                }
+                Space(size = 10.dp)
             }
-            Space(size = 10.dp)
         }
     }
 
@@ -95,7 +114,8 @@ class CreateGroupFragment : BaseFragment() {
     }
 
     private fun process(event: CreateGroupViewEvent): Unit = when (event) {
-        is CreateGroupViewEvent.NavigateToMain -> navigator.backToMain()
+        is CreateGroupViewEvent.NavigateBack -> onBack()
+        is CreateGroupViewEvent.NavigateToGroups -> navigator.backToGroups()
         is CreateGroupViewEvent.ShowDeleteDialog -> {
             BaseDialogFragment.show(
                 fragmentManager = this.activity?.supportFragmentManager,

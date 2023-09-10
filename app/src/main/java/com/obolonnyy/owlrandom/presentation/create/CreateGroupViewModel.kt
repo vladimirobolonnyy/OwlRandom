@@ -40,13 +40,18 @@ class CreateGroupViewModel(
         CreateGroupViewEvent.ShowDeleteDialog.post()
     }
 
+    fun onSaveClicked() {
+        saveItems()
+        CreateGroupViewEvent.NavigateBack.post()
+    }
+
     fun onDeleteConfirmed() {
         launchIO {
             asResult {
                 repo.deleteGroup(state.getGroup())
             }.onSuccessUI {
                 CreateGroupViewState().set()
-                CreateGroupViewEvent.NavigateToMain.post()
+                CreateGroupViewEvent.NavigateToGroups.post()
             }.onFailureUI {
                 showErrorMessage()
             }
@@ -54,11 +59,17 @@ class CreateGroupViewModel(
     }
 
     fun onStop() {
+        saveItems()
+    }
+
+    private fun saveItems() {
         val state = _viewState.value ?: return
-        onTitleChanged(state.title)
+        val title = state.title.takeIf { it.isNotEmpty() } ?: "No name"
+        onTitleChanged(title)
         onItemsChanged(state.items)
         saveItems(state)
     }
+
 
     private fun loadData() {
         launchIO {
@@ -76,10 +87,9 @@ class CreateGroupViewModel(
     }
 
     private fun saveItems(state: CreateGroupViewState) {
-        if (state.isEmpty) return
         applicationScope.launch(Dispatchers.IO) {
-            val group = this@CreateGroupViewModel.state.getGroup()
-            if (group.items.all { it.isEmpty() }) {
+            val group = state.getGroup()
+            if (group.strItems.isEmpty() || state.isEmpty) {
                 repo.deleteGroup(group)
                 log("CreateDetailsViewModel deleted group with id:= ${group.id}")
             } else {

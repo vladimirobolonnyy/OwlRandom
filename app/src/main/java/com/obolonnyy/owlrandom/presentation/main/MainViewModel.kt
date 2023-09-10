@@ -17,10 +17,6 @@ class MainViewModel(
         loadData()
     }
 
-    fun onAddItemClicked() {
-        _viewEvents.postValue(MainViewEvent.GoToCreateItem)
-    }
-
     private fun loadData() = launchIO {
 
     }

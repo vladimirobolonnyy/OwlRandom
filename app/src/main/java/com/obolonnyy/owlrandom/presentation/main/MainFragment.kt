@@ -20,6 +20,7 @@ import com.obolonnyy.owlrandom.app.Navigator
 import com.obolonnyy.owlrandom.app.NavigatorImpl
 import com.obolonnyy.owlrandom.utils.observe
 import com.orra.core_presentation.base.BaseFragment
+import com.orra.core_presentation.dialog.BaseDialogFragment
 import com.orra.core_presentation.utils.fragmentViewModel
 import com.orra.core_ui.button.BaseButton
 import com.orra.core_ui.navbar.NavBar
@@ -68,10 +69,11 @@ class MainFragment : BaseFragment() {
             Column(modifier = Modifier.weight(1f)) {
                 RenderOtherTabs()
             }
+            //todo delete
             BaseButton(
                 text = stringResource(id = R.string.main_add_button),
                 bgColor = AppTheme.colors.static.primary,
-                onClick = viewModel::onAddItemClicked
+                onClick = {  navigator.goToEditDetails() }
             )
             Space(size = 10.dp)
         }

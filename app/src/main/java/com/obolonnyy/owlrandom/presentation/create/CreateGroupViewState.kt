@@ -18,6 +18,7 @@ data class CreateGroupViewState(
 }
 
 sealed class CreateGroupViewEvent {
-    object NavigateToMain : CreateGroupViewEvent()
+    object NavigateBack : CreateGroupViewEvent()
+    object NavigateToGroups : CreateGroupViewEvent()
     object ShowDeleteDialog : CreateGroupViewEvent()
 }

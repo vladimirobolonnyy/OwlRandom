@@ -20,8 +20,14 @@ fun SmallButton(
     enabled: Boolean = true,
     onClick: (() -> Unit),
 ) {
+    val colors = ButtonDefaults.buttonColors(
+        containerColor = AppTheme.colors.elements.primary,
+        contentColor = Color.White,
+        disabledContainerColor = AppTheme.colors.elements.disabled,
+        disabledContentColor = Color.White,
+    )
     Button(
-        colors = colors(),
+        colors = colors,
         enabled = enabled,
         shape = RoundedCornerShape(8.dp),
         onClick = throttled(onClick),
@@ -37,11 +43,3 @@ fun SmallButton(
         }
     )
 }
-
-@Composable
-private fun colors() = ButtonDefaults.buttonColors(
-    containerColor = AppTheme.colors.elements.primary,
-    contentColor = Color.White,
-    disabledContainerColor = AppTheme.colors.elements.disabled,
-    disabledContentColor = Color.White,
-)

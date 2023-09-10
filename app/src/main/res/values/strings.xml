@@ -2,18 +2,19 @@
     <string name="app_name">Owl randomizer</string>
     <string name="roll">Roll</string>
     <string name="submit">submit</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
 
     <!--Main Fragment-->
     <string name="main_empty_text">Tab anywhere to add new items</string>
     <string name="create_details_title">Create your items</string>
     <string name="create_details_item_title_hint">Title for your items</string>
     <string name="create_details_item_hint">Type here items, divided by enter</string>
-    <string name="main_title">Your items</string>
-    <string name="main_add_button">Add new list</string>
-    <string name="edit">edit</string>
-    <string name="delete">delete</string>
+    <string name="main_title">Owl randomizer</string>
+    <string name="main_add_button">Create new group</string>
     <string name="material_dialog_delete_title">Delete all group?</string>
-    <string name="cancel">cancel</string>
     <string name="coin_title">Heads or tails</string>
     <string name="coin_roll_button">Roll</string>
     <string name="main_coil_text">Roll Coin</string>
@@ -30,8 +31,8 @@
     <string name="numbers_max_valie_hint">Type here max value</string>
     <string name="groups_title">Your groups</string>
     <string name="main_groups_text">Groups</string>
-    <string name="create_details_delete_title">title</string>
-    <string name="create_details_delete_content">content</string>
-    <string name="create_details_positive_text">positive</string>
-    <string name="create_details_negative_text">negative</string>
+    <string name="create_details_delete_title">Delete</string>
+    <string name="create_details_delete_content">Are you sure, you want to delete this group?</string>
+    <string name="create_details_positive_text">delete</string>
+    <string name="create_details_negative_text">cancel</string>
 </resources>

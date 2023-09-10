@@ -19,6 +19,7 @@ interface Navigator {
     fun goToDetails(groupId: Long)
     fun showMain()
     fun backToMain()
+    fun backToGroups()
     fun goToCoin()
     fun goToDice()
     fun goToNumbers()
@@ -48,6 +49,11 @@ class NavigatorImpl(
         MainFragment().replace()
     }
 
+    override fun backToGroups() {
+        fm.popBackStack(GroupsFragment().className(), FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        goToGroups()
+    }
+
     override fun goToCoin() {
         CoinFragment().replace()
     }
@@ -66,6 +72,7 @@ class NavigatorImpl(
 
     private fun Fragment.replace() {
         fm.beginTransaction()
+            .setReorderingAllowed(true)
             .setCustomAnimations(
                 R.animator.slide_in_left, R.animator.slide_in_right,
                 R.animator.slide_in_left_exit, R.animator.slide_in_right_exit
