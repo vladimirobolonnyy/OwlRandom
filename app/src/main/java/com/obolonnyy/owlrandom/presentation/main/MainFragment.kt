@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -103,33 +102,33 @@ class MainFragment : BaseFragment() {
 
     @Composable
     private fun RenderOtherTabs() {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(16.dp)
-                .elementClickable { navigator.goToCoin() }
-        ) {
-            BodyText(text = stringResource(id = R.string.main_coil_text))
-        }
+        RenderType(
+            name = stringResource(id = R.string.main_coil_text),
+            icon = R.drawable.error,
+            onClick = { navigator.goToCoin() }
+        )
+        RenderType(
+            name = stringResource(id = R.string.main_dice_text),
+            icon = R.drawable.error,
+            onClick = { navigator.goToDice() }
+        )
+        RenderType(
+            name = stringResource(id = R.string.main_numbers_text),
+            icon = R.drawable.error,
+            onClick = { navigator.goToNumbers() }
+        )
+    }
 
+    @Composable
+    private fun RenderType(name: String, icon: Int, onClick: () -> Unit) {
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(16.dp)
-                .elementClickable { navigator.goToDice() }
+                .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                .border(1.dp, AppTheme.colors.elements.divider, RoundedCornerShape(4.dp))
+                .elementClickable(onClick = onClick)
+                .padding(8.dp)
         ) {
-            BodyText(text = stringResource(id = R.string.main_dice_text))
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(16.dp)
-                .elementClickable { navigator.goToNumbers() }
-        ) {
-            BodyText(text = stringResource(id = R.string.main_numbers_text))
+            BodyText(text = name)
         }
     }
 
