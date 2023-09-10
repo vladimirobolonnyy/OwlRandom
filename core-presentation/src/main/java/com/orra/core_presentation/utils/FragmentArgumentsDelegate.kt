@@ -24,7 +24,7 @@ class FragmentArgumentsDelegate<T> where T : Any? {
             is Boolean -> args.putBoolean(key, value)
             is Parcelable -> args.putParcelable(key, value)
             is Serializable -> args.putSerializable(key, value)
-            else -> TODO("Not supported type. Please add it to FragmentArgumentsDelegate class")
+            else -> error("Not supported type. Please add it to FragmentArgumentsDelegate class")
         }
     }
 

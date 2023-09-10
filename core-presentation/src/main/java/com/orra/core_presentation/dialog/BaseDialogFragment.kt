@@ -3,12 +3,17 @@ package com.orra.core_presentation.dialog
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.orra.core_presentation.utils.FragmentArgumentsDelegate
 import com.orra.core_presentation.utils.className
@@ -17,18 +22,12 @@ import com.orra.core_ui.R
 import com.orra.core_ui.button.SmallButton
 import com.orra.core_ui.text.BodyText
 import com.orra.core_ui.text.Title
+import com.orra.core_ui.theme.AppTheme
 
 
 class BaseDialogFragment : DialogFragment(R.layout.fragment_basic_dialog) {
 
     companion object {
-
-        fun newInstance(dialogTitle: String = "", dialogContent: String = "") =
-            BaseDialogFragment().apply {
-                title = dialogTitle
-                content = dialogContent
-            }
-
         fun show(
             fragmentManager: FragmentManager?,
             title: String = "",
@@ -75,7 +74,13 @@ class BaseDialogFragment : DialogFragment(R.layout.fragment_basic_dialog) {
 
     @Composable
     private fun Render() {
-        Column {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .clip(RoundedCornerShape(16.dp))
+                .background(AppTheme.colors.background.primary)
+        ) {
             Title(title = title)
             BodyText(text = content)
             SmallButton(text = positiveActionTitle, onClick = { onPositiveAction?.invoke() })

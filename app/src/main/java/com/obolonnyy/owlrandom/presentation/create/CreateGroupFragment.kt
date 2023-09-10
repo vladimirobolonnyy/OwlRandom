@@ -17,6 +17,7 @@ import com.obolonnyy.owlrandom.app.Navigator
 import com.obolonnyy.owlrandom.app.NavigatorImpl
 import com.obolonnyy.owlrandom.utils.observe
 import com.orra.core_presentation.base.BaseFragment
+import com.orra.core_presentation.dialog.BaseDialogFragment
 import com.orra.core_presentation.utils.fragmentViewModel
 import com.orra.core_ui.button.BaseButton
 import com.orra.core_ui.navbar.NavBar
@@ -24,14 +25,16 @@ import com.orra.core_ui.text.EditText
 import com.orra.core_ui.theme.AppTheme
 import com.orra.core_ui.utils.Space
 
-class EditDetailsFragment : BaseFragment() {
+//todo 1. Кнопку делать над клавиатурой
+// todo есть только кнопка удалить - вот её надо доработать. Сделать кнопку создать
+class CreateGroupFragment : BaseFragment() {
 
     companion object {
         private const val GROUP_ID = "GROUP_ID"
 
-        fun new(groupId: Long?): EditDetailsFragment {
-            groupId ?: return EditDetailsFragment()
-            return EditDetailsFragment().apply {
+        fun new(groupId: Long?): CreateGroupFragment {
+            groupId ?: return CreateGroupFragment()
+            return CreateGroupFragment().apply {
                 arguments = Bundle().apply {
                     putLong(GROUP_ID, groupId)
                 }
@@ -40,7 +43,7 @@ class EditDetailsFragment : BaseFragment() {
     }
 
     private val groupId: Long? by lazy { arguments?.getLong(GROUP_ID) }
-    private val viewModel by fragmentViewModel { EditDetailsViewModel(groupId.takeIf { it != -1L }) }
+    private val viewModel by fragmentViewModel { CreateGroupViewModel(groupId.takeIf { it != -1L }) }
     private val navigator: Navigator by lazy { NavigatorImpl(this.requireActivity()) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,7 +82,7 @@ class EditDetailsFragment : BaseFragment() {
                 BaseButton(
                     text = stringResource(id = R.string.delete),
                     bgColor = AppTheme.colors.static.primary,
-                    onClick = viewModel::delete
+                    onClick = viewModel::onDeleteClicked
                 )
             }
             Space(size = 10.dp)
@@ -91,8 +94,18 @@ class EditDetailsFragment : BaseFragment() {
         viewModel.onStop()
     }
 
-    private fun process(event: CreateDetailsViewEvent): Unit = when (event) {
-        is CreateDetailsViewEvent.NavigateToMain -> navigator.backToMain()
+    private fun process(event: CreateGroupViewEvent): Unit = when (event) {
+        is CreateGroupViewEvent.NavigateToMain -> navigator.backToMain()
+        is CreateGroupViewEvent.ShowDeleteDialog -> {
+            BaseDialogFragment.show(
+                fragmentManager = this.activity?.supportFragmentManager,
+                title = getString(R.string.create_details_delete_title),
+                content = getString(R.string.create_details_delete_content),
+                positiveActionTitle = getString(R.string.create_details_positive_text),
+                negativeActionTitle = getString(R.string.create_details_negative_text),
+                onPositiveAction = viewModel::onDeleteConfirmed
+            )
+        }
     }
 
 }

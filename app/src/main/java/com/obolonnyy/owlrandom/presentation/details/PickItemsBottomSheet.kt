@@ -8,12 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.obolonnyy.owlrandom.presentation.details.random.RandomTypes
-import com.orra.core_presentation.dialog.BaseComposeBottomSheet
+import com.orra.core_presentation.dialog.BaseBottomSheet
 import com.orra.core_presentation.utils.FragmentArgumentsDelegate
 import com.orra.core_ui.text.TextElement
 import com.orra.core_ui.utils.elementClickable
 
-class PickItemsBottomSheet : BaseComposeBottomSheet() {
+class PickItemsBottomSheet : BaseBottomSheet() {
 
     companion object {
         fun newInstance(items: List<RandomTypes>, onItemClicked: ((RandomTypes) -> Unit)) =

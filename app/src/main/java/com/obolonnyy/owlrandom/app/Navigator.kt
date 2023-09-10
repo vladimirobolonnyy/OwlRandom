@@ -6,11 +6,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.presentation.coin.CoinFragment
-import com.obolonnyy.owlrandom.presentation.create.EditDetailsFragment
+import com.obolonnyy.owlrandom.presentation.create.CreateGroupFragment
 import com.obolonnyy.owlrandom.presentation.details.DetailsFragment
 import com.obolonnyy.owlrandom.presentation.dice.DiceFragment
 import com.obolonnyy.owlrandom.presentation.main.MainFragment
 import com.obolonnyy.owlrandom.presentation.numbers.NumbersFragment
+import com.obolonnyy.owlrandom.presentation.teams.GroupsFragment
 import com.orra.core_presentation.utils.className
 
 interface Navigator {
@@ -21,6 +22,7 @@ interface Navigator {
     fun goToCoin()
     fun goToDice()
     fun goToNumbers()
+    fun goToGroups()
 }
 
 class NavigatorImpl(
@@ -35,7 +37,7 @@ class NavigatorImpl(
     }
 
     override fun goToEditDetails(groupId: Long?) {
-        EditDetailsFragment.new(groupId).replace()
+        CreateGroupFragment.new(groupId).replace()
     }
 
     override fun goToDetails(groupId: Long) {
@@ -56,6 +58,10 @@ class NavigatorImpl(
 
     override fun goToNumbers() {
         NumbersFragment().replace()
+    }
+
+    override fun goToGroups() {
+        GroupsFragment().replace()
     }
 
     private fun Fragment.replace() {

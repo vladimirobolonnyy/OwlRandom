@@ -10,7 +10,7 @@ class MainViewModel(
     private val repo: MainRepository = MainRepositoryImpl()
 ) : BaseViewModel<MainViewEvent>() {
 
-    private val _viewState = MutableLiveData<MainViewState>(MainViewState.Empty)
+    private val _viewState = MutableLiveData<MainViewState>()
     val viewState: LiveData<MainViewState> = _viewState
 
     init {
@@ -22,12 +22,6 @@ class MainViewModel(
     }
 
     private fun loadData() = launchIO {
-        repo.getAllGroups().collect { groups ->
-            if (groups.isNotEmpty()) {
-                _viewState.postValue(MainViewState.Loaded(groups))
-            } else {
-                _viewState.postValue(MainViewState.Empty)
-            }
-        }
+
     }
 }

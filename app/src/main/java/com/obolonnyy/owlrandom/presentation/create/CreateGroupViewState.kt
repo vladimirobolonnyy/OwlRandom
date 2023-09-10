@@ -3,7 +3,7 @@ package com.obolonnyy.owlrandom.presentation.create
 import com.obolonnyy.owlrandom.model.MyGroup
 
 
-data class CreateDetailsViewState(
+data class CreateGroupViewState(
     val groupId: Long = -1,
     val title: String = "",
     val items: String = "",
@@ -17,6 +17,7 @@ data class CreateDetailsViewState(
     constructor(group: MyGroup) : this(group.id, group.title, group.strItems)
 }
 
-sealed class CreateDetailsViewEvent {
-    object NavigateToMain : CreateDetailsViewEvent()
+sealed class CreateGroupViewEvent {
+    object NavigateToMain : CreateGroupViewEvent()
+    object ShowDeleteDialog : CreateGroupViewEvent()
 }
