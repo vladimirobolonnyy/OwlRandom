@@ -5,8 +5,8 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.plugin.serialization'
-    id 'kotlin-kapt'
-//    id 'com.google.devtools.ksp'
+//    id 'kotlin-kapt'
+    id 'com.google.devtools.ksp'
 }
 
 android {
@@ -105,9 +105,9 @@ dependencies {
 
     implementation "androidx.room:room-runtime:${versions.room}"
     implementation "androidx.room:room-ktx:${versions.room}"
-    kapt ("androidx.room:room-compiler:${versions.room}")
+//    kapt ("androidx.room:room-compiler:${versions.room}")
     //todo someday
-//    ksp ("androidx.room:room-compiler:${versions.room}")
+    ksp ("androidx.room:room-compiler:${versions.room}")
 
     implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
     implementation "com.jakewharton.timber:timber:$versions.timber"
