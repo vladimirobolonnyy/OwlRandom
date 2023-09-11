@@ -9,13 +9,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import com.orra.core_presentation.R
 import com.orra.core_presentation.base.views.ErrorView
 import com.orra.core_presentation.base.views.InfoView
 import com.orra.core_presentation.base.views.LoadingView
 import com.orra.core_presentation.utils.className
 import com.orra.core_presentation.utils.observeLD
 import com.orra.core_presentation.utils.setThemedContent
-import com.orra.core_ui.R
 import kotlinx.coroutines.delay
 
 abstract class BaseFragment : Fragment(R.layout.fragment_base) {
@@ -75,7 +75,7 @@ abstract class BaseFragment : Fragment(R.layout.fragment_base) {
     }
 
     protected open fun onBack() {
-        activity?.onBackPressed()
+        activity?.onBackPressedDispatcher?.onBackPressed()
     }
 
 }

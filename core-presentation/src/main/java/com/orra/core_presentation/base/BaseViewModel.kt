@@ -6,9 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.viewModelScope
+import com.orra.core_presentation.R
 import com.orra.core_presentation.utils.NotNullMutableLiveData
 import com.orra.core_presentation.utils.SingleLiveEvent
-import com.orra.core_ui.R
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -79,6 +79,7 @@ abstract class BaseViewModel<E : Any> : ViewModel() {
         mutableModalLoadingState.postValue(visible)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun logError(error: Throwable, additionalTag: String? = null) {
     }
 

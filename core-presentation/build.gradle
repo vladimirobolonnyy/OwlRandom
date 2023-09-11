@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace 'com.orra.core_ui'
+    namespace 'com.orra.core_presentation'
     compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {

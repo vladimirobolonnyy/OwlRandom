@@ -18,10 +18,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.orra.core_presentation.R
 import com.orra.core_ui.theme.AppTheme
 import com.orra.core_ui.utils.elementClickable
 import com.orra.core_presentation.base.ErrorAction
-import com.orra.core_ui.R
 
 @Composable
 internal fun ErrorView(

@@ -28,10 +28,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import com.orra.core_presentation.R
 import com.orra.core_presentation.utils.FragmentArgumentsDelegate
 import com.orra.core_presentation.utils.className
 import com.orra.core_presentation.utils.setThemedContent
-import com.orra.core_ui.R
 import com.orra.core_ui.text.BodyText
 import com.orra.core_ui.text.TitleSecondary
 import com.orra.core_ui.theme.AppTheme

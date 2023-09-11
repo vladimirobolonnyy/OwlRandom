@@ -10,7 +10,7 @@ class FragmentArgumentsDelegate<T> where T : Any? {
 
     @Suppress("UNCHECKED_CAST")
     operator fun getValue(fragment: Fragment, property: KProperty<*>): T =
-        fragment.requireArguments().get(property.name) as T
+        fragment.requireArguments().getString(property.name) as T
 
     operator fun setValue(fragment: Fragment, property: KProperty<*>, value: T) {
         if (value == null) return
