@@ -35,10 +35,6 @@ android {
         sourceCompatibility sourceCompatibilityValue
         targetCompatibility sourceCompatibilityValue
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
     kotlinOptions {
         jvmTarget = jvmTargetValue
     }
@@ -52,7 +48,5 @@ dependencies {
     implementation kotlinImpl.values()
     implementation compose.values()
     implementation androidxLib.values()
-
-    implementation datetime
 
 }

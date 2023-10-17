@@ -95,7 +95,6 @@ ext {
     ]
 
     serialization = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
-    datetime = "joda-time:joda-time:2.12.5"
     materialBottom = "com.google.android.material:material:1.9.0"
     flippable = "com.wajahatkarim:flippable:1.0.6"
     timber = "com.jakewharton.timber:timber:4.7.1"

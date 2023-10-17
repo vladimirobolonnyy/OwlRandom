@@ -3,7 +3,6 @@ package com.obolonnyy.owlrandom.app
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
-import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -21,7 +20,6 @@ class MainApplication : Application(), AppScope {
     override fun onCreate() {
         super.onCreate()
         context = this
-        AndroidThreeTen.init(this);
         if (BuildInfo.isDebug) {
             Timber.plant(Timber.DebugTree())
         }

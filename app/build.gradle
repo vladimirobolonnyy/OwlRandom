@@ -53,10 +53,6 @@ android {
         sourceCompatibility sourceCompatibilityValue
         targetCompatibility sourceCompatibilityValue
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
-    }
     kotlinOptions {
         jvmTarget = jvmTargetValue
     }
@@ -88,27 +84,23 @@ dependencies {
     implementation project(path: ':core-presentation')
 
     implementation androidxLib.values()
+    implementation materialBottom
     implementation compose.values()
+    debugImplementation debugCompose.values()
+
     implementation multiDEXLib
-    implementation coilUsial
 
     implementation kotlinImpl.values()
     implementation coroutines.values()
-    implementation retrofit.values()
-    implementation okHttp
-    implementation serialization
-    implementation datetime
-
-    implementation flippable
-    implementation materialBottom
-
     implementation room.values()
-    ksp (roomKsp)
+    ksp(roomKsp)
 
-    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.1'
+    implementation serialization
+    implementation flippable
     implementation timber
-
-    debugImplementation debugCompose.values()
+//    implementation coilUsial
+//    implementation retrofit.values()
+//    implementation okHttp
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
