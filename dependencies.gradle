@@ -1,17 +1,3 @@
-def versions = [
-        koin     : '2.0.1',
-        room     : '2.5.2',
-
-        retrofit : '2.6.2',
-        converter: '2.6.2',
-
-        junit    : 'junit:junit:4.12',
-        runner   : 'com.android.support.test:runner:1.0.2',
-        espresso : 'com.android.support.test.espresso:espresso-core:3.0.2'
-]
-
-ext.versions = versions
-
 ext {
     compileSdkVersion = 33
     minSdkVersion = 27
@@ -33,6 +19,7 @@ ext {
     coroutinesVersion = '1.6.4'
     retrofitVersion = '2.9.0'
     okHttpVersion = '4.9.3'
+    roomVersion = '2.5.2'
 
     kotlinImpl = [
             stdLib7             : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
@@ -54,10 +41,10 @@ ext {
     ]
 
     room = [
-            roomRuntime: "androidx.room:room-runtime:${versions.room}",
-            roomKtx    : "androidx.room:room-ktx:${versions.room}"
+            roomRuntime: "androidx.room:room-runtime:${roomVersion}",
+            roomKtx    : "androidx.room:room-ktx:${roomVersion}"
     ]
-    roomKsp = "androidx.room:room-compiler:${versions.room}"
+    roomKsp = "androidx.room:room-compiler:${roomVersion}"
 
     compose = [
             composeUI              : "androidx.compose.ui:ui:$composeVersion",

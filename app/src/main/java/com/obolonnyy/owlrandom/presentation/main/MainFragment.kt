@@ -5,7 +5,6 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -25,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.app.Navigator
 import com.obolonnyy.owlrandom.app.NavigatorImpl
-import com.obolonnyy.owlrandom.utils.observe
 import com.orra.core_presentation.base.BaseFragment
 import com.orra.core_presentation.utils.fragmentViewModel
 import com.orra.core_ui.navbar.NavBar
@@ -70,6 +68,7 @@ class MainFragment : BaseFragment() {
         ) {
             NavBar(title = stringResource(id = R.string.main_title), iconLeft = null)
             Column(modifier = Modifier.weight(1f)) {
+//                Box(modifier = Modifier.weight(1f))
                 RenderOtherTabs()
             }
             Space(size = 10.dp)
@@ -78,23 +77,28 @@ class MainFragment : BaseFragment() {
 
     @Composable
     private fun RenderOtherTabs() {
-        Column(
-            modifier = Modifier,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
+        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
             Row {
                 RenderType(
                     name = stringResource(id = R.string.main_groups_text),
                     icon = R.drawable.ic_user_group,
                     onClick = { navigator.goToGroups() }
                 )
+                Space(size = 16.dp)
+                RenderType(
+                    name = stringResource(id = R.string.main_numbers_text),
+                    icon = R.drawable.baseline_looks_5_24,
+                    onClick = { navigator.goToNumbers() }
+                )
             }
+            Space(size = 8.dp)
             Row() {
                 RenderType(
                     name = stringResource(id = R.string.main_coil_text),
                     icon = R.drawable.ic_coin,
                     onClick = { navigator.goToCoin() }
                 )
+                Space(size = 16.dp)
                 RenderType(
                     name = stringResource(id = R.string.main_dice_text),
                     icon = R.drawable.baseline_casino_24,
@@ -102,11 +106,7 @@ class MainFragment : BaseFragment() {
                 )
             }
             Row {
-                RenderType(
-                    name = stringResource(id = R.string.main_numbers_text),
-                    icon = R.drawable.baseline_looks_5_24,
-                    onClick = { navigator.goToNumbers() }
-                )
+
             }
         }
     }
@@ -116,7 +116,6 @@ class MainFragment : BaseFragment() {
         Row(
             modifier = Modifier
                 .weight(1f)
-                .padding(horizontal = 16.dp)
                 .border(1.dp, AppTheme.colors.elements.secondary, RoundedCornerShape(6.dp))
                 .elementClickable(onClick = onClick)
                 .padding(8.dp),

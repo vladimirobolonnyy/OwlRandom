@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.app.Navigator
@@ -44,6 +46,13 @@ class DiceFragment : BaseFragment() {
         observe(viewModel.viewEvents, ::process)
     }
 
+
+    /*todo
+    1. нормальный вывод статистики
+    2. нормальный вид кубиков
+    3. ограничения по кубикам
+    4.
+    *  */
     @Composable
     override fun FragmentContent() {
         Column(
@@ -69,12 +78,14 @@ class DiceFragment : BaseFragment() {
                         modifier = Modifier.fillMaxWidth(),
                         value = state.maxValue.toString(),
                         label = stringResource(id = R.string.dice_max_valie_hint),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = viewModel::onMaxValueChanged
                     )
                     EditText(
                         modifier = Modifier.fillMaxWidth(),
                         value = state.dicesNumber.toString(),
                         label = stringResource(id = R.string.dice_dices_number_hint),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = viewModel::onDicesNumberChanged
                     )
                     RenderImage(state.values)

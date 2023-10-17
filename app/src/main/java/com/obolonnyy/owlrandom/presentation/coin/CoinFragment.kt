@@ -8,8 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -79,10 +82,21 @@ class CoinFragment : BaseFragment() {
                         null -> {}
                         else -> Title(b.toCoinStr(), textAlign = TextAlign.Center)
                     }
+
+                    val scroll = rememberScrollState()
+                    val statsText = state.stats.toStr()
+
                     if (state.stats.isNotEmpty()) {
-                        BodyText(text = "Result: positive:= ${state.positive}, negative:= ${state.negative}")
-                        BodyText(text = state.stats.toCoinStr())
+                        //todo make string resource
+                        BodyText(text = "Stats: positive:= ${state.positive}, negative:= ${state.negative}")
+                        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                            BodyText(text = statsText)
+                        }
                     }
+
+                    LaunchedEffect(key1 = statsText, block = {
+                        scroll.animateScrollTo(scroll.maxValue)
+                    })
                 }
             }
 
@@ -103,8 +117,8 @@ class CoinFragment : BaseFragment() {
         }
     }
 
-    private fun List<Boolean>.toCoinStr(): String {
-        return joinToString(", ") { it.toCoinStr() }
+    private fun List<Boolean>.toStr(): String {
+        return this.mapIndexed { i, l -> "${i + 1}. ${l.toCoinStr()}" }.joinToString("\n")
     }
 
     private fun Boolean.toCoinStr(): String {

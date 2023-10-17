@@ -3,7 +3,6 @@ package com.obolonnyy.owlrandom.presentation.numbers
 import android.os.Bundle
 import android.view.View
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +19,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.obolonnyy.owlrandom.R
 import com.obolonnyy.owlrandom.app.Navigator
@@ -68,20 +69,22 @@ class NumbersFragment : BaseFragment() {
                 state?.let {
                     EditText(
                         modifier = Modifier.fillMaxWidth(),
-                        value = state.minValue.toString(),
+                        value = state.minValue?.toString().orEmpty(),
                         label = stringResource(id = R.string.numbers_min_valie_hint),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = viewModel::onMinValueChanged
                     )
                     EditText(
                         modifier = Modifier.fillMaxWidth(),
-                        value = state.maxValue.toString(),
+                        value = state.maxValue?.toString().orEmpty(),
                         label = stringResource(id = R.string.numbers_max_valie_hint),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                         onValueChange = viewModel::onMaxValueChanged
                     )
 
-                    RenderImage(state.values)
+                    RenderImage(state.result)
 
-                    val scroll =rememberScrollState()
+                    val scroll = rememberScrollState()
                     val statsText = state.stats.toStr()
 
                     if (state.stats.isNotEmpty()) {
@@ -107,18 +110,20 @@ class NumbersFragment : BaseFragment() {
     }
 
     @Composable
-    private fun RenderImage(number: Long) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = number.toString(),
-                color = AppTheme.colors.text.primary,
-                style = AppTheme.styles.TitlePrimary,
-            )
+    private fun RenderImage(number: Long?) {
+        number?.let {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = number.toString(),
+                    color = AppTheme.colors.text.primary,
+                    style = AppTheme.styles.BigNumber,
+                )
+            }
         }
     }
 

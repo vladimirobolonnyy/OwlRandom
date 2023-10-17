@@ -1,5 +1,6 @@
 package com.orra.core_ui.text
 
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -13,6 +14,7 @@ fun EditText(
     modifier: Modifier = Modifier,
     value: String?,
     label: String? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onValueChange: (String) -> Unit,
 ) {
     TextField(
@@ -27,6 +29,7 @@ fun EditText(
             focusedContainerColor = AppTheme.colors.background.primary,
             unfocusedContainerColor = AppTheme.colors.background.primary,
         ),
+        keyboardOptions = keyboardOptions,
         onValueChange = onValueChange,
         label = label?.let {
             {

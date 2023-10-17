@@ -48,4 +48,11 @@ object Styles {
         lineHeight = 16.sp,
         letterSpacing = (0.08).sp
     )
+
+    val BigNumber = TextStyle(
+        fontWeight = FontWeight(600),
+        fontSize = 30.sp,
+        lineHeight = 34.sp,
+        letterSpacing = (-0.24).sp
+    )
 }
