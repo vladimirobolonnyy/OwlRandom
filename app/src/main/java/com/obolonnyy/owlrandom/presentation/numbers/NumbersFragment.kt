@@ -3,16 +3,18 @@ package com.obolonnyy.owlrandom.presentation.numbers
 import android.os.Bundle
 import android.view.View
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -79,12 +81,19 @@ class NumbersFragment : BaseFragment() {
 
                     RenderImage(state.values)
 
-                    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                        if (state.stats.isNotEmpty()) {
-                            BodyText(text = stringResource(id = R.string.dice_stats))
-                            BodyText(text = state.stats.toStr())
+                    val scroll =rememberScrollState()
+                    val statsText = state.stats.toStr()
+
+                    if (state.stats.isNotEmpty()) {
+                        BodyText(text = stringResource(id = R.string.dice_stats))
+                        Column(modifier = Modifier.verticalScroll(scroll)) {
+                            BodyText(text = statsText)
                         }
                     }
+
+                    LaunchedEffect(key1 = statsText, block = {
+                        scroll.animateScrollTo(scroll.maxValue)
+                    })
                 }
             }
 
@@ -100,7 +109,10 @@ class NumbersFragment : BaseFragment() {
     @Composable
     private fun RenderImage(number: Long) {
         Box(
-            modifier = Modifier.size(200.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
         ) {
             Text(
                 text = number.toString(),
@@ -115,7 +127,7 @@ class NumbersFragment : BaseFragment() {
     }
 
     private fun List<Long>.toStr(): String {
-        return this.joinToString("\n")
+        return this.mapIndexed { i, l -> "${i + 1}. $l" }.joinToString("\n")
     }
 
 }

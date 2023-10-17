@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -78,12 +79,19 @@ class DiceFragment : BaseFragment() {
                     )
                     RenderImage(state.values)
 
-                    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                        if (state.stats.isNotEmpty()) {
-                            BodyText(text = stringResource(id = R.string.dice_stats))
-                            BodyText(text = state.stats.toStr())
+                    val scroll = rememberScrollState()
+                    val statsText = state.stats.toStr()
+
+                    if (state.stats.isNotEmpty()) {
+                        BodyText(text = stringResource(id = R.string.dice_stats))
+                        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                            BodyText(text = statsText)
                         }
                     }
+
+                    LaunchedEffect(key1 = statsText, block = {
+                        scroll.animateScrollTo(scroll.maxValue)
+                    })
                 }
             }
 
