@@ -1,8 +1,9 @@
 @file:Suppress("DEPRECATION")
 
-package com.obolonnyy.owlrandom.utils
+package com.orra.core_presentation.utils
 
 import android.app.Activity
+import android.app.Dialog
 import android.os.Build
 import android.view.View
 import android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
@@ -33,6 +34,23 @@ fun Activity.setDarkNavigationBar() = window.decorView.setLightNavigationBar(fal
 fun Activity.toggleNavigationBar(light: Boolean) =
     if (light) setLightNavigationBar() else setDarkNavigationBar()
 
+
+fun Dialog.setLightStatusBar() = window?.decorView?.setLightStatusBar(true)
+fun Dialog.setDarkStatusBar() = window?.decorView?.setLightStatusBar(false)
+fun Dialog.setLightNavigationBar() = window?.decorView?.setLightNavigationBar(true)
+fun Dialog.setDarkNavigationBar() = window?.decorView?.setLightNavigationBar(false)
+
+private fun View.setLightNavigationBar(light: Boolean) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val flag = SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        if (light) addSystemUiVisibility(flag) else removeSystemUiVisibility(flag)
+    }
+}
+
+private fun View.setLightStatusBar(light: Boolean) {
+    val flag = SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+    if (light) addSystemUiVisibility(flag) else removeSystemUiVisibility(flag)
+}
 private fun View.setLightNavigationBar(light: Boolean, window: Window) {
     if (Build.VERSION.SDK_INT >= 31) {
         window.setDecorFitsSystemWindows(false)

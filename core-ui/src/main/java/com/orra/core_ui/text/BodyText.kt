@@ -30,3 +30,8 @@ fun BodyText(
             .padding(16.dp, 0.dp, 16.dp, 16.dp)
     )
 }
+
+@Composable
+fun Divider() {
+    androidx.compose.material3.Divider(thickness = 1.dp, color = AppTheme.colors.elements.divider)
+}

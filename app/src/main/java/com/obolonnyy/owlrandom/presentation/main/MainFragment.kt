@@ -41,7 +41,6 @@ class MainFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observe(viewModel.viewEvents, ::process)
     }
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -139,14 +138,6 @@ class MainFragment : BaseFragment() {
                 contentDescription = null,
                 tint = AppTheme.colors.elements.primary
             )
-        }
-    }
-
-    private fun process(event: MainViewEvent) {
-        when (event) {
-            is MainViewEvent.GoToCreateItem -> {
-                navigator.goToEditDetails()
-            }
         }
     }
 }

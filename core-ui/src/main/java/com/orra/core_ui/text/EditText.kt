@@ -21,10 +21,11 @@ fun EditText(
         colors = TextFieldDefaults.colors(
             focusedTextColor = AppTheme.colors.text.primary,
             focusedLabelColor = AppTheme.colors.text.secondary,
-
             focusedIndicatorColor = AppTheme.colors.static.primary,
             unfocusedIndicatorColor = AppTheme.colors.static.primary,
             disabledIndicatorColor = AppTheme.colors.static.primary,
+            focusedContainerColor = AppTheme.colors.background.primary,
+            unfocusedContainerColor = AppTheme.colors.background.primary,
         ),
         onValueChange = onValueChange,
         label = label?.let {

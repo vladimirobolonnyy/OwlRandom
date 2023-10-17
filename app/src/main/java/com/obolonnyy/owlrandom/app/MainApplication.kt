@@ -7,6 +7,7 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import timber.log.Timber
 
 class MainApplication : Application(), AppScope {
 
@@ -22,7 +23,7 @@ class MainApplication : Application(), AppScope {
         context = this
         AndroidThreeTen.init(this);
         if (BuildInfo.isDebug) {
-//            Timber.plant(Timber.DebugTree())
+            Timber.plant(Timber.DebugTree())
         }
     }
 }

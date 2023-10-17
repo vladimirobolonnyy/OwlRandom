@@ -27,8 +27,8 @@
     <string name="dice_stats">stats:</string>
     <string name="main_numbers_text">Roll Numbers</string>
     <string name="numbers_title">Roll number</string>
-    <string name="numbers_min_valie_hint">Type here min value</string>
-    <string name="numbers_max_valie_hint">Type here max value</string>
+    <string name="numbers_min_valie_hint">Min value</string>
+    <string name="numbers_max_valie_hint">Max value</string>
     <string name="groups_title">Your groups</string>
     <string name="main_groups_text">Groups</string>
     <string name="create_details_delete_title">Delete</string>
