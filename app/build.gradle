@@ -96,7 +96,6 @@ dependencies {
     ksp(roomKsp)
 
     implementation serialization
-    implementation flippable
     implementation timber
 //    implementation coilUsial
 //    implementation retrofit.values()

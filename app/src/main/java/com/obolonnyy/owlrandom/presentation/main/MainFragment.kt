@@ -5,6 +5,7 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -77,36 +78,37 @@ class MainFragment : BaseFragment() {
 
     @Composable
     private fun RenderOtherTabs() {
-        Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             Row {
                 RenderType(
                     name = stringResource(id = R.string.main_groups_text),
                     icon = R.drawable.ic_user_group,
                     onClick = { navigator.goToGroups() }
                 )
-                Space(size = 16.dp)
+            }
+            Row {
                 RenderType(
                     name = stringResource(id = R.string.main_numbers_text),
                     icon = R.drawable.baseline_looks_5_24,
                     onClick = { navigator.goToNumbers() }
                 )
             }
-            Space(size = 8.dp)
-            Row() {
+            Row {
                 RenderType(
                     name = stringResource(id = R.string.main_coil_text),
                     icon = R.drawable.ic_coin,
                     onClick = { navigator.goToCoin() }
                 )
-                Space(size = 16.dp)
+            }
+            Row {
                 RenderType(
                     name = stringResource(id = R.string.main_dice_text),
                     icon = R.drawable.baseline_casino_24,
                     onClick = { navigator.goToDice() }
                 )
-            }
-            Row {
-
             }
         }
     }

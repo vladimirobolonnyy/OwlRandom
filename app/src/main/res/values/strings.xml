@@ -17,7 +17,10 @@
     <string name="material_dialog_delete_title">Delete all group?</string>
     <string name="coin_title">Heads or tails</string>
     <string name="coin_roll_button">Roll</string>
+    <string name="coin_enable_animation">Enable Animation</string>
+    <string name="coin_disable_animation">Disable Animation</string>
     <string name="main_coil_text">Roll Coin</string>
+    <string name="coin_result_stats">Stats: heads:= %1$s, tails:= %2$s</string>
     <string name="coin_head">Head</string>
     <string name="coin_tail">Tail</string>
     <string name="main_dice_text">Roll Dice</string>

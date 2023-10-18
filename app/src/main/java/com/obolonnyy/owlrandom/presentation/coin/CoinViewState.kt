@@ -2,7 +2,9 @@ package com.obolonnyy.owlrandom.presentation.coin
 
 
 data class CoinViewState(
-    val value: Boolean? = null,
+    val value: Boolean = false,
+    val loading: Boolean = false,
+    val useAnimation: Boolean = true,
     val stats: List<Boolean> = emptyList()
 ) {
     val positive = stats.count { it }

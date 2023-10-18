@@ -2,6 +2,12 @@ package com.obolonnyy.owlrandom.presentation.coin
 
 import android.os.Bundle
 import android.view.View
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,9 +20,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -28,15 +38,13 @@ import com.obolonnyy.owlrandom.utils.observe
 import com.orra.core_presentation.base.BaseFragment
 import com.orra.core_presentation.utils.fragmentViewModel
 import com.orra.core_ui.button.BaseButton
+import com.orra.core_ui.button.SecondaryButton
 import com.orra.core_ui.navbar.NavBar
 import com.orra.core_ui.text.BodyText
 import com.orra.core_ui.text.Title
 import com.orra.core_ui.theme.AppTheme
 import com.orra.core_ui.utils.Space
 import com.orra.core_ui.utils.clearClickable
-import com.wajahatkarim.flippable.Flippable
-import com.wajahatkarim.flippable.FlippableController
-import com.wajahatkarim.flippable.FlippableState
 
 class CoinFragment : BaseFragment() {
 
@@ -58,6 +66,9 @@ class CoinFragment : BaseFragment() {
                 .systemBarsPadding()
         ) {
             val state = viewModel.viewState.observeAsState().value
+            val scroll = rememberScrollState()
+            val infiniteTransition = rememberInfiniteTransition(label = "")
+
             NavBar(
                 title = stringResource(id = R.string.coin_title),
                 onLeftIconClicked = ::onBack,
@@ -70,26 +81,52 @@ class CoinFragment : BaseFragment() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 state?.let {
-                    val flipController1 = remember { FlippableController() }
-                    flipController1.flip(state.value.toState())
-                    Flippable(
-                        frontSide = { RenderImage(R.drawable.success) },
-                        backSide = { RenderImage(R.drawable.error) },
-                        flipController = flipController1,
-                        flipOnTouch = false
-                    )
-                    when (val b = state.value) {
-                        null -> {}
-                        else -> Title(b.toCoinStr(), textAlign = TextAlign.Center)
+                    when {
+                        state.loading -> {
+                            val animDur = 300
+                            val rotationAnimation = infiniteTransition.animateFloat(
+                                initialValue = 0f,
+                                targetValue = 360f,
+                                animationSpec = infiniteRepeatable(tween(animDur, 0, LinearEasing)),
+                                label = ""
+                            )
+                            val floatAn = infiniteTransition.animateFloat(
+                                initialValue = 0f,
+                                targetValue = 4f,
+                                animationSpec = infiniteRepeatable(tween(animDur, 0, LinearEasing)),
+                                label = ""
+                            )
+                            val isHead = remember { mutableStateOf(state.value) }
+                            isHead.value = floatAn.value in 1f..3f
+                            val res = if (isHead.value) R.drawable.success else R.drawable.error
+                            Image(
+                                modifier = Modifier
+                                    .size(200.dp)
+                                    .graphicsLayer { rotationY = rotationAnimation.value },
+                                painter = painterResource(id = res),
+                                contentDescription = "",
+                                contentScale = ContentScale.FillBounds,
+                                colorFilter = ColorFilter.tint(AppTheme.colors.elements.primary)
+                            )
+                        }
+
+                        state.value -> RenderImage(R.drawable.success)
+                        else -> RenderImage(R.drawable.error)
                     }
 
-                    val scroll = rememberScrollState()
+                    Title(state.value.toCoinStr(), textAlign = TextAlign.Center)
+
                     val statsText = state.stats.toStr()
 
                     if (state.stats.isNotEmpty()) {
-                        //todo make string resource
-                        BodyText(text = "Stats: positive:= ${state.positive}, negative:= ${state.negative}")
-                        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                        BodyText(
+                            text = stringResource(
+                                id = R.string.coin_result_stats,
+                                state.positive,
+                                state.negative
+                            )
+                        )
+                        Column(modifier = Modifier.verticalScroll(scroll)) {
                             BodyText(text = statsText)
                         }
                     }
@@ -99,21 +136,18 @@ class CoinFragment : BaseFragment() {
                     })
                 }
             }
-
+            val secText =
+                if (state?.useAnimation == true) R.string.coin_disable_animation else R.string.coin_enable_animation
+            SecondaryButton(
+                text = stringResource(id = secText),
+                onClick = viewModel::onAnimationClicked
+            )
             BaseButton(
                 text = stringResource(id = R.string.coin_roll_button),
                 bgColor = AppTheme.colors.static.primary,
                 onClick = viewModel::roll
             )
             Space(size = 10.dp)
-        }
-    }
-
-    private fun Boolean?.toState(): FlippableState {
-        return when (this) {
-            false -> FlippableState.BACK
-            true -> FlippableState.FRONT
-            null -> FlippableState.INITIALIZED
         }
     }
 
@@ -138,5 +172,4 @@ class CoinFragment : BaseFragment() {
     private fun process(event: CoinViewEvent) {
 
     }
-
 }
