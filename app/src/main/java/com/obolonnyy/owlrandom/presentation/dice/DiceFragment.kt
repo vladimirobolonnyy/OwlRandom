@@ -51,7 +51,8 @@ class DiceFragment : BaseFragment() {
     1. нормальный вывод статистики
     2. нормальный вид кубиков
     3. ограничения по кубикам
-    4.
+    4. сумму и среднее
+    5. Генерация пароля ??
     *  */
     @Composable
     override fun FragmentContent() {
