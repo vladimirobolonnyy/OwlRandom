@@ -1,0 +1,12 @@
+https://www.materialpalette.com/colors
+https://vectorizer.ai/
+https://www.composables.com/svgtocompose
+
+
+    /*todo
+    1. нормальный вывод статистики
+    2. нормальный вид кубиков
+    3. ограничения по кубикам
+    4. сумму и среднее
+    5. Генерация пароля ??
+    *  */
