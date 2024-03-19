@@ -16,8 +16,8 @@ android {
         applicationId "com.obolonnyy.owlrandom"
         minSdk rootProject.ext.minSdkVersion
         targetSdk rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "0.1.0"
+        versionCode 4
+        versionName "0.1.1"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -69,11 +69,10 @@ android {
         }
     }
 
-    applicationVariants.all {
-        variant ->
-            variant.outputs.all {
-                outputFileName = "owl-random-${variant.name}-${variant.versionCode}-v${variant.versionName}.apk"
-            }
+    applicationVariants.configureEach { variant ->
+        variant.outputs.configureEach {
+            outputFileName = "owl-random-${variant.name}-${variant.versionCode}-v${variant.versionName}.apk"
+        }
     }
 
 }
