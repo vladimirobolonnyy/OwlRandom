@@ -6,9 +6,9 @@ ext {
     jvmTargetValue = "17"
     sourceCompatibilityValue = JavaVersion.VERSION_17
 
-    buildToolsVersion = '30.0.3'
+    buildToolsVersion = '35.0.0'
     multiDEXVersion = '2.0.1'
-    gradleVersion = '7.4.2'
+    gradleVersion = '8.8.2'
     kotlinVersion = '1.8.21'
     lifecycleVersion = '2.6.1'
     coreKtxVersion = '1.10.1'
@@ -20,6 +20,17 @@ ext {
     retrofitVersion = '2.9.0'
     okHttpVersion = '4.9.3'
     roomVersion = '2.5.2'
+    /*gradle = "8.8.2"
+kotlin = "2.1.10"
+archnavigation = "2.8.7"
+constraintLayout = "1.1.3"
+lifecycle = "2.8.7"
+cardview = "1.0.0"
+annotationCompiler = "1.1.0"
+coreKtx = "1.10.1"
+fragment = "1.8.5"
+preference = "1.2.1"
+compose = "1.8.1"*/
 
     kotlinImpl = [
             stdLib7             : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion",
